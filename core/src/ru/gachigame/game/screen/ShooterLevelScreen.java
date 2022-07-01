@@ -1,23 +1,25 @@
 package ru.gachigame.game.screen;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.utils.Array;
-import ru.gachigame.game.MyGdxGame;
-import ru.gachigame.game.characters.Billy;
-import ru.gachigame.game.characters.Master;
-import ru.gachigame.game.characters.Slave;
-import ru.gachigame.game.characters.parts.Cum;
 import ru.gachigame.game.characters.parts.CumArray;
+import ru.gachigame.game.characters.parts.Cum;
+import ru.gachigame.game.characters.Master;
+import ru.gachigame.game.characters.Billy;
+import ru.gachigame.game.characters.Slave;
+import com.badlogic.gdx.graphics.Texture;
+import org.json.simple.parser.JSONParser;
+import com.badlogic.gdx.graphics.GL20;
 import ru.gachigame.game.parts.Wall;
-import ru.gachigame.game.parts.Walls;
-import ru.gachigame.game.screen.parts.TableOfRecords;
+import ru.gachigame.game.MyGdxGame;
+import org.json.simple.JSONObject;
+import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.Gdx;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.io.FileReader;
 import java.util.Random;
+import java.util.List;
+import java.io.File;
 
 public class ShooterLevelScreen implements Screen {
     private final MyGdxGame game;
@@ -26,12 +28,9 @@ public class ShooterLevelScreen implements Screen {
     private final Random random;
 
     private final Billy billy;
-    private final ArrayList<Slave> slaveArray;
-    private final Array<Wall> wallsArray;
+    private final List<Slave> slaveArray;
+    private final List<Wall> wallsArray;
     private final Texture dungeonTexture;
-
-    private final long startCurrentTime;
-
     private float billyX;
     private float billyY;
 
@@ -42,37 +41,11 @@ public class ShooterLevelScreen implements Screen {
         camera.setToOrtho(false, 200, 200);
 
         dungeonTexture = new Texture("sprites/dungeon.jpg");
-        slaveArray = new ArrayList<>();
-        wallsArray = new Walls().wallsArray;
+        wallsArray = readWalls();
+        slaveArray = readSlave();
         billy = new Billy();
 
-        spawnSlave(800, 400);
-        spawnSlave(820, 420);
-        spawnSlave(1000, 500);
-
-
-        spawnSlave(925, 880);
-        spawnSlave(1260, 872);
-
-
-        spawnSlave(1126, 1030);
-        spawnSlave(1264, 1030);
-        spawnSlave(1400, 1030);
-        spawnSlave(1538, 1030);
-
-        spawnSlave(1126, 1166);
-        spawnSlave(1264, 1166);
-        spawnSlave(1400, 1166);
-        spawnSlave(1538, 1166);
-
-        spawnSlave(1126, 1302);
-        spawnSlave(1264, 1302);
-        spawnSlave(1400, 1302);
-        spawnSlave(1538, 1302);
-
         spawnMaster();
-
-        startCurrentTime = System.currentTimeMillis();
     }
 
     @Override
@@ -177,12 +150,6 @@ public class ShooterLevelScreen implements Screen {
 
     }
 
-    private void spawnSlave(int slaveX, int slaveY){
-        Slave slave = new Slave();
-        slave.x = slaveX;
-        slave.y = slaveY;
-        slaveArray.add(slave);
-    }
 
     private void slaveMoveToBilly(Slave slave){
         slave.fieldOfView.x = slave.x - slave.fieldOfView.width/2;
@@ -230,21 +197,8 @@ public class ShooterLevelScreen implements Screen {
             }
         }
         else {
-            long finishCurrentTime = System.currentTimeMillis();
-            float timeMs = finishCurrentTime - startCurrentTime;
-            float time = (timeMs/1000/60);
-            String sTime = String.valueOf(time);
-            StringBuilder sTimeAccuracy = new StringBuilder();
-            char timeChar;
-            for (int accuracy = 0; accuracy < 5; accuracy++){
-                timeChar = sTime.charAt(accuracy);
-                sTimeAccuracy.append(timeChar);
-            }
-            time = Float.parseFloat(sTimeAccuracy.toString());
             CumArray.cumArray.clear();
-            TableOfRecords.addRecord(time, game.nickname);
-            game.nickname = null;
-            game.setScreen(new TableOfRecordsScreen(game));
+            game.setScreen(new MainMenuScreen(game));
         }
     }
 
@@ -294,5 +248,50 @@ public class ShooterLevelScreen implements Screen {
             game.nickname = null;
             game.setScreen(new DeathScreen(game));
         }
+    }
+
+    private List<Wall> readWalls() {
+        List<Wall> wallList = new ArrayList<>();
+        try {
+            JSONObject jsonObject = (JSONObject) readJson(new File("core/objects/shooter/walls.json"));
+            List<JSONObject> JSONWallsList = (List<JSONObject>) jsonObject.get("wallsList");
+            for (JSONObject thisObject : JSONWallsList) {
+                int x = Integer.parseInt(String.valueOf(thisObject.get("x")));
+                int y = Integer.parseInt(String.valueOf(thisObject.get("y")));
+                int width = Integer.parseInt(String.valueOf(thisObject.get("width")));
+                int height = Integer.parseInt(String.valueOf(thisObject.get("height")));
+                wallList.add(new Wall(x, y, width, height));
+            }
+        }
+        catch (Exception exception){
+            exception.printStackTrace();
+        }
+        return wallList;
+    }
+
+    private List<Slave> readSlave(){
+        List<Slave> slaveList = new ArrayList<>();
+        try {
+            JSONObject jsonObject = (JSONObject) readJson(new File("core/objects/shooter/slave.json"));
+            List<JSONObject> JSONSlavesList = (List<JSONObject>) jsonObject.get("slavesList");
+            for (JSONObject thisObject : JSONSlavesList) {
+                float x = Float.parseFloat(String.valueOf(thisObject.get("x")));
+                float y = Float.parseFloat(String.valueOf(thisObject.get("y")));
+                Slave slave = new Slave();
+                slave.setX(x);
+                slave.setY(y);
+                slaveList.add(slave);
+            }
+        }
+        catch (Exception exception){
+            exception.printStackTrace();
+        }
+        return slaveList;
+    }
+
+    public static Object readJson(File file) throws Exception {
+        FileReader reader = new FileReader(file);
+        JSONParser jsonParser = new JSONParser();
+        return jsonParser.parse(reader);
     }
 }

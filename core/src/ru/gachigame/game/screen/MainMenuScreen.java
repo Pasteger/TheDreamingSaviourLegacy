@@ -12,10 +12,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import ru.gachigame.game.MyGdxGame;
-import ru.gachigame.game.screen.parts.MyTextInputListener;
-import ru.gachigame.game.screen.parts.ReadingAndWritingTheDatabase;
-import ru.gachigame.game.screen.parts.TableOfRecords;
-import java.io.IOException;
 import java.util.Random;
 
 public class MainMenuScreen implements Screen {
@@ -24,7 +20,6 @@ public class MainMenuScreen implements Screen {
     private final Texture background;
     private final Stage stage;
     private final Random random;
-    private final MyTextInputListener listener;
     private final float volume;
 
 
@@ -48,13 +43,9 @@ public class MainMenuScreen implements Screen {
         stage.addActor(settingsButton);
         settingsButton.setPosition(20, 150);
 
-        Button tableOfRecordsButton = new TextButton("Table of records", textButtonStyle);
-        stage.addActor(tableOfRecordsButton);
-        tableOfRecordsButton.setPosition(20, 100);
-
         Button exitButton = new TextButton("Exit", textButtonStyle);
         stage.addActor(exitButton);
-        exitButton.setPosition(20, 50);
+        exitButton.setPosition(20, 100);
 
 
 
@@ -64,21 +55,11 @@ public class MainMenuScreen implements Screen {
         background = new Texture("sprites/main_menu_background.jpg");
 
 
-        StringBuilder table = ReadingAndWritingTheDatabase.readingFile();
-        table = TableOfRecords.sortTable(table);
-        try {
-            ReadingAndWritingTheDatabase.writingFile(table.toString());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-
-        listener = new MyTextInputListener(game);
-
         startButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                Gdx.input.getTextInput(listener, "Enter you nickname", "", "Enter you nickname");
+                game.setScreen(new ShooterLevelScreen(game));
+                //Gdx.input.getTextInput(listener, "Enter you nickname", "", "Enter you nickname");
             }
         });
 
@@ -89,12 +70,6 @@ public class MainMenuScreen implements Screen {
             }
         });
 
-        tableOfRecordsButton.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                game.setScreen(new TableOfRecordsScreen(game));
-            }
-        });
 
         exitButton.addListener(new ChangeListener() {
             @Override
@@ -127,10 +102,6 @@ public class MainMenuScreen implements Screen {
         game.batch.end();
 
         stage.draw();
-
-        if (game.nickname != null) {
-            game.setScreen(new ShooterLevelScreen(game));
-        }
     }
     @Override public void show(){}
     @Override public void resize(int width, int height){}
