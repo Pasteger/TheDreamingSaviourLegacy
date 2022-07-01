@@ -15,29 +15,27 @@ import ru.gachigame.game.characters.parts.CumArray;
 import ru.gachigame.game.parts.Wall;
 import ru.gachigame.game.parts.Walls;
 import ru.gachigame.game.screen.parts.TableOfRecords;
-
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Random;
 
-public class MainGameSpace implements Screen {
-    final MyGdxGame game;
+public class ShooterLevelScreen implements Screen {
+    private final MyGdxGame game;
 
-    OrthographicCamera camera;
-    Random random;
+    private final OrthographicCamera camera;
+    private final Random random;
 
-    Billy billy;
-    ArrayList<Slave> slaveArray;
-    Array<Wall> wallsArray;
-    Texture dungeonTexture;
+    private final Billy billy;
+    private final ArrayList<Slave> slaveArray;
+    private final Array<Wall> wallsArray;
+    private final Texture dungeonTexture;
 
-    long startCurrentTime;
-    long finishCurrentTime;
+    private final long startCurrentTime;
 
-    float billyX;
-    float billyY;
+    private float billyX;
+    private float billyY;
 
-    public MainGameSpace(final MyGdxGame game){
+    public ShooterLevelScreen(final MyGdxGame game){
         random = new Random();
         this.game = game;
         camera = new OrthographicCamera();
@@ -49,7 +47,7 @@ public class MainGameSpace implements Screen {
         billy = new Billy();
 
         spawnSlave(800, 400);
-        /*spawnSlave(820, 420);
+        spawnSlave(820, 420);
         spawnSlave(1000, 500);
 
 
@@ -72,7 +70,7 @@ public class MainGameSpace implements Screen {
         spawnSlave(1400, 1302);
         spawnSlave(1538, 1302);
 
-        spawnMaster();*/
+        spawnMaster();
 
         startCurrentTime = System.currentTimeMillis();
     }
@@ -84,7 +82,7 @@ public class MainGameSpace implements Screen {
 
         if(!game.music.isPlaying()){
             game.musicID = random.nextInt(4);
-            game.music = game.musicArrayList.get(game.musicID);
+            game.music = game.musicList.get(game.musicID);
             game.music.play();
         }
 
@@ -232,7 +230,7 @@ public class MainGameSpace implements Screen {
             }
         }
         else {
-            finishCurrentTime = System.currentTimeMillis();
+            long finishCurrentTime = System.currentTimeMillis();
             float timeMs = finishCurrentTime - startCurrentTime;
             float time = (timeMs/1000/60);
             String sTime = String.valueOf(time);

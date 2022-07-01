@@ -14,7 +14,7 @@ public class ReadingAndWritingTheDatabase {
     public static StringBuilder readingFile() {
         try {
             BufferedReader reader = new BufferedReader(new FileReader(
-                    "android/assets/database/table_of_records.txt"));
+                    "core/assets/database/table_of_records.txt"));
             String line;
             StringBuilder text = new StringBuilder();
             while ((line = reader.readLine()) != null) {
@@ -29,7 +29,7 @@ public class ReadingAndWritingTheDatabase {
 
     @SuppressWarnings("NewApi")
     public static void writingFile(String text) throws IOException {
-        @SuppressWarnings("NewApi") Path file = Paths.get("android/assets/database/table_of_records.txt");
+        @SuppressWarnings("NewApi") Path file = Paths.get("core/assets/database/table_of_records.txt");
         Files.write(file, Collections.singleton(text), StandardCharsets.UTF_8);
     }
 }

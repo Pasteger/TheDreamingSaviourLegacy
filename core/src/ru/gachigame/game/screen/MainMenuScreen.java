@@ -9,7 +9,6 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import ru.gachigame.game.MyGdxGame;
@@ -20,51 +19,40 @@ import java.io.IOException;
 import java.util.Random;
 
 public class MainMenuScreen implements Screen {
-    final MyGdxGame game;
-    OrthographicCamera camera;
-    Texture background;
-    Stage stage;
-    TextButton.TextButtonStyle textButtonStyle;
-    BitmapFont font;
-    Skin skin;
-    Button startButton;
-    Button settingsButton;
-    Button tableOfRecordsButton;
-    Button exitButton;
-    boolean isPressed;
-    Random random;
-    MyTextInputListener listener;
-    boolean listenerExist;
-    float volume;
+    private final MyGdxGame game;
+    private final OrthographicCamera camera;
+    private final Texture background;
+    private final Stage stage;
+    private final Random random;
+    private final MyTextInputListener listener;
+    private final float volume;
 
 
     public MainMenuScreen(final MyGdxGame gam){
         this.game = gam;
-        listenerExist = false;
         random = new Random();
         stage = new Stage();
         Gdx.input.setInputProcessor(stage);
-        volume = (float) game.volume/10;
+        volume = (float) game.volume/30;
 
-        font = new BitmapFont();
-        skin = new Skin();
-        textButtonStyle = new TextButton.TextButtonStyle();
+        BitmapFont font = new BitmapFont();
+        TextButton.TextButtonStyle textButtonStyle = new TextButton.TextButtonStyle();
         textButtonStyle.font = font;
         textButtonStyle.font.getData().setScale(2);
 
-        startButton = new TextButton("Start", textButtonStyle);
+        Button startButton = new TextButton("Start", textButtonStyle);
         stage.addActor(startButton);
         startButton.setPosition(20, 200);
 
-        settingsButton = new TextButton("Settings", textButtonStyle);
+        Button settingsButton = new TextButton("Settings", textButtonStyle);
         stage.addActor(settingsButton);
         settingsButton.setPosition(20, 150);
 
-        tableOfRecordsButton = new TextButton("Table of records", textButtonStyle);
+        Button tableOfRecordsButton = new TextButton("Table of records", textButtonStyle);
         stage.addActor(tableOfRecordsButton);
         tableOfRecordsButton.setPosition(20, 100);
 
-        exitButton = new TextButton("Exit", textButtonStyle);
+        Button exitButton = new TextButton("Exit", textButtonStyle);
         stage.addActor(exitButton);
         exitButton.setPosition(20, 50);
 
@@ -86,21 +74,48 @@ public class MainMenuScreen implements Screen {
 
 
         listener = new MyTextInputListener(game);
+
+        startButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                Gdx.input.getTextInput(listener, "Enter you nickname", "", "Enter you nickname");
+            }
+        });
+
+        settingsButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                game.setScreen(new SettingsScreen(game));
+            }
+        });
+
+        tableOfRecordsButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                game.setScreen(new TableOfRecordsScreen(game));
+            }
+        });
+
+        exitButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                throw new RuntimeException();
+            }
+        });
     }
 
     @Override
     public void render(float delta) {
-        isPressed = false;
         Gdx.gl.glClearColor(0, 0, 0.2f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        game.music = game.musicArrayList.get(game.musicID);
+        game.music = game.musicList.get(game.musicID);
         game.music.setVolume(volume);
         game.music.setLooping(false);
 
         if(!game.music.isPlaying()){
             game.musicID = random.nextInt(4);
-            game.music = game.musicArrayList.get(game.musicID);
+            game.music = game.musicList.get(game.musicID);
             game.music.play();
         }
 
@@ -113,57 +128,9 @@ public class MainMenuScreen implements Screen {
 
         stage.draw();
 
-
-
-
         if (game.nickname != null) {
-            game.setScreen(new MainGameSpace(game));
-            dispose();
+            game.setScreen(new ShooterLevelScreen(game));
         }
-
-        startButton.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                if (!isPressed) {
-                    isPressed = true;
-                    Gdx.input.getTextInput(listener, "Enter you nickname", "", "Enter you nickname");
-                    listenerExist = true;
-                }
-            }
-        });
-
-
-        settingsButton.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                if(!isPressed) {
-                    isPressed = true;
-                    game.setScreen(new SettingsScreen(game));
-                    dispose();
-                }
-            }
-        });
-
-        tableOfRecordsButton.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                if(!isPressed) {
-                    isPressed = true;
-                    game.setScreen(new TableOfRecordsScreen(game));
-                    dispose();
-                }
-            }
-        });
-
-        exitButton.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                if(!isPressed) {
-                    isPressed = true;
-                    int a = 0 / 0;
-                }
-            }
-        });
     }
     @Override public void show(){}
     @Override public void resize(int width, int height){}

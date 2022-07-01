@@ -1,15 +1,14 @@
 package ru.gachigame.game.desktop;
 
-import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
-import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
+import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
+import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import ru.gachigame.game.MyGdxGame;
 
 public class DesktopLauncher {
 	public static void main (String[] arg) {
-		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
-		config.title = "GachiGame";
-		config.width = 600;
-		config.height = 500;
-		new LwjglApplication(new MyGdxGame(), config);
+		Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
+		config.setTitle("GachiGame");
+		config.setWindowedMode(600, 500);
+		new Lwjgl3Application(new MyGdxGame(), config);
 	}
 }

@@ -7,12 +7,13 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import ru.gachigame.game.screen.MainMenuScreen;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class MyGdxGame extends Game {
 	public SpriteBatch batch;
 	public BitmapFont font;
-	public ArrayList<Music> musicArrayList;
+	public List<Music> musicList;
 	public Music music;
 	public int musicID;
 	public int volume;
@@ -23,14 +24,14 @@ public class MyGdxGame extends Game {
 	public void create () {
 		random = new Random();
 		musicID = random.nextInt(4);
-		volume = 15;
+		volume = 1;
 		batch = new SpriteBatch();
 		font = new BitmapFont();
-		musicArrayList = new ArrayList<>();
-		musicArrayList.add(Gdx.audio.newMusic(Gdx.files.internal("music/bossmark.mp3")));
-		musicArrayList.add(Gdx.audio.newMusic(Gdx.files.internal("music/fool_and_lightning.mp3")));
-		musicArrayList.add(Gdx.audio.newMusic(Gdx.files.internal("music/first_lieutenant.mp3")));
-		musicArrayList.add(Gdx.audio.newMusic(Gdx.files.internal("music/youth_in_boots.mp3")));
+		musicList = new ArrayList<>();
+		musicList.add(Gdx.audio.newMusic(Gdx.files.internal("music/bossmark.mp3")));
+		musicList.add(Gdx.audio.newMusic(Gdx.files.internal("music/fool_and_lightning.mp3")));
+		musicList.add(Gdx.audio.newMusic(Gdx.files.internal("music/first_lieutenant.mp3")));
+		musicList.add(Gdx.audio.newMusic(Gdx.files.internal("music/youth_in_boots.mp3")));
 		this.setScreen(new MainMenuScreen(this));
 	}
 
