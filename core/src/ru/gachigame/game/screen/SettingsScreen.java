@@ -1,4 +1,4 @@
-package ru.gachigame.game.screen;
+/*package ru.gachigame.game.screen;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -24,8 +24,6 @@ public class SettingsScreen implements Screen {
 
     public SettingsScreen(final MyGdxGame gam) {
         this.game = gam;
-
-        volume = (float) game.volume / 10;
 
         stage = new Stage();
         Gdx.input.setInputProcessor(stage);
@@ -148,4 +146,4 @@ public class SettingsScreen implements Screen {
     @Override public void resume(){}
     @Override public void hide(){}
     @Override public void dispose(){}
-}
+}*/

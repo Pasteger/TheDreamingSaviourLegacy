@@ -1,32 +1,24 @@
 package ru.gachigame.game.screen;
 
+import ru.gachigame.game.gameobject.characters.parts.Cum;
+import ru.gachigame.game.gameobject.characters.Master;
+import ru.gachigame.game.gameobject.characters.Billy;
+import ru.gachigame.game.gameobject.characters.Slave;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import ru.gachigame.game.characters.parts.CumArray;
-import ru.gachigame.game.characters.parts.Cum;
-import ru.gachigame.game.characters.Master;
-import ru.gachigame.game.characters.Billy;
-import ru.gachigame.game.characters.Slave;
+import ru.gachigame.game.gameobject.Wall;
 import com.badlogic.gdx.graphics.Texture;
-import org.json.simple.parser.JSONParser;
 import com.badlogic.gdx.graphics.GL20;
-import ru.gachigame.game.parts.Wall;
+import ru.gachigame.game.JSONReader;
 import ru.gachigame.game.MyGdxGame;
-import org.json.simple.JSONObject;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.Gdx;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.io.FileReader;
-import java.util.Random;
-import java.util.List;
-import java.io.File;
+import java.util.*;
 
 public class ShooterLevelScreen implements Screen {
     private final MyGdxGame game;
-
+    public static final List<Cum> cumArray = new ArrayList<>();
     private final OrthographicCamera camera;
     private final Random random;
-
     private final Billy billy;
     private final List<Slave> slaveArray;
     private final List<Wall> wallsArray;
@@ -35,30 +27,21 @@ public class ShooterLevelScreen implements Screen {
     private float billyY;
 
     public ShooterLevelScreen(final MyGdxGame game){
-        random = new Random();
         this.game = game;
-        camera = new OrthographicCamera();
+        Gdx.gl.glClearColor(0, 0, 0.2f, 1);
+        dungeonTexture = new Texture(JSONReader.SHOOTER_BACKGROUND_TEXTURE_PATH);
+        random = new Random();
+        camera = game.getCamera();
         camera.setToOrtho(false, 200, 200);
-
-        dungeonTexture = new Texture("sprites/dungeon.jpg");
-        wallsArray = readWalls();
-        slaveArray = readSlave();
+        wallsArray = JSONReader.readWalls(JSONReader.SHOOTER_WALLS_PATH);
+        slaveArray = JSONReader.readShooterSlave(JSONReader.SHOOTER_SLAVES_PATH);
         billy = new Billy();
-
         spawnMaster();
     }
 
     @Override
     public void render(float delta) {
-        Gdx.gl.glClearColor(0, 0, 0.2f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
-        if(!game.music.isPlaying()){
-            game.musicID = random.nextInt(4);
-            game.music = game.musicList.get(game.musicID);
-            game.music.play();
-        }
-
 
         camera.update();
         game.batch.setProjectionMatrix(camera.combined);
@@ -175,7 +158,7 @@ public class ShooterLevelScreen implements Screen {
             slave.recharge--;
             if (slave.recharge <= 0) {
                 slave.recharge = (byte) ((byte) 12 + random.nextInt(50));
-                slave.shot();
+                slave.shot("BAD");
             }
         }
     }
@@ -197,14 +180,14 @@ public class ShooterLevelScreen implements Screen {
             }
         }
         else {
-            CumArray.cumArray.clear();
+            cumArray.clear();
             game.setScreen(new MainMenuScreen(game));
         }
     }
 
     private void cumLogic(){
-        if (!CumArray.cumArray.isEmpty()) {
-            Iterator<Cum> cumIterator = CumArray.cumArray.iterator();
+        if (!cumArray.isEmpty()) {
+            Iterator<Cum> cumIterator = cumArray.iterator();
             while (cumIterator.hasNext()) {
                 Cum cum = cumIterator.next();
                 cum.move();
@@ -244,54 +227,9 @@ public class ShooterLevelScreen implements Screen {
 
     private void billyDeath(){
         if (billy.HP < 1) {
-            CumArray.cumArray.clear();
+            cumArray.clear();
             game.nickname = null;
             game.setScreen(new DeathScreen(game));
         }
-    }
-
-    private List<Wall> readWalls() {
-        List<Wall> wallList = new ArrayList<>();
-        try {
-            JSONObject jsonObject = (JSONObject) readJson(new File("core/objects/shooter/walls.json"));
-            List<JSONObject> JSONWallsList = (List<JSONObject>) jsonObject.get("wallsList");
-            for (JSONObject thisObject : JSONWallsList) {
-                int x = Integer.parseInt(String.valueOf(thisObject.get("x")));
-                int y = Integer.parseInt(String.valueOf(thisObject.get("y")));
-                int width = Integer.parseInt(String.valueOf(thisObject.get("width")));
-                int height = Integer.parseInt(String.valueOf(thisObject.get("height")));
-                wallList.add(new Wall(x, y, width, height));
-            }
-        }
-        catch (Exception exception){
-            exception.printStackTrace();
-        }
-        return wallList;
-    }
-
-    private List<Slave> readSlave(){
-        List<Slave> slaveList = new ArrayList<>();
-        try {
-            JSONObject jsonObject = (JSONObject) readJson(new File("core/objects/shooter/slave.json"));
-            List<JSONObject> JSONSlavesList = (List<JSONObject>) jsonObject.get("slavesList");
-            for (JSONObject thisObject : JSONSlavesList) {
-                float x = Float.parseFloat(String.valueOf(thisObject.get("x")));
-                float y = Float.parseFloat(String.valueOf(thisObject.get("y")));
-                Slave slave = new Slave();
-                slave.setX(x);
-                slave.setY(y);
-                slaveList.add(slave);
-            }
-        }
-        catch (Exception exception){
-            exception.printStackTrace();
-        }
-        return slaveList;
-    }
-
-    public static Object readJson(File file) throws Exception {
-        FileReader reader = new FileReader(file);
-        JSONParser jsonParser = new JSONParser();
-        return jsonParser.parse(reader);
     }
 }

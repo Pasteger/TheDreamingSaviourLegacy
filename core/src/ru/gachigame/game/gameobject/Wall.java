@@ -1,4 +1,4 @@
-package ru.gachigame.game.parts;
+package ru.gachigame.game.gameobject;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;

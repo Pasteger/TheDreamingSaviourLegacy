@@ -1,20 +1,14 @@
-package ru.gachigame.game.characters;
+package ru.gachigame.game.gameobject.characters;
 
 import com.badlogic.gdx.graphics.Texture;
-import ru.gachigame.game.characters.parts.Cum;
-import ru.gachigame.game.characters.parts.CumArray;
+import ru.gachigame.game.JSONReader;
+import ru.gachigame.game.gameobject.characters.parts.Cum;
+import ru.gachigame.game.screen.ShooterLevelScreen;
 
 public class Master extends Slave {
-
     public Master(){
-        slaveSprites.clear();
-        slaveSprites.add(
-                new Texture("sprites/master_up_sprite.png"),
-                new Texture("sprites/master_down_sprite.png"),
-                new Texture("sprites/master_right_sprite.png"),
-                new Texture("sprites/master_left_sprite.png")
-        );
-        texture = slaveSprites.get(0);
+        fillSpritesMap(JSONReader.MASTER_SPRITES);
+        texture = sprites.get(UP);
         width = 68;
         height = 68;
         HP = 25;
@@ -25,32 +19,32 @@ public class Master extends Slave {
     }
 
     @Override
-    public void shot() {
+    public void shot(String cumType) {
         Cum cum = new Cum();
         switch (direction) {
-            case "NORTH":
+            case "NORTH" -> {
                 cum.x = x + 17;
                 cum.y = y + 68;
-                break;
-            case "SOUTH":
+            }
+            case "SOUTH" -> {
                 cum.x = x + 17;
                 cum.y = y - 17;
-                break;
-            case "WEST":
+            }
+            case "WEST" -> {
                 cum.x = x - 17;
                 cum.y = y + 17;
-                break;
-            case "EAST":
+            }
+            case "EAST" -> {
                 cum.x = x + 68;
                 cum.y = y + 17;
-                break;
+            }
         }
         cum.height = 17;
         cum.width = 17;
         cum.direction = direction;
         cum.type = "MASTERS";
-        cum.texture = new Texture("sprites/master_cum.png");
-        CumArray.cumArray.add(cum);
+        cum.texture = new Texture(JSONReader.getSpritePath(JSONReader.CUM_SPRITES, "masterCum"));
+        ShooterLevelScreen.cumArray.add(cum);
     }
 
     @Override
@@ -58,24 +52,24 @@ public class Master extends Slave {
         shotDistanceHitBox.x = x;
         shotDistanceHitBox.y = y;
         switch (direction) {
-            case "NORTH":
+            case "NORTH" -> {
                 shotDistanceHitBox.width = 68;
                 shotDistanceHitBox.height = 600;
-                break;
-            case "SOUTH":
+            }
+            case "SOUTH" -> {
                 shotDistanceHitBox.y = y - 600;
                 shotDistanceHitBox.width = 68;
                 shotDistanceHitBox.height = 600;
-                break;
-            case "EAST":
+            }
+            case "EAST" -> {
                 shotDistanceHitBox.width = 600;
                 shotDistanceHitBox.height = 68;
-                break;
-            case "WEST":
+            }
+            case "WEST" -> {
                 shotDistanceHitBox.x = x - 600;
                 shotDistanceHitBox.width = 600;
                 shotDistanceHitBox.height = 68;
-                break;
+            }
         }
     }
 }

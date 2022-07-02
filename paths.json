@@ -1,0 +1,34 @@
+{
+  "mainMenuBackground": "sprites/main_menu_background.jpg",
+  "wallTexture": "sprites/wall.png",
+  "shooterResources": {
+    "wallsPath": "objects/shooter/walls.json",
+    "slavesPath": "objects/shooter/slaves.json",
+    "billySprites": {
+      "upSprite": "sprites/shooter/billy/up_sprite.png",
+      "downSprite": "sprites/shooter/billy/down_sprite.png",
+      "leftSprite": "sprites/shooter/billy/left_sprite.png",
+      "rightSprite": "sprites/shooter/billy/right_sprite.png"
+    },
+    "slaveSprites": {
+      "upSprite": "sprites/shooter/slave/up_sprite.png",
+      "downSprite": "sprites/shooter/slave/down_sprite.png",
+      "leftSprite": "sprites/shooter/slave/left_sprite.png",
+      "rightSprite": "sprites/shooter/slave/right_sprite.png"
+    },
+    "masterSprites": {
+      "upSprite": "sprites/shooter/master/up_sprite.png",
+      "downSprite": "sprites/shooter/master/down_sprite.png",
+      "leftSprite": "sprites/shooter/master/left_sprite.png",
+      "rightSprite": "sprites/shooter/master/right_sprite.png"
+    },
+    "cumSprites": {
+      "cum": "sprites/shooter/cum/cum.png",
+      "badCum": "sprites/shooter/cum/bad_cum.png",
+      "masterCum": "sprites/shooter/cum/master_cum.png",
+      "greyCum": "sprites/shooter/cum/grey_cum.png"
+    },
+    "deathBackground": "sprites/shooter/death_background.png",
+    "dungeon": "sprites/shooter/dungeon.jpg"
+  }
+}
