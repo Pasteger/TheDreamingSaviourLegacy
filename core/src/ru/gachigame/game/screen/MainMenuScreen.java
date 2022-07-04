@@ -1,6 +1,7 @@
 package ru.gachigame.game.screen;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -12,7 +13,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import ru.gachigame.game.JSONReader;
+import ru.gachigame.game.LevelEditor;
 import ru.gachigame.game.MyGdxGame;
+import ru.gachigame.game.shooter.screen.ShooterLevelScreen;
 
 public class MainMenuScreen implements Screen {
     private final MyGdxGame game;
@@ -84,6 +87,10 @@ public class MainMenuScreen implements Screen {
         game.batch.draw(background, 0, 0);
         game.batch.end();
         stage.draw();
+
+        if(Gdx.input.isKeyJustPressed(Input.Keys.E)){
+            game.setScreen(new LevelEditor(game));
+        }
     }
     @Override public void show(){}
     @Override public void resize(int width, int height){}

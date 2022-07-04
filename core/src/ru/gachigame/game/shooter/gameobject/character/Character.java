@@ -1,13 +1,14 @@
-package ru.gachigame.game.gameobject.characters;
+package ru.gachigame.game.shooter.gameobject.character;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Rectangle;
 import org.json.simple.JSONObject;
 import ru.gachigame.game.JSONReader;
-import ru.gachigame.game.gameobject.characters.parts.Cum;
-import ru.gachigame.game.screen.ShooterLevelScreen;
+import ru.gachigame.game.shooter.gameobject.character.parts.Cum;
+import ru.gachigame.game.shooter.screen.ShooterLevelScreen;
 import java.util.HashMap;
 import java.util.Map;
+import static ru.gachigame.game.shooter.ShooterCRUD.CUM_SPRITES;
 
 public class Character extends Rectangle {
     final String UP = "upSprite";
@@ -51,8 +52,8 @@ public class Character extends Rectangle {
         cum.direction = direction;
         cum.type = cumType;
         switch (cumType){
-            case "GOOD" -> cum.texture = new Texture(JSONReader.getSpritePath(JSONReader.CUM_SPRITES, "cum"));
-            case "BAD" -> cum.texture = new Texture(JSONReader.getSpritePath(JSONReader.CUM_SPRITES, "badCum"));
+            case "GOOD" -> cum.texture = new Texture(JSONReader.getSpritePath(CUM_SPRITES, "cum"));
+            case "BAD" -> cum.texture = new Texture(JSONReader.getSpritePath(CUM_SPRITES, "badCum"));
         }
         ShooterLevelScreen.cumArray.add(cum);
     }

@@ -1,13 +1,14 @@
-package ru.gachigame.game.gameobject.characters;
+package ru.gachigame.game.shooter.gameobject.character;
 
 import com.badlogic.gdx.graphics.Texture;
 import ru.gachigame.game.JSONReader;
-import ru.gachigame.game.gameobject.characters.parts.Cum;
-import ru.gachigame.game.screen.ShooterLevelScreen;
+import ru.gachigame.game.shooter.gameobject.character.parts.Cum;
+import ru.gachigame.game.shooter.screen.ShooterLevelScreen;
+import static ru.gachigame.game.shooter.ShooterCRUD.*;
 
 public class Master extends Slave {
     public Master(){
-        fillSpritesMap(JSONReader.MASTER_SPRITES);
+        fillSpritesMap(MASTER_SPRITES);
         texture = sprites.get(UP);
         width = 68;
         height = 68;
@@ -43,7 +44,7 @@ public class Master extends Slave {
         cum.width = 17;
         cum.direction = direction;
         cum.type = "MASTERS";
-        cum.texture = new Texture(JSONReader.getSpritePath(JSONReader.CUM_SPRITES, "masterCum"));
+        cum.texture = new Texture(JSONReader.getSpritePath(CUM_SPRITES, "masterCum"));
         ShooterLevelScreen.cumArray.add(cum);
     }
 

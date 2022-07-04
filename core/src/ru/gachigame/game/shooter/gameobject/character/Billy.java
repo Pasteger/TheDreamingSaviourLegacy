@@ -1,12 +1,12 @@
-package ru.gachigame.game.gameobject.characters;
+package ru.gachigame.game.shooter.gameobject.character;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import ru.gachigame.game.JSONReader;
+import static ru.gachigame.game.shooter.ShooterCRUD.*;
 
 public class Billy extends Character {
     public Billy(){
-        fillSpritesMap(JSONReader.BILLY_SPRITES);
+        fillSpritesMap(BILLY_SPRITES);
 
         texture = sprites.get(UP);
         HP = 4;

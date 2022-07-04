@@ -1,4 +1,4 @@
-package ru.gachigame.game.screen;
+package ru.gachigame.game.shooter.screen;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -6,8 +6,9 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
-import ru.gachigame.game.JSONReader;
 import ru.gachigame.game.MyGdxGame;
+import ru.gachigame.game.screen.MainMenuScreen;
+import static ru.gachigame.game.shooter.ShooterCRUD.DEATH_BACKGROUND_TEXTURE_PATH;
 
 public class DeathScreen implements Screen {
     private final MyGdxGame game;
@@ -19,7 +20,7 @@ public class DeathScreen implements Screen {
         this.game = gam;
         camera = new OrthographicCamera();
         camera.setToOrtho(false, 800, 480);
-        background = new Texture(JSONReader.DEATH_BACKGROUND_TEXTURE_PATH);
+        background = new Texture(DEATH_BACKGROUND_TEXTURE_PATH);
         startCurrentTime = System.currentTimeMillis();
         Sound sound = Gdx.audio.newSound(Gdx.files.internal("sounds/sometimes_i_rip_the_skin.wav"));
         sound.play();

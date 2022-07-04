@@ -1,9 +1,11 @@
-package ru.gachigame.game.screen;
+package ru.gachigame.game.shooter.screen;
 
-import ru.gachigame.game.gameobject.characters.parts.Cum;
-import ru.gachigame.game.gameobject.characters.Master;
-import ru.gachigame.game.gameobject.characters.Billy;
-import ru.gachigame.game.gameobject.characters.Slave;
+import ru.gachigame.game.screen.MainMenuScreen;
+import ru.gachigame.game.shooter.ShooterCRUD;
+import ru.gachigame.game.shooter.gameobject.character.parts.Cum;
+import ru.gachigame.game.shooter.gameobject.character.Billy;
+import ru.gachigame.game.shooter.gameobject.character.Slave;
+import static ru.gachigame.game.shooter.ShooterCRUD.*;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import ru.gachigame.game.gameobject.Wall;
 import com.badlogic.gdx.graphics.Texture;
@@ -29,14 +31,14 @@ public class ShooterLevelScreen implements Screen {
     public ShooterLevelScreen(final MyGdxGame game){
         this.game = game;
         Gdx.gl.glClearColor(0, 0, 0.2f, 1);
-        dungeonTexture = new Texture(JSONReader.SHOOTER_BACKGROUND_TEXTURE_PATH);
+        dungeonTexture = new Texture(SHOOTER_BACKGROUND_TEXTURE_PATH);
         random = new Random();
         camera = game.getCamera();
         camera.setToOrtho(false, 200, 200);
-        wallsArray = JSONReader.readWalls(JSONReader.SHOOTER_WALLS_PATH);
-        slaveArray = JSONReader.readShooterSlave(JSONReader.SHOOTER_SLAVES_PATH);
+        wallsArray = JSONReader.readWalls(SHOOTER_WALLS_PATH);
+        slaveArray = ShooterCRUD.readSlave(SHOOTER_SLAVES_PATH);
+        slaveArray.addAll(ShooterCRUD.readMaster(SHOOTER_MASTER_PATH));
         billy = new Billy();
-        spawnMaster();
     }
 
     @Override
@@ -216,13 +218,6 @@ public class ShooterLevelScreen implements Screen {
                 }
             }
         }
-    }
-
-    private void spawnMaster(){
-        Master master = new Master();
-        master.x = 580;
-        master.y = 820;
-        slaveArray.add(master);
     }
 
     private void billyDeath(){

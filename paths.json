@@ -4,6 +4,7 @@
   "shooterResources": {
     "wallsPath": "objects/shooter/walls.json",
     "slavesPath": "objects/shooter/slaves.json",
+    "masterPath": "objects/shooter/masters.json",
     "billySprites": {
       "upSprite": "sprites/shooter/billy/up_sprite.png",
       "downSprite": "sprites/shooter/billy/down_sprite.png",
