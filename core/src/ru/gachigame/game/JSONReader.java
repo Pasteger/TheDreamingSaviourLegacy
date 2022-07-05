@@ -44,11 +44,11 @@ public class JSONReader {
             @SuppressWarnings("unchecked")
             List<JSONObject> JSONWallsList = (List<JSONObject>) jsonObject.get("wallsList");
             for (JSONObject thisObject : JSONWallsList) {
-                int x = Integer.parseInt(String.valueOf(thisObject.get("x")));
-                int y = Integer.parseInt(String.valueOf(thisObject.get("y")));
-                int width = Integer.parseInt(String.valueOf(thisObject.get("width")));
-                int height = Integer.parseInt(String.valueOf(thisObject.get("height")));
-                wallList.add(new Wall(x, y, width, height));
+                float x = Float.parseFloat(String.valueOf(thisObject.get("x")));
+                float y = Float.parseFloat(String.valueOf(thisObject.get("y")));
+                float width = Float.parseFloat(String.valueOf(thisObject.get("width")));
+                float height = Float.parseFloat(String.valueOf(thisObject.get("height")));
+                wallList.add(new Wall((int) x, (int) y, (int) width, (int) height));
             }
         }
         catch (Exception exception){
@@ -81,6 +81,28 @@ public class JSONReader {
                 jsonWallsList.set(id, newJsonObject);
             }
             jsonObject.put("wallsList", jsonWallsList);
+            JSONReader.writeJson(new File(path), jsonObject);
+            return true;
+        }
+        catch (Exception exception){
+            exception.printStackTrace();
+            return false;
+        }
+    }
+
+    public static boolean saveWallList(List<Wall> walls, String path){
+        try {
+            JSONObject jsonObject = JSONReader.readJson(new File(path));
+            List<JSONObject> jsonObjectList = new ArrayList<>();
+            for (Wall wall : walls){
+                JSONObject jsonWall = new JSONObject();
+                jsonWall.put("x", wall.getX());
+                jsonWall.put("y", wall.getY());
+                jsonWall.put("width", wall.getWidth());
+                jsonWall.put("height", wall.getHeight());
+                jsonObjectList.add(jsonWall);
+            }
+            jsonObject.put("wallsList", jsonObjectList);
             JSONReader.writeJson(new File(path), jsonObject);
             return true;
         }

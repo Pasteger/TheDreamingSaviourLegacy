@@ -8,19 +8,20 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import ru.gachigame.game.gameobject.Wall;
+import ru.gachigame.game.screen.MainMenuScreen;
 import ru.gachigame.game.shooter.ShooterCRUD;
+import ru.gachigame.game.shooter.gameobject.character.Master;
 import ru.gachigame.game.shooter.gameobject.character.Slave;
 import java.util.List;
 import static ru.gachigame.game.shooter.ShooterCRUD.*;
-import static ru.gachigame.game.shooter.ShooterCRUD.SHOOTER_MASTER_PATH;
 
 public class LevelEditor implements Screen {
     private final MyGdxGame game;
     private final OrthographicCamera camera;
     private final List<Slave> slaveArray;
+    private final List<Master> masterArray;
     private final List<Wall> wallsArray;
     private final Texture dungeonTexture;
-    private final Wall point = new Wall(0, 0, 1, 1);
     private boolean spawnSlave;
     private boolean deleteSlave;
     private boolean generateWall;
@@ -36,9 +37,8 @@ public class LevelEditor implements Screen {
         camera = game.getCamera();
         camera.setToOrtho(false, 400, 400);
         wallsArray = JSONReader.readWalls(SHOOTER_WALLS_PATH);
-        wallsArray.add(point);
         slaveArray = ShooterCRUD.readSlave(SHOOTER_SLAVES_PATH);
-        slaveArray.addAll(ShooterCRUD.readMaster(SHOOTER_MASTER_PATH));
+        masterArray = ShooterCRUD.readMaster(SHOOTER_MASTER_PATH);
 
         Gdx.input.setInputProcessor(new InputProcessor() {
             private int touchDownX;
@@ -122,14 +122,13 @@ public class LevelEditor implements Screen {
         game.font.draw(game.batch, Gdx.input.getX() + "   " + Gdx.input.getY(), camera.position.x-200, camera.position.y+175);
 
 
-        point.x = camera.position.x;
-        point.y = camera.position.y;
-
         game.batch.end();
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.S)) {
             spawnSlave = !spawnSlave;
             deleteSlave = false;
+            generateWall = false;
+            removeWall = false;
             System.out.println("spawnSlave");
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.D)) {
@@ -167,6 +166,34 @@ public class LevelEditor implements Screen {
                     slave.getX() >= x - slave.getWidth() && slave.getX() <= x + 1 &&
                     slave.getY() >= y - slave.getHeight() && slave.getY() <= y + 1)
             );
+        }
+        if (generateWall && Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)){
+            Wall wall = new Wall(
+                    (int) getXForCameraAndForMouse(),
+                    (int) getYForCameraAndForMouse(),
+                    20, 20);
+            wallsArray.add(wall);
+        }
+        if (removeWall && Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)){
+            float x = getXForCameraAndForMouse();
+            float y = getYForCameraAndForMouse();
+            wallsArray.removeIf(wall -> (
+                    wall.getX() >= x - wall.getWidth() && wall.getX() <= x + 1 &&
+                            wall.getY() >= y - wall.getHeight() && wall.getY() <= y + 1)
+            );
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.CONTROL_LEFT) && Gdx.input.isKeyJustPressed(Input.Keys.S)){
+            boolean saveSlave = ShooterCRUD.saveSlaveList(slaveArray);
+            System.out.println("saveSlave " + saveSlave);
+            boolean saveMaster = ShooterCRUD.saveMasterList(masterArray);
+            System.out.println("saveMaster " + saveMaster);
+            boolean saveWall = JSONReader.saveWallList(wallsArray, SHOOTER_WALLS_PATH);
+            System.out.println("saveWall " + saveWall);
+        }
+
+
+        if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
+            game.setScreen(new MainMenuScreen(game));
         }
     }
 

@@ -1,5 +1,6 @@
 package ru.gachigame.game.shooter.screen;
 
+import com.badlogic.gdx.Input;
 import ru.gachigame.game.screen.MainMenuScreen;
 import ru.gachigame.game.shooter.ShooterCRUD;
 import ru.gachigame.game.shooter.gameobject.character.parts.Cum;
@@ -67,6 +68,10 @@ public class ShooterLevelScreen implements Screen {
         camera.position.x = billy.x;
         camera.position.y = billy.y;
         billyDeath();
+
+        if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
+            game.setScreen(new MainMenuScreen(game));
+        }
     }
 
     @Override public void show(){}

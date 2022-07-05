@@ -94,6 +94,26 @@ public class ShooterCRUD extends JSONReader {
         }
     }
 
+    public static boolean saveSlaveList(List<Slave> slaves){
+        try {
+            JSONObject jsonObject = JSONReader.readJson(new File(SHOOTER_SLAVES_PATH));
+            List<JSONObject> jsonObjectList = new ArrayList<>();
+            for (Slave slave : slaves){
+                JSONObject jsonSlave = new JSONObject();
+                jsonSlave.put("x", slave.getX());
+                jsonSlave.put("y", slave.getY());
+                jsonObjectList.add(jsonSlave);
+            }
+            jsonObject.put("slaveList", jsonObjectList);
+            JSONReader.writeJson(new File(SHOOTER_SLAVES_PATH), jsonObject);
+            return true;
+        }
+        catch (Exception exception){
+            exception.printStackTrace();
+            return false;
+        }
+    }
+
     public static List<Master> readMaster(String path){
         List<Master> masterList = new ArrayList<>();
         try {
@@ -125,6 +145,26 @@ public class ShooterCRUD extends JSONReader {
             newJsonObject.put("y", y);
             jsonMasterList.add(newJsonObject);
             jsonObject.put("mastersList", jsonMasterList);
+            JSONReader.writeJson(new File(SHOOTER_MASTER_PATH), jsonObject);
+            return true;
+        }
+        catch (Exception exception){
+            exception.printStackTrace();
+            return false;
+        }
+    }
+
+    public static boolean saveMasterList(List<Master> masters){
+        try {
+            JSONObject jsonObject = JSONReader.readJson(new File(SHOOTER_MASTER_PATH));
+            List<JSONObject> jsonObjectList = new ArrayList<>();
+            for (Master master : masters){
+                JSONObject jsonMaster = new JSONObject();
+                jsonMaster.put("x", master.getX());
+                jsonMaster.put("y", master.getY());
+                jsonObjectList.add(jsonMaster);
+            }
+            jsonObject.put("mastersArray", jsonObjectList);
             JSONReader.writeJson(new File(SHOOTER_MASTER_PATH), jsonObject);
             return true;
         }
