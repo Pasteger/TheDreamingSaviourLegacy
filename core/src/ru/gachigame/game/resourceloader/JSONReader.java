@@ -1,4 +1,4 @@
-package ru.gachigame.game;
+package ru.gachigame.game.resourceloader;
 
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -12,7 +12,8 @@ import java.util.List;
 
 public class JSONReader {
     public static final String MAIN_MENU_BACKGROUND_TEXTURE_PATH;
-
+    public static final String WALL_TEXTURE_PATH;
+    public static final String EDITABLE_WALL_TEXTURE_PATH;
 
     protected static JSONObject readJson(File file) throws Exception {
         FileReader reader = new FileReader(file);
@@ -30,6 +31,8 @@ public class JSONReader {
         try {
             JSONObject paths = readJson(new File("paths.json"));
             MAIN_MENU_BACKGROUND_TEXTURE_PATH = (String) paths.get("mainMenuBackground");
+            WALL_TEXTURE_PATH = (String) paths.get("wallTexture");
+            EDITABLE_WALL_TEXTURE_PATH = (String) paths.get("editableWallTexture");
         } catch (Exception e) {throw new RuntimeException(e);}
     }
 
@@ -56,45 +59,12 @@ public class JSONReader {
         }
         return wallList;
     }
-    public static boolean addWall(int x, int y, String path){
-        return addUpdateWall(-1, x, y, 20, 20, path);
-    }
 
-    public static boolean updateWall(int id, int x, int y, int width, int height, String path){
-        return addUpdateWall(id, x, y, width, height, path);
-    }
-
-    private static boolean addUpdateWall(int id, int x, int y, int width, int height, String path){
-        try {
-            JSONObject jsonObject = JSONReader.readJson(new File(path));
-            @SuppressWarnings("unchecked")
-            List<JSONObject> jsonWallsList = (List<JSONObject>) jsonObject.get("wallsList");
-            JSONObject newJsonObject = new JSONObject();
-            newJsonObject.put("x", x);
-            newJsonObject.put("y", y);
-            newJsonObject.put("width", width);
-            newJsonObject.put("height", height);
-            if (id == -1){
-                jsonWallsList.add(newJsonObject);
-            }
-            else {
-                jsonWallsList.set(id, newJsonObject);
-            }
-            jsonObject.put("wallsList", jsonWallsList);
-            JSONReader.writeJson(new File(path), jsonObject);
-            return true;
-        }
-        catch (Exception exception){
-            exception.printStackTrace();
-            return false;
-        }
-    }
-
-    public static boolean saveWallList(List<Wall> walls, String path){
+    public static boolean saveWallList(List<Wall> walls, String path) {
         try {
             JSONObject jsonObject = JSONReader.readJson(new File(path));
             List<JSONObject> jsonObjectList = new ArrayList<>();
-            for (Wall wall : walls){
+            for (Wall wall : walls) {
                 JSONObject jsonWall = new JSONObject();
                 jsonWall.put("x", wall.getX());
                 jsonWall.put("y", wall.getY());
@@ -105,24 +75,7 @@ public class JSONReader {
             jsonObject.put("wallsList", jsonObjectList);
             JSONReader.writeJson(new File(path), jsonObject);
             return true;
-        }
-        catch (Exception exception){
-            exception.printStackTrace();
-            return false;
-        }
-    }
-
-    public static boolean removeWall(int id, String path){
-        try {
-            JSONObject jsonObject = JSONReader.readJson(new File(path));
-            @SuppressWarnings("unchecked")
-            List<JSONObject> JSONWallsList = (List<JSONObject>) jsonObject.get("wallsList");
-            JSONWallsList.remove(id);
-            jsonObject.put("wallsList", JSONWallsList);
-            JSONReader.writeJson(new File(path), jsonObject);
-            return true;
-        }
-        catch (Exception exception){
+        } catch (Exception exception) {
             exception.printStackTrace();
             return false;
         }

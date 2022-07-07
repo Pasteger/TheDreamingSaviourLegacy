@@ -2,11 +2,11 @@ package ru.gachigame.game.shooter.gameobject.character;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import static ru.gachigame.game.shooter.ShooterCRUD.*;
+import static ru.gachigame.game.resourceloader.TextureLoader.*;
 
 public class Billy extends Character {
     public Billy(){
-        fillSpritesMap(BILLY_SPRITES);
+        sprites = SHOOTER_BILLY_TEXTURES;
 
         texture = sprites.get(UP);
         HP = 4;

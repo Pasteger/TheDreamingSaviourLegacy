@@ -1,7 +1,7 @@
 package ru.gachigame.game.shooter.gameobject.character;
 
 import com.badlogic.gdx.math.Rectangle;
-import static ru.gachigame.game.shooter.ShooterCRUD.SLAVE_SPRITES;
+import static ru.gachigame.game.resourceloader.TextureLoader.*;
 
 public class Slave extends Character {
     public byte recharge;
@@ -13,7 +13,7 @@ public class Slave extends Character {
     public String type;
 
     public Slave(){
-        fillSpritesMap(SLAVE_SPRITES);
+        sprites = SHOOTER_SLAVE_TEXTURES;
         texture = sprites.get(UP);
 
         width = 8;

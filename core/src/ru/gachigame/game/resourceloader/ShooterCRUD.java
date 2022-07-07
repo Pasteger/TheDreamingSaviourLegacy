@@ -1,7 +1,7 @@
-package ru.gachigame.game.shooter;
+package ru.gachigame.game.resourceloader;
 
 import org.json.simple.JSONObject;
-import ru.gachigame.game.JSONReader;
+import ru.gachigame.game.resourceloader.JSONReader;
 import ru.gachigame.game.shooter.gameobject.character.Master;
 import ru.gachigame.game.shooter.gameobject.character.Slave;
 import java.io.File;
@@ -17,7 +17,7 @@ public class ShooterCRUD extends JSONReader {
     public static final JSONObject SLAVE_SPRITES;
     public static final JSONObject MASTER_SPRITES;
     public static final JSONObject CUM_SPRITES;
-    public static final String DEATH_BACKGROUND_TEXTURE_PATH;
+    public static final String SHOOTER_DEATH_BACKGROUND_TEXTURE_PATH;
 
     static {
         try {
@@ -25,7 +25,7 @@ public class ShooterCRUD extends JSONReader {
             JSONObject shooterResources = (JSONObject) paths.get("shooterResources");
 
             SHOOTER_BACKGROUND_TEXTURE_PATH = (String) shooterResources.get("dungeon");
-            DEATH_BACKGROUND_TEXTURE_PATH = (String) shooterResources.get("deathBackground");
+            SHOOTER_DEATH_BACKGROUND_TEXTURE_PATH = (String) shooterResources.get("deathBackground");
 
             SHOOTER_WALLS_PATH = (String) shooterResources.get("wallsPath");
             SHOOTER_SLAVES_PATH = (String) shooterResources.get("slavesPath");
@@ -57,41 +57,6 @@ public class ShooterCRUD extends JSONReader {
             exception.printStackTrace();
         }
         return slaveList;
-    }
-
-    public static boolean addSlave(int x, int y){
-        try {
-            JSONObject jsonObject = JSONReader.readJson(new File(SHOOTER_SLAVES_PATH));
-            @SuppressWarnings("unchecked")
-            List<JSONObject> JSONSlavesList = (List<JSONObject>) jsonObject.get("slavesList");
-            JSONObject newJsonObject = new JSONObject();
-            newJsonObject.put("x", x);
-            newJsonObject.put("y", y);
-            JSONSlavesList.add(newJsonObject);
-            jsonObject.put("slavesList", JSONSlavesList);
-            JSONReader.writeJson(new File(SHOOTER_SLAVES_PATH), jsonObject);
-            return true;
-        }
-        catch (Exception exception){
-            exception.printStackTrace();
-            return false;
-        }
-    }
-
-    public static boolean removeSlave(int id){
-        try {
-            JSONObject jsonObject = JSONReader.readJson(new File(SHOOTER_SLAVES_PATH));
-            @SuppressWarnings("unchecked")
-            List<JSONObject> JSONSlavesList = (List<JSONObject>) jsonObject.get("slavesList");
-            JSONSlavesList.remove(id);
-            jsonObject.put("slavesList", JSONSlavesList);
-            JSONReader.writeJson(new File(SHOOTER_SLAVES_PATH), jsonObject);
-            return true;
-        }
-        catch (Exception exception){
-            exception.printStackTrace();
-            return false;
-        }
     }
 
     public static boolean saveSlaveList(List<Slave> slaves){
@@ -135,25 +100,6 @@ public class ShooterCRUD extends JSONReader {
         return masterList;
     }
 
-    public static boolean addMaster(int x, int y){
-        try {
-            JSONObject jsonObject = JSONReader.readJson(new File(SHOOTER_MASTER_PATH));
-            @SuppressWarnings("unchecked")
-            List<JSONObject> jsonMasterList = (List<JSONObject>) jsonObject.get("mastersList");
-            JSONObject newJsonObject = new JSONObject();
-            newJsonObject.put("x", x);
-            newJsonObject.put("y", y);
-            jsonMasterList.add(newJsonObject);
-            jsonObject.put("mastersList", jsonMasterList);
-            JSONReader.writeJson(new File(SHOOTER_MASTER_PATH), jsonObject);
-            return true;
-        }
-        catch (Exception exception){
-            exception.printStackTrace();
-            return false;
-        }
-    }
-
     public static boolean saveMasterList(List<Master> masters){
         try {
             JSONObject jsonObject = JSONReader.readJson(new File(SHOOTER_MASTER_PATH));
@@ -164,23 +110,7 @@ public class ShooterCRUD extends JSONReader {
                 jsonMaster.put("y", master.getY());
                 jsonObjectList.add(jsonMaster);
             }
-            jsonObject.put("mastersArray", jsonObjectList);
-            JSONReader.writeJson(new File(SHOOTER_MASTER_PATH), jsonObject);
-            return true;
-        }
-        catch (Exception exception){
-            exception.printStackTrace();
-            return false;
-        }
-    }
-
-    public static boolean removeMaster(int id){
-        try {
-            JSONObject jsonObject = JSONReader.readJson(new File(SHOOTER_MASTER_PATH));
-            @SuppressWarnings("unchecked")
-            List<JSONObject> jsonMasterList = (List<JSONObject>) jsonObject.get("mastersList");
-            jsonMasterList.remove(id);
-            jsonObject.put("mastersList", jsonMasterList);
+            jsonObject.put("mastersList", jsonObjectList);
             JSONReader.writeJson(new File(SHOOTER_MASTER_PATH), jsonObject);
             return true;
         }

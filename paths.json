@@ -1,6 +1,7 @@
 {
   "mainMenuBackground": "sprites/main_menu_background.jpg",
   "wallTexture": "sprites/wall.png",
+  "editableWallTexture": "sprites/editableWall.png",
   "shooterResources": {
     "wallsPath": "objects/shooter/walls.json",
     "slavesPath": "objects/shooter/slaves.json",

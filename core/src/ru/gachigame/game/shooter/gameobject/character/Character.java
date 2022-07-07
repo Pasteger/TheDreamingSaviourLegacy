@@ -2,30 +2,20 @@ package ru.gachigame.game.shooter.gameobject.character;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Rectangle;
-import org.json.simple.JSONObject;
-import ru.gachigame.game.JSONReader;
 import ru.gachigame.game.shooter.gameobject.character.parts.Cum;
 import ru.gachigame.game.shooter.screen.ShooterLevelScreen;
-import java.util.HashMap;
 import java.util.Map;
-import static ru.gachigame.game.shooter.ShooterCRUD.CUM_SPRITES;
+import static ru.gachigame.game.resourceloader.TextureLoader.*;
 
 public class Character extends Rectangle {
     final String UP = "upSprite";
     final String DOWN = "downSprite";
     final String LEFT = "leftSprite";
     final String RIGHT = "rightSprite";
-    final Map<String, Texture> sprites = new HashMap<>();
+    Map<String, Texture> sprites;
     public byte HP;
     public String direction = "NORTH";
     public Texture texture;
-
-    void fillSpritesMap(JSONObject spriteJSONObject){
-        sprites.put(UP, new Texture(JSONReader.getSpritePath(spriteJSONObject, UP)));
-        sprites.put(DOWN, new Texture(JSONReader.getSpritePath(spriteJSONObject, DOWN)));
-        sprites.put(LEFT, new Texture(JSONReader.getSpritePath(spriteJSONObject, LEFT)));
-        sprites.put(RIGHT, new Texture(JSONReader.getSpritePath(spriteJSONObject, RIGHT)));
-    }
 
     public void shot(String cumType){
         Cum cum = new Cum();
@@ -52,8 +42,8 @@ public class Character extends Rectangle {
         cum.direction = direction;
         cum.type = cumType;
         switch (cumType){
-            case "GOOD" -> cum.texture = new Texture(JSONReader.getSpritePath(CUM_SPRITES, "cum"));
-            case "BAD" -> cum.texture = new Texture(JSONReader.getSpritePath(CUM_SPRITES, "badCum"));
+            case "GOOD" -> cum.texture = CUM_TEXTURE;
+            case "BAD" -> cum.texture = BAD_CUM_TEXTURE;
         }
         ShooterLevelScreen.cumArray.add(cum);
     }

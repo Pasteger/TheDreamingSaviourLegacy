@@ -12,10 +12,10 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import ru.gachigame.game.JSONReader;
 import ru.gachigame.game.LevelEditor;
 import ru.gachigame.game.MyGdxGame;
 import ru.gachigame.game.shooter.screen.ShooterLevelScreen;
+import static ru.gachigame.game.resourceloader.TextureLoader.*;
 
 public class MainMenuScreen implements Screen {
     private final MyGdxGame game;
@@ -28,7 +28,7 @@ public class MainMenuScreen implements Screen {
         stage = new Stage();
         Gdx.input.setInputProcessor(stage);
 
-        background = new Texture(JSONReader.MAIN_MENU_BACKGROUND_TEXTURE_PATH);
+        background = MAIN_MENU_BACKGROUND;
 
         BitmapFont font = new BitmapFont();
         TextButton.TextButtonStyle textButtonStyle = new TextButton.TextButtonStyle();
@@ -72,7 +72,7 @@ public class MainMenuScreen implements Screen {
         exitButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                throw new RuntimeException();
+                throw new Error();
             }
         });
         Gdx.gl.glClearColor(0, 0, 0.2f, 1);
