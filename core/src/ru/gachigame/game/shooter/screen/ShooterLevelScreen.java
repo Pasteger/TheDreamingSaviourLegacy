@@ -32,13 +32,13 @@ public class ShooterLevelScreen implements Screen {
     public ShooterLevelScreen(final MyGdxGame game){
         this.game = game;
         Gdx.gl.glClearColor(0, 0, 0.2f, 1);
-        dungeonTexture = new Texture(SHOOTER_BACKGROUND_TEXTURE_PATH);
+        dungeonTexture = new Texture(getShooterBackgroundTexturePath());
         random = new Random();
         camera = game.getCamera();
         camera.setToOrtho(false, 200, 200);
-        wallsArray = JSONReader.readWalls(SHOOTER_WALLS_PATH);
-        slaveArray = ShooterCRUD.readSlave(SHOOTER_SLAVES_PATH);
-        slaveArray.addAll(ShooterCRUD.readMaster(SHOOTER_MASTER_PATH));
+        wallsArray = JSONReader.readWalls(getShooterWallsPath());
+        slaveArray = ShooterCRUD.readSlave(getShooterSlavesPath());
+        slaveArray.addAll(ShooterCRUD.readMaster(getShooterMasterPath()));
         billy = new Billy();
     }
 

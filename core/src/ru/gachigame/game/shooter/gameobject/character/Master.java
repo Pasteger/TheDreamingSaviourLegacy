@@ -6,7 +6,7 @@ import static ru.gachigame.game.resourceloader.TextureLoader.*;
 
 public class Master extends Slave {
     public Master(){
-        sprites = SHOOTER_MASTER_TEXTURES;
+        sprites = getShooterMasterTextures();
         texture = sprites.get(UP);
         width = 68;
         height = 68;
@@ -42,7 +42,7 @@ public class Master extends Slave {
         cum.width = 17;
         cum.direction = direction;
         cum.type = "MASTERS";
-        cum.texture = MASTER_CUM_TEXTURE;
+        cum.texture = getMasterCumTexture();
         ShooterLevelScreen.cumArray.add(cum);
     }
 

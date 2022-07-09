@@ -11,9 +11,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class JSONReader {
-    public static final String MAIN_MENU_BACKGROUND_TEXTURE_PATH;
-    public static final String WALL_TEXTURE_PATH;
-    public static final String EDITABLE_WALL_TEXTURE_PATH;
+    private static String mainMenuBackgroundTexturePath;
+    private static String wallTexturePath;
+    private static String editableWallTexturePath;
+    private static String sometimesIRipTheSkinSoundPath;
+
+    public static void load() throws Exception {
+        JSONObject paths = readJson(new File("paths.json"));
+        mainMenuBackgroundTexturePath = (String) paths.get("mainMenuBackground");
+        wallTexturePath = (String) paths.get("wallTexture");
+        editableWallTexturePath = (String) paths.get("editableWallTexture");
+        sometimesIRipTheSkinSoundPath = (String) paths.get("sometimesIRipTheSkinSound");
+    }
+
 
     protected static JSONObject readJson(File file) throws Exception {
         FileReader reader = new FileReader(file);
@@ -25,15 +35,6 @@ public class JSONReader {
         FileWriter writer = new FileWriter(file);
         writer.write(jsonObject.toString());
         writer.close();
-    }
-
-    static {
-        try {
-            JSONObject paths = readJson(new File("paths.json"));
-            MAIN_MENU_BACKGROUND_TEXTURE_PATH = (String) paths.get("mainMenuBackground");
-            WALL_TEXTURE_PATH = (String) paths.get("wallTexture");
-            EDITABLE_WALL_TEXTURE_PATH = (String) paths.get("editableWallTexture");
-        } catch (Exception e) {throw new RuntimeException(e);}
     }
 
     public static String getSpritePath(JSONObject gameObject, String sprite){
@@ -79,5 +80,21 @@ public class JSONReader {
             exception.printStackTrace();
             return false;
         }
+    }
+
+    public static String getMainMenuBackgroundTexturePath() {
+        return mainMenuBackgroundTexturePath;
+    }
+
+    public static String getWallTexturePath() {
+        return wallTexturePath;
+    }
+
+    public static String getEditableWallTexturePath() {
+        return editableWallTexturePath;
+    }
+
+    public static String getSometimesIRipTheSkinSoundPath() {
+        return sometimesIRipTheSkinSoundPath;
     }
 }

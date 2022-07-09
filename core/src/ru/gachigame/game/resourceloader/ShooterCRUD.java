@@ -1,7 +1,6 @@
 package ru.gachigame.game.resourceloader;
 
 import org.json.simple.JSONObject;
-import ru.gachigame.game.resourceloader.JSONReader;
 import ru.gachigame.game.shooter.gameobject.character.Master;
 import ru.gachigame.game.shooter.gameobject.character.Slave;
 import java.io.File;
@@ -9,33 +8,31 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ShooterCRUD extends JSONReader {
-    public static final String SHOOTER_WALLS_PATH;
-    public static final String SHOOTER_SLAVES_PATH;
-    public static final String SHOOTER_MASTER_PATH;
-    public static final String SHOOTER_BACKGROUND_TEXTURE_PATH;
-    public static final JSONObject BILLY_SPRITES;
-    public static final JSONObject SLAVE_SPRITES;
-    public static final JSONObject MASTER_SPRITES;
-    public static final JSONObject CUM_SPRITES;
-    public static final String SHOOTER_DEATH_BACKGROUND_TEXTURE_PATH;
+    private static String shooterWallsPath;
+    private static String shooterSlavesPath;
+    private static String shooterMasterPath;
+    private static String shooterBackgroundTexturePath;
+    private static JSONObject billySprites;
+    private static JSONObject slaveSprites;
+    private static JSONObject masterSprites;
+    private static JSONObject cumSprites;
+    private static String shooterDeathBackgroundTexturePath;
 
-    static {
-        try {
-            JSONObject paths = readJson(new File("paths.json"));
-            JSONObject shooterResources = (JSONObject) paths.get("shooterResources");
+    public static void load() throws Exception {
+        JSONObject paths = readJson(new File("paths.json"));
+        JSONObject shooterResources = (JSONObject) paths.get("shooterResources");
 
-            SHOOTER_BACKGROUND_TEXTURE_PATH = (String) shooterResources.get("dungeon");
-            SHOOTER_DEATH_BACKGROUND_TEXTURE_PATH = (String) shooterResources.get("deathBackground");
+        shooterBackgroundTexturePath = (String) shooterResources.get("dungeon");
+        shooterDeathBackgroundTexturePath = (String) shooterResources.get("deathBackground");
 
-            SHOOTER_WALLS_PATH = (String) shooterResources.get("wallsPath");
-            SHOOTER_SLAVES_PATH = (String) shooterResources.get("slavesPath");
-            SHOOTER_MASTER_PATH = (String) shooterResources.get("masterPath");
+        shooterWallsPath = (String) shooterResources.get("wallsPath");
+        shooterSlavesPath = (String) shooterResources.get("slavesPath");
+        shooterMasterPath = (String) shooterResources.get("masterPath");
 
-            BILLY_SPRITES = (JSONObject) shooterResources.get("billySprites");
-            SLAVE_SPRITES = (JSONObject) shooterResources.get("slaveSprites");
-            MASTER_SPRITES = (JSONObject) shooterResources.get("masterSprites");
-            CUM_SPRITES = (JSONObject) shooterResources.get("cumSprites");
-        } catch (Exception e) {throw new RuntimeException(e);}
+        billySprites = (JSONObject) shooterResources.get("billySprites");
+        slaveSprites = (JSONObject) shooterResources.get("slaveSprites");
+        masterSprites = (JSONObject) shooterResources.get("masterSprites");
+        cumSprites = (JSONObject) shooterResources.get("cumSprites");
     }
 
     public static List<Slave> readSlave(String path){
@@ -61,7 +58,7 @@ public class ShooterCRUD extends JSONReader {
 
     public static boolean saveSlaveList(List<Slave> slaves){
         try {
-            JSONObject jsonObject = JSONReader.readJson(new File(SHOOTER_SLAVES_PATH));
+            JSONObject jsonObject = JSONReader.readJson(new File(shooterSlavesPath));
             List<JSONObject> jsonObjectList = new ArrayList<>();
             for (Slave slave : slaves){
                 JSONObject jsonSlave = new JSONObject();
@@ -70,7 +67,7 @@ public class ShooterCRUD extends JSONReader {
                 jsonObjectList.add(jsonSlave);
             }
             jsonObject.put("slaveList", jsonObjectList);
-            JSONReader.writeJson(new File(SHOOTER_SLAVES_PATH), jsonObject);
+            JSONReader.writeJson(new File(shooterSlavesPath), jsonObject);
             return true;
         }
         catch (Exception exception){
@@ -102,7 +99,7 @@ public class ShooterCRUD extends JSONReader {
 
     public static boolean saveMasterList(List<Master> masters){
         try {
-            JSONObject jsonObject = JSONReader.readJson(new File(SHOOTER_MASTER_PATH));
+            JSONObject jsonObject = JSONReader.readJson(new File(shooterMasterPath));
             List<JSONObject> jsonObjectList = new ArrayList<>();
             for (Master master : masters){
                 JSONObject jsonMaster = new JSONObject();
@@ -111,12 +108,48 @@ public class ShooterCRUD extends JSONReader {
                 jsonObjectList.add(jsonMaster);
             }
             jsonObject.put("mastersList", jsonObjectList);
-            JSONReader.writeJson(new File(SHOOTER_MASTER_PATH), jsonObject);
+            JSONReader.writeJson(new File(shooterMasterPath), jsonObject);
             return true;
         }
         catch (Exception exception){
             exception.printStackTrace();
             return false;
         }
+    }
+
+    public static String getShooterWallsPath() {
+        return shooterWallsPath;
+    }
+
+    public static String getShooterSlavesPath() {
+        return shooterSlavesPath;
+    }
+
+    public static String getShooterMasterPath() {
+        return shooterMasterPath;
+    }
+
+    public static String getShooterBackgroundTexturePath() {
+        return shooterBackgroundTexturePath;
+    }
+
+    public static JSONObject getBillySprites() {
+        return billySprites;
+    }
+
+    public static JSONObject getSlaveSprites() {
+        return slaveSprites;
+    }
+
+    public static JSONObject getMasterSprites() {
+        return masterSprites;
+    }
+
+    public static JSONObject getCumSprites() {
+        return cumSprites;
+    }
+
+    public static String getShooterDeathBackgroundTexturePath() {
+        return shooterDeathBackgroundTexturePath;
     }
 }

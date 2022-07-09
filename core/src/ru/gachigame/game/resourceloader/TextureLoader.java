@@ -7,36 +7,30 @@ import java.util.Map;
 import static ru.gachigame.game.resourceloader.ShooterCRUD.*;
 
 public class TextureLoader {
-    public final static Texture WALL_TEXTURE;
-    public final static Texture EDIT_WALL_TEXTURE;
-    public final static Map<String, Texture> SHOOTER_SLAVE_TEXTURES = new HashMap<>();
-    public final static Map<String, Texture> SHOOTER_BILLY_TEXTURES = new HashMap<>();
-    public final static Map<String, Texture> SHOOTER_MASTER_TEXTURES = new HashMap<>();
-    public final static Texture CUM_TEXTURE;
-    public final static Texture BAD_CUM_TEXTURE;
-    public final static Texture MASTER_CUM_TEXTURE;
-    public final static Texture MAIN_MENU_BACKGROUND;
-    public final static Texture SHOOTER_BACKGROUND;
-    public final static Texture SHOOTER_DEATH_BACKGROUND;
+    private static Texture wallTexture;
+    private static Texture editWallTexture;
+    private static final Map<String, Texture> shooterSlaveTextures = new HashMap<>();
+    private static final Map<String, Texture> shooterBullyTextures = new HashMap<>();
+    private static final Map<String, Texture> shooterMasterTextures = new HashMap<>();
+    private static Texture cumTexture;
+    private static Texture badCumTexture;
+    private static Texture masterCumTexture;
+    private static Texture mainMenuBackground;
+    private static Texture shooterBackground;
+    private static Texture shooterDeathBackground;
 
-    static {
-        try {
-            WALL_TEXTURE = new Texture(WALL_TEXTURE_PATH);
-            EDIT_WALL_TEXTURE = new Texture(EDITABLE_WALL_TEXTURE_PATH);
-            fillSpritesMap(SHOOTER_BILLY_TEXTURES, BILLY_SPRITES);
-            fillSpritesMap(SHOOTER_SLAVE_TEXTURES, SLAVE_SPRITES);
-            fillSpritesMap(SHOOTER_MASTER_TEXTURES, MASTER_SPRITES);
-            CUM_TEXTURE = new Texture(getSpritePath(CUM_SPRITES, "cum"));
-            BAD_CUM_TEXTURE = new Texture(getSpritePath(CUM_SPRITES, "badCum"));
-            MASTER_CUM_TEXTURE = new Texture(getSpritePath(CUM_SPRITES, "masterCum"));
-            MAIN_MENU_BACKGROUND = new Texture(MAIN_MENU_BACKGROUND_TEXTURE_PATH);
-            SHOOTER_BACKGROUND = new Texture(SHOOTER_BACKGROUND_TEXTURE_PATH);
-            SHOOTER_DEATH_BACKGROUND = new Texture(SHOOTER_DEATH_BACKGROUND_TEXTURE_PATH);
-        }
-        catch (Exception exception){
-            exception.printStackTrace();
-            throw new RuntimeException();
-        }
+    public static void load() {
+        wallTexture = new Texture(getWallTexturePath());
+        editWallTexture = new Texture(getEditableWallTexturePath());
+        fillSpritesMap(shooterBullyTextures, getBillySprites());
+        fillSpritesMap(shooterSlaveTextures, getSlaveSprites());
+        fillSpritesMap(shooterMasterTextures, getMasterSprites());
+        cumTexture = new Texture(getSpritePath(getCumSprites(), "cum"));
+        badCumTexture = new Texture(getSpritePath(getCumSprites(), "badCum"));
+        masterCumTexture = new Texture(getSpritePath(getCumSprites(), "masterCum"));
+        mainMenuBackground = new Texture(getMainMenuBackgroundTexturePath());
+        shooterBackground = new Texture(getShooterBackgroundTexturePath());
+        shooterDeathBackground = new Texture(getShooterDeathBackgroundTexturePath());
     }
 
     private static void fillSpritesMap(Map<String, Texture> sprites, JSONObject spriteJSONObject){
@@ -44,5 +38,49 @@ public class TextureLoader {
         sprites.put("downSprite", new Texture(getSpritePath(spriteJSONObject, "downSprite")));
         sprites.put("leftSprite", new Texture(getSpritePath(spriteJSONObject, "leftSprite")));
         sprites.put("rightSprite", new Texture(getSpritePath(spriteJSONObject, "rightSprite")));
+    }
+
+    public static Texture getWallTexture() {
+        return wallTexture;
+    }
+
+    public static Texture getEditWallTexture() {
+        return editWallTexture;
+    }
+
+    public static Map<String, Texture> getShooterSlaveTextures() {
+        return shooterSlaveTextures;
+    }
+
+    public static Map<String, Texture> getShooterBullyTextures() {
+        return shooterBullyTextures;
+    }
+
+    public static Map<String, Texture> getShooterMasterTextures() {
+        return shooterMasterTextures;
+    }
+
+    public static Texture getCumTexture() {
+        return cumTexture;
+    }
+
+    public static Texture getBadCumTexture() {
+        return badCumTexture;
+    }
+
+    public static Texture getMasterCumTexture() {
+        return masterCumTexture;
+    }
+
+    public static Texture getMainMenuBackground() {
+        return mainMenuBackground;
+    }
+
+    public static Texture getShooterBackground() {
+        return shooterBackground;
+    }
+
+    public static Texture getShooterDeathBackground() {
+        return shooterDeathBackground;
     }
 }

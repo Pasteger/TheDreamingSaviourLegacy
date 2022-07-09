@@ -6,7 +6,7 @@ import static ru.gachigame.game.resourceloader.TextureLoader.*;
 
 public class Billy extends Character {
     public Billy(){
-        sprites = SHOOTER_BILLY_TEXTURES;
+        sprites = getShooterBullyTextures();
 
         texture = sprites.get(UP);
         HP = 4;

@@ -13,7 +13,7 @@ public class Slave extends Character {
     public String type;
 
     public Slave(){
-        sprites = SHOOTER_SLAVE_TEXTURES;
+        sprites = getShooterSlaveTextures();
         texture = sprites.get(UP);
 
         width = 8;

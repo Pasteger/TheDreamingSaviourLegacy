@@ -28,7 +28,8 @@ public class MainMenuScreen implements Screen {
         stage = new Stage();
         Gdx.input.setInputProcessor(stage);
 
-        background = MAIN_MENU_BACKGROUND;
+        background = getMainMenuBackground();
+        System.out.println(background);
 
         BitmapFont font = new BitmapFont();
         TextButton.TextButtonStyle textButtonStyle = new TextButton.TextButtonStyle();
@@ -50,7 +51,6 @@ public class MainMenuScreen implements Screen {
 
         camera = game.getCamera();
         camera.setToOrtho(false, 800, 480);
-        //background = new Texture("sprites/main_menu_background.jpg");
 
 
         startButton.addListener(new ChangeListener() {

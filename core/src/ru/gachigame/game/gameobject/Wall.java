@@ -14,9 +14,9 @@ public class Wall extends Rectangle {
         setStandardTexture();
     }
     public void setStandardTexture(){
-        texture = new TextureRegion(WALL_TEXTURE, (int) x, (int) y, (int) width, (int) height);
+        texture = new TextureRegion(getWallTexture(), (int) x, (int) y, (int) width, (int) height);
     }
     public void setEditableTexture(){
-        texture = new TextureRegion(EDIT_WALL_TEXTURE, (int) x, (int) y, (int) width, (int) height);
+        texture = new TextureRegion(getEditWallTexture(), (int) x, (int) y, (int) width, (int) height);
     }
 }

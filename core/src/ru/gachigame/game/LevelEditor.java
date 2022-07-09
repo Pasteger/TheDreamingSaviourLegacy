@@ -10,13 +10,13 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Rectangle;
 import ru.gachigame.game.gameobject.Wall;
 import ru.gachigame.game.resourceloader.JSONReader;
-import ru.gachigame.game.resourceloader.TextureLoader;
 import ru.gachigame.game.screen.MainMenuScreen;
 import ru.gachigame.game.resourceloader.ShooterCRUD;
 import ru.gachigame.game.shooter.gameobject.character.Master;
 import ru.gachigame.game.shooter.gameobject.character.Slave;
 import java.util.List;
 import static ru.gachigame.game.resourceloader.ShooterCRUD.*;
+import static ru.gachigame.game.resourceloader.TextureLoader.*;
 
 public class LevelEditor implements Screen {
     private final MyGdxGame game;
@@ -41,10 +41,10 @@ public class LevelEditor implements Screen {
         Gdx.gl.glClearColor(0, 0, 0.2f, 1);
         camera = game.getCamera();
         camera.setToOrtho(false, 400, 400);
-        dungeonTexture = TextureLoader.SHOOTER_BACKGROUND;
-        wallsArray = JSONReader.readWalls(SHOOTER_WALLS_PATH);
-        slaveArray = ShooterCRUD.readSlave(SHOOTER_SLAVES_PATH);
-        masterArray = ShooterCRUD.readMaster(SHOOTER_MASTER_PATH);
+        dungeonTexture = getShooterBackground();
+        wallsArray = JSONReader.readWalls(getShooterWallsPath());
+        slaveArray = ShooterCRUD.readSlave(getShooterSlavesPath());
+        masterArray = ShooterCRUD.readMaster(getShooterMasterPath());
 
         Gdx.input.setInputProcessor(new EditorInputProcessor());
     }
@@ -166,7 +166,7 @@ public class LevelEditor implements Screen {
             System.out.println("saveSlave " + saveSlave);
             boolean saveMaster = ShooterCRUD.saveMasterList(masterArray);
             System.out.println("saveMaster " + saveMaster);
-            boolean saveWall = JSONReader.saveWallList(wallsArray, SHOOTER_WALLS_PATH);
+            boolean saveWall = JSONReader.saveWallList(wallsArray, getShooterWallsPath());
             System.out.println("saveWall " + saveWall);
         }
 
