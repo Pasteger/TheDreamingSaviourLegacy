@@ -1,7 +1,9 @@
 {
   "mainMenuBackground": "sprites/main_menu_background.jpg",
-  "wallTexture": "sprites/wall.png",
-  "editableWallTexture": "sprites/editableWall.png",
+  "floorTexture": "sprites/floors/floor.jpg",
+  "editableFloorTexture": "sprites/floors/editableFloor.jpg",
+  "wallTexture": "sprites/walls/wall.png",
+  "editableWallTexture": "sprites/walls/editableWall.png",
   "sometimesIRipTheSkinSound": "sounds/sometimes_i_rip_the_skin.wav",
   "shooterResources": {
     "wallsPath": "objects/shooter/walls.json",

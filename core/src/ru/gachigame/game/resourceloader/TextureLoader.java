@@ -9,6 +9,8 @@ import static ru.gachigame.game.resourceloader.ShooterCRUD.*;
 public class TextureLoader {
     private static Texture wallTexture;
     private static Texture editWallTexture;
+    private static Texture floorTexture;
+    private static Texture editFloorTexture;
     private static final Map<String, Texture> shooterSlaveTextures = new HashMap<>();
     private static final Map<String, Texture> shooterBullyTextures = new HashMap<>();
     private static final Map<String, Texture> shooterMasterTextures = new HashMap<>();
@@ -22,6 +24,8 @@ public class TextureLoader {
     public static void load() {
         wallTexture = new Texture(getWallTexturePath());
         editWallTexture = new Texture(getEditableWallTexturePath());
+        floorTexture = new Texture(getFloorTexturePath());
+        editFloorTexture = new Texture(getEditableFloorTexturePath());
         fillSpritesMap(shooterBullyTextures, getBillySprites());
         fillSpritesMap(shooterSlaveTextures, getSlaveSprites());
         fillSpritesMap(shooterMasterTextures, getMasterSprites());
@@ -82,5 +86,21 @@ public class TextureLoader {
 
     public static Texture getShooterDeathBackground() {
         return shooterDeathBackground;
+    }
+
+    public static Texture getFloorTexture() {
+        return floorTexture;
+    }
+
+    public static void setFloorTexture(Texture floorTexture) {
+        TextureLoader.floorTexture = floorTexture;
+    }
+
+    public static Texture getEditFloorTexture() {
+        return editFloorTexture;
+    }
+
+    public static void setEditFloorTexture(Texture editFloorTexture) {
+        TextureLoader.editFloorTexture = editFloorTexture;
     }
 }

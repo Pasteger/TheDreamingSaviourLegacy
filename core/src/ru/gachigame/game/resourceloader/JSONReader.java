@@ -14,6 +14,8 @@ public class JSONReader {
     private static String mainMenuBackgroundTexturePath;
     private static String wallTexturePath;
     private static String editableWallTexturePath;
+    private static String floorTexturePath;
+    private static String editableFloorTexturePath;
     private static String sometimesIRipTheSkinSoundPath;
 
     public static void load() throws Exception {
@@ -21,6 +23,8 @@ public class JSONReader {
         mainMenuBackgroundTexturePath = (String) paths.get("mainMenuBackground");
         wallTexturePath = (String) paths.get("wallTexture");
         editableWallTexturePath = (String) paths.get("editableWallTexture");
+        floorTexturePath = (String) paths.get("floorTexture");
+        editableFloorTexturePath = (String) paths.get("editableFloorTexture");
         sometimesIRipTheSkinSoundPath = (String) paths.get("sometimesIRipTheSkinSound");
     }
 
@@ -96,5 +100,21 @@ public class JSONReader {
 
     public static String getSometimesIRipTheSkinSoundPath() {
         return sometimesIRipTheSkinSoundPath;
+    }
+
+    public static String getFloorTexturePath() {
+        return floorTexturePath;
+    }
+
+    public static void setFloorTexturePath(String floorTexturePath) {
+        JSONReader.floorTexturePath = floorTexturePath;
+    }
+
+    public static String getEditableFloorTexturePath() {
+        return editableFloorTexturePath;
+    }
+
+    public static void setEditableFloorTexturePath(String editableFloorTexturePath) {
+        JSONReader.editableFloorTexturePath = editableFloorTexturePath;
     }
 }
