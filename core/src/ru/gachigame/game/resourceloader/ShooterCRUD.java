@@ -40,7 +40,7 @@ public class ShooterCRUD extends JSONReader {
         try {
             JSONObject jsonObject = readJson(new File(path));
             @SuppressWarnings("unchecked")
-            List<JSONObject> JSONSlavesList = (List<JSONObject>) jsonObject.get("slavesList");
+            List<JSONObject> JSONSlavesList = (List<JSONObject>) jsonObject.get("slaveList");
             for (JSONObject thisObject : JSONSlavesList) {
                 float x = Float.parseFloat(String.valueOf(thisObject.get("x")));
                 float y = Float.parseFloat(String.valueOf(thisObject.get("y")));

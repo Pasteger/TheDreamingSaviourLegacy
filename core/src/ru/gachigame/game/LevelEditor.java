@@ -6,17 +6,18 @@ import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Rectangle;
+import ru.gachigame.game.gameobject.Floor;
 import ru.gachigame.game.gameobject.Wall;
 import ru.gachigame.game.resourceloader.JSONReader;
 import ru.gachigame.game.screen.MainMenuScreen;
 import ru.gachigame.game.resourceloader.ShooterCRUD;
 import ru.gachigame.game.shooter.gameobject.character.Master;
 import ru.gachigame.game.shooter.gameobject.character.Slave;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import static ru.gachigame.game.resourceloader.ShooterCRUD.*;
-import static ru.gachigame.game.resourceloader.TextureLoader.*;
 
 public class LevelEditor implements Screen {
     private final MyGdxGame game;
@@ -24,13 +25,9 @@ public class LevelEditor implements Screen {
     private final List<Slave> slaveArray;
     private final List<Master> masterArray;
     private final List<Wall> wallsArray;
-    private final Texture dungeonTexture;
-    private boolean spawnSlave;
-    private boolean deleteSlave;
-    private boolean generateWall;
-    private boolean removeWall;
-    private boolean edit;
+    private final List<Floor> floorList;
     private boolean dragged;
+    private String currentTask;
     private int deltaX;
     private int deltaY;
     private Wall currentWall;
@@ -38,10 +35,11 @@ public class LevelEditor implements Screen {
 
     public LevelEditor(final MyGdxGame game){
         this.game = game;
+        currentTask = "";
         Gdx.gl.glClearColor(0, 0, 0.2f, 1);
         camera = game.getCamera();
         camera.setToOrtho(false, 400, 400);
-        dungeonTexture = getShooterBackground();
+        floorList = new ArrayList<>();
         wallsArray = JSONReader.readWalls(getShooterWallsPath());
         slaveArray = ShooterCRUD.readSlave(getShooterSlavesPath());
         masterArray = ShooterCRUD.readMaster(getShooterMasterPath());
@@ -57,71 +55,59 @@ public class LevelEditor implements Screen {
         game.batch.setProjectionMatrix(camera.combined);
 
         game.batch.begin();
-        game.batch.draw(dungeonTexture, 0, 0);
+        if (!floorList.isEmpty()) floorList.forEach(floor -> floor.sprite.draw(game.batch));
 
         wallsArray.forEach(wall -> game.batch.draw(wall.texture, wall.x, wall.y));
         slaveArray.forEach(slave -> game.batch.draw(slave.texture, slave.x, slave.y));
         masterArray.forEach(master -> game.batch.draw(master.texture, master.x, master.y));
 
+        game.font.draw(game.batch, camera.position.x + "  " + camera.position.y, camera.position.x-200, camera.position.y+190);
+        game.font.draw(game.batch, currentTask, camera.position.x-200, camera.position.y+175);
+
+        game.batch.end();
+
         if (dragged) {
             camera.position.x += (float) deltaX/100;
             camera.position.y -= (float) deltaY/100;
         }
-
-        game.font.draw(game.batch, camera.position.x + "  " + camera.position.y, camera.position.x-200, camera.position.y+190);
-        game.font.draw(game.batch, Gdx.input.getX() + "   " + Gdx.input.getY(), camera.position.x-200, camera.position.y+175);
-
-        game.batch.end();
-
         buttons();
     }
 
     private void buttons(){
         if (Gdx.input.isKeyJustPressed(Input.Keys.S)) {
-            spawnSlave = !spawnSlave;
-            deleteSlave = false;
-            generateWall = false;
-            removeWall = false;
-            edit = false;
-            System.out.println("spawnSlave");
+            currentTask = !currentTask.equals("spawnSlave") ? "spawnSlave" : "";
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.D)) {
-            deleteSlave = !deleteSlave;
-            spawnSlave = false;
-            generateWall = false;
-            removeWall = false;
-            edit = false;
-            System.out.println("deleteSlave");
+            currentTask = !currentTask.equals("deleteSlave") ? "deleteSlave" : "";
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.W)) {
-            generateWall = !generateWall;
-            spawnSlave = false;
-            deleteSlave = false;
-            removeWall = false;
-            edit = false;
-            System.out.println("generateWall");
+            currentTask = !currentTask.equals("generateWall") ? "generateWall" : "";
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.R)) {
-            removeWall = !removeWall;
-            spawnSlave = false;
-            deleteSlave = false;
-            generateWall = false;
-            edit = false;
-            System.out.println("removeWall");
+            currentTask = !currentTask.equals("removeWall") ? "removeWall" : "";
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.E)) {
-            edit = !edit;
-            spawnSlave = false;
-            deleteSlave = false;
-            generateWall = false;
-            removeWall = false;
-            System.out.println("edit");
+            currentTask = !currentTask.equals("edit") ? "edit" : "";
+        }
+        if (Gdx.input.isKeyJustPressed(Input.Keys.F)) {
+            currentTask = !currentTask.equals("addFloor") ? "addFloor" : "";
         }
 
-        if (edit && Gdx.input.isButtonJustPressed(Input.Buttons.LEFT) && (currentWall == null || currentSlave == null)){
+        if (currentTask.equals("addFloor") && Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)){
+            Floor floor = new Floor(
+                    (int) getXForCameraAndForMouse(),
+                    (int) getYForCameraAndForMouse(),
+                    20,
+                    20
+            );
+            floorList.add(floor);
+            System.out.println("floor added");
+        }
+
+        if (currentTask.equals("edit") && Gdx.input.isButtonJustPressed(Input.Buttons.LEFT) && (currentWall == null && currentSlave == null)){
             setCurrentObject();
         }
-        if (edit && Gdx.input.isKeyJustPressed(Input.Keys.ENTER) && (currentWall != null || currentSlave != null)) {
+        if (currentTask.equals("edit") && Gdx.input.isKeyJustPressed(Input.Keys.ENTER) && (currentWall != null || currentSlave != null)) {
             if (currentWall != null) {
                 currentWall.setStandardTexture();
                 currentWall = null;
@@ -129,16 +115,16 @@ public class LevelEditor implements Screen {
             if (currentSlave != null) {
                 currentSlave = null;
             }
-            edit = false;
+            currentTask = "";
         }
 
-        if (spawnSlave && Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)){
+        if (currentTask.equals("spawnSlave") && Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)){
             Slave slave = new Slave();
             slave.setX(getXForCameraAndForMouse());
             slave.setY(getYForCameraAndForMouse());
             slaveArray.add(slave);
         }
-        if (deleteSlave && Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)){
+        if (currentTask.equals("deleteSlave") && Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)){
             float x = getXForCameraAndForMouse();
             float y = getYForCameraAndForMouse();
             slaveArray.removeIf(slave -> (
@@ -146,16 +132,16 @@ public class LevelEditor implements Screen {
                             slave.getY() >= y - slave.getHeight() && slave.getY() <= y + 1
             ));
         }
-        if (generateWall && Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)){
+        if (currentTask.equals("generateWall") && Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)){
             Wall wall = new Wall(
                     (int) getXForCameraAndForMouse(),
                     (int) getYForCameraAndForMouse(),
                     20, 20);
             wallsArray.add(wall);
         }
-        if (removeWall && Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)){
-            float x = getXForCameraAndForMouse();
+        if (currentTask.equals("removeWall") && Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)){
             float y = getYForCameraAndForMouse();
+            float x = getXForCameraAndForMouse();
             wallsArray.removeIf(wall -> (
                     wall.getX() >= x - wall.getWidth() && wall.getX() <= x + 1 &&
                             wall.getY() >= y - wall.getHeight() && wall.getY() <= y + 1)
@@ -170,7 +156,9 @@ public class LevelEditor implements Screen {
             System.out.println("saveWall " + saveWall);
         }
 
-        if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {game.setScreen(new MainMenuScreen(game));}
+        if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
+            game.setScreen(new MainMenuScreen(game));
+        }
     }
 
     private float getXForCameraAndForMouse(){
@@ -188,6 +176,7 @@ public class LevelEditor implements Screen {
             if (findObjectFromCord(wall, x, y)){
                 currentWall = wall;
                 currentWall.setEditableTexture();
+                Collections.swap(wallsArray, wallsArray.indexOf(currentWall), wallsArray.size()-1);
                 return;
             }
         }

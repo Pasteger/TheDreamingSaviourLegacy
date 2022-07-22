@@ -188,7 +188,8 @@ public class ShooterLevelScreen implements Screen {
         }
         else {
             cumArray.clear();
-            game.setScreen(new MainMenuScreen(game));
+            game.setScreen(new ShooterLevelScreen(game));
+            //game.setScreen(new MainMenuScreen(game));
         }
     }
 
