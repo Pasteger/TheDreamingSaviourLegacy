@@ -9,15 +9,13 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Rectangle;
 import ru.gachigame.game.gameobject.Floor;
 import ru.gachigame.game.gameobject.Wall;
-import ru.gachigame.game.resourceloader.JSONReader;
+import ru.gachigame.game.resourceloader.LevelSaver;
 import ru.gachigame.game.screen.MainMenuScreen;
-import ru.gachigame.game.resourceloader.ShooterCRUD;
 import ru.gachigame.game.shooter.gameobject.character.Master;
 import ru.gachigame.game.shooter.gameobject.character.Slave;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import static ru.gachigame.game.resourceloader.ShooterCRUD.*;
+import static ru.gachigame.game.resourceloader.LevelLoader.*;
 
 public class LevelEditor implements Screen {
     private final MyGdxGame game;
@@ -40,10 +38,11 @@ public class LevelEditor implements Screen {
         Gdx.gl.glClearColor(0, 0, 0.2f, 1);
         camera = game.getCamera();
         camera.setToOrtho(false, 400, 400);
-        floorList = new ArrayList<>();
-        wallsList = JSONReader.readWalls(getShooterWallsPath());
-        slaveList = ShooterCRUD.readSlave(getShooterSlavesPath());
-        masterList = ShooterCRUD.readMaster(getShooterMasterPath());
+
+        slaveList = getSlaveList();
+        masterList = getMasterList();
+        wallsList = getWallsList();
+        floorList = getFloorList();
 
         Gdx.input.setInputProcessor(new EditorInputProcessor());
     }
@@ -147,12 +146,7 @@ public class LevelEditor implements Screen {
             );
         }
         if (Gdx.input.isKeyPressed(Input.Keys.CONTROL_LEFT) && Gdx.input.isKeyJustPressed(Input.Keys.S)){
-            boolean saveSlave = ShooterCRUD.saveSlaveList(slaveList);
-            System.out.println("saveSlave " + saveSlave);
-            boolean saveMaster = ShooterCRUD.saveMasterList(masterList);
-            System.out.println("saveMaster " + saveMaster);
-            boolean saveWall = JSONReader.saveWallList(wallsList, getShooterWallsPath());
-            System.out.println("saveWall " + saveWall);
+            LevelSaver.save(wallsList, floorList, slaveList, masterList, "level0", "level0");
         }
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {

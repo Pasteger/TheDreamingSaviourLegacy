@@ -18,7 +18,6 @@ public class TextureLoader {
     private static Texture badCumTexture;
     private static Texture masterCumTexture;
     private static Texture mainMenuBackground;
-    private static Texture shooterBackground;
     private static Texture shooterDeathBackground;
 
     public static void load() {
@@ -33,7 +32,6 @@ public class TextureLoader {
         badCumTexture = new Texture(getSpritePath(getCumSprites(), "badCum"));
         masterCumTexture = new Texture(getSpritePath(getCumSprites(), "masterCum"));
         mainMenuBackground = new Texture(getMainMenuBackgroundTexturePath());
-        shooterBackground = new Texture(getShooterBackgroundTexturePath());
         shooterDeathBackground = new Texture(getShooterDeathBackgroundTexturePath());
     }
 
@@ -80,10 +78,6 @@ public class TextureLoader {
         return mainMenuBackground;
     }
 
-    public static Texture getShooterBackground() {
-        return shooterBackground;
-    }
-
     public static Texture getShooterDeathBackground() {
         return shooterDeathBackground;
     }
@@ -91,16 +85,7 @@ public class TextureLoader {
     public static Texture getFloorTexture() {
         return floorTexture;
     }
-
-    public static void setFloorTexture(Texture floorTexture) {
-        TextureLoader.floorTexture = floorTexture;
-    }
-
     public static Texture getEditFloorTexture() {
         return editFloorTexture;
-    }
-
-    public static void setEditFloorTexture(Texture editFloorTexture) {
-        TextureLoader.editFloorTexture = editFloorTexture;
     }
 }

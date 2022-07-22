@@ -1,17 +1,17 @@
 package ru.gachigame.game.shooter.screen;
 
 import com.badlogic.gdx.Input;
+import ru.gachigame.game.gameobject.Floor;
+import ru.gachigame.game.resourceloader.LevelLoader;
 import ru.gachigame.game.screen.MainMenuScreen;
-import ru.gachigame.game.resourceloader.ShooterCRUD;
 import ru.gachigame.game.shooter.gameobject.character.parts.Cum;
 import ru.gachigame.game.shooter.gameobject.character.Billy;
 import ru.gachigame.game.shooter.gameobject.character.Slave;
-import static ru.gachigame.game.resourceloader.ShooterCRUD.*;
+import static ru.gachigame.game.resourceloader.LevelLoader.*;
+import static ru.gachigame.game.resourceloader.LevelLoader.getFloorList;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import ru.gachigame.game.gameobject.Wall;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.GL20;
-import ru.gachigame.game.resourceloader.JSONReader;
 import ru.gachigame.game.MyGdxGame;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.Gdx;
@@ -25,20 +25,21 @@ public class ShooterLevelScreen implements Screen {
     private final Billy billy;
     private final List<Slave> slaveArray;
     private final List<Wall> wallsArray;
-    private final Texture dungeonTexture;
+    private final List<Floor> floorList;
     private float billyX;
     private float billyY;
 
     public ShooterLevelScreen(final MyGdxGame game){
         this.game = game;
         Gdx.gl.glClearColor(0, 0, 0.2f, 1);
-        dungeonTexture = new Texture(getShooterBackgroundTexturePath());
         random = new Random();
         camera = game.getCamera();
         camera.setToOrtho(false, 200, 200);
-        wallsArray = JSONReader.readWalls(getShooterWallsPath());
-        slaveArray = ShooterCRUD.readSlave(getShooterSlavesPath());
-        slaveArray.addAll(ShooterCRUD.readMaster(getShooterMasterPath()));
+
+        floorList = getFloorList();
+        wallsArray = getWallsList();
+        slaveArray = getSlaveList();
+        slaveArray.addAll(getMasterList());
         billy = new Billy();
     }
 
@@ -50,11 +51,9 @@ public class ShooterLevelScreen implements Screen {
         game.batch.setProjectionMatrix(camera.combined);
 
         game.batch.begin();
-        game.batch.draw(dungeonTexture, 0, 0);
+        floorList.forEach(floor -> floor.draw(game.batch));
+        wallsArray.forEach(wall -> game.batch.draw(wall.texture, wall.x, wall.y));
 
-        for (Wall wall : wallsArray){
-            game.batch.draw(wall.texture, wall.x, wall.y);
-        }
         game.batch.draw(billy.texture, billy.x, billy.y);
 
         slaveLive();
@@ -82,7 +81,6 @@ public class ShooterLevelScreen implements Screen {
 
     @Override
     public void dispose() {
-        dungeonTexture.dispose();
         billy.texture.dispose();
         game.batch.dispose();
         game.dispose();
@@ -188,8 +186,13 @@ public class ShooterLevelScreen implements Screen {
         }
         else {
             cumArray.clear();
-            game.setScreen(new ShooterLevelScreen(game));
-            //game.setScreen(new MainMenuScreen(game));
+            try {
+                LevelLoader.load(getNextLevel());
+                game.setScreen(new ShooterLevelScreen(game));
+            }
+            catch (Exception exception){
+                exception.printStackTrace();
+            }
         }
     }
 

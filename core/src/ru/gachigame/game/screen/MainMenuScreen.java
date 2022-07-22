@@ -14,6 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import ru.gachigame.game.LevelEditor;
 import ru.gachigame.game.MyGdxGame;
+import ru.gachigame.game.resourceloader.LevelLoader;
 import ru.gachigame.game.shooter.screen.ShooterLevelScreen;
 import static ru.gachigame.game.resourceloader.TextureLoader.*;
 
@@ -29,7 +30,6 @@ public class MainMenuScreen implements Screen {
         Gdx.input.setInputProcessor(stage);
 
         background = getMainMenuBackground();
-        System.out.println(background);
 
         BitmapFont font = new BitmapFont();
         TextButton.TextButtonStyle textButtonStyle = new TextButton.TextButtonStyle();
@@ -56,7 +56,13 @@ public class MainMenuScreen implements Screen {
         startButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                game.setScreen(new ShooterLevelScreen(game));
+                try {
+                    LevelLoader.load("level0");
+                    game.setScreen(new ShooterLevelScreen(game));
+                }
+                catch (Exception exception){
+                    exception.printStackTrace();
+                }
             }
         });
 
@@ -89,7 +95,13 @@ public class MainMenuScreen implements Screen {
         stage.draw();
 
         if(Gdx.input.isKeyJustPressed(Input.Keys.E)){
-            game.setScreen(new LevelEditor(game));
+            try {
+                LevelLoader.load("level0");
+                game.setScreen(new LevelEditor(game));
+            }
+            catch (Exception exception){
+                exception.printStackTrace();
+            }
         }
     }
     @Override public void show(){}
