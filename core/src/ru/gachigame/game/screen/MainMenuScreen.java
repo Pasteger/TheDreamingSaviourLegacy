@@ -103,6 +103,9 @@ public class MainMenuScreen implements Screen {
                 exception.printStackTrace();
             }
         }
+        if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
+            throw new Error();
+        }
     }
     @Override public void show(){}
     @Override public void resize(int width, int height){}

@@ -43,7 +43,7 @@ public class Master extends Slave {
         cum.direction = direction;
         cum.type = "MASTERS";
         cum.texture = getMasterCumTexture();
-        ShooterLevelScreen.cumArray.add(cum);
+        ShooterLevelScreen.cumList.add(cum);
     }
 
     @Override

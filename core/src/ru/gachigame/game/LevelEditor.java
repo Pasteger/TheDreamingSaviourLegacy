@@ -7,8 +7,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Rectangle;
-import ru.gachigame.game.gameobject.Floor;
-import ru.gachigame.game.gameobject.Wall;
+import ru.gachigame.game.gameobject.Surface;
 import ru.gachigame.game.resourceloader.LevelSaver;
 import ru.gachigame.game.screen.MainMenuScreen;
 import ru.gachigame.game.shooter.gameobject.character.Master;
@@ -22,14 +21,12 @@ public class LevelEditor implements Screen {
     private final OrthographicCamera camera;
     private final List<Slave> slaveList;
     private final List<Master> masterList;
-    private final List<Wall> wallsList;
-    private final List<Floor> floorList;
+    private final List<Surface> surfaceList;
     private boolean dragged;
     private String currentTask;
     private int deltaX;
     private int deltaY;
-    private Wall currentWall;
-    private Floor currentFloor;
+    private Surface currentSurface;
     private Slave currentSlave;
 
     public LevelEditor(final MyGdxGame game){
@@ -41,8 +38,7 @@ public class LevelEditor implements Screen {
 
         slaveList = getSlaveList();
         masterList = getMasterList();
-        wallsList = getWallsList();
-        floorList = getFloorList();
+        surfaceList = getSurfaceList();
 
         Gdx.input.setInputProcessor(new EditorInputProcessor());
     }
@@ -55,9 +51,8 @@ public class LevelEditor implements Screen {
         game.batch.setProjectionMatrix(camera.combined);
 
         game.batch.begin();
-        floorList.forEach(floor -> floor.draw(game.batch));
+        surfaceList.forEach(surface -> surface.draw(game.batch));
 
-        wallsList.forEach(wall -> game.batch.draw(wall.texture, wall.x, wall.y));
         slaveList.forEach(slave -> game.batch.draw(slave.texture, slave.x, slave.y));
         masterList.forEach(master -> game.batch.draw(master.texture, master.x, master.y));
 
@@ -94,27 +89,24 @@ public class LevelEditor implements Screen {
         }
 
         if (currentTask.equals("addFloor") && Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)){
-            Floor floor = new Floor((int) getSynchronizedX(), (int) getSynchronizedY(), 20, 20);
-            floorList.add(floor);
+            Surface floor = new Surface(getSynchronizedX(), getSynchronizedY(),
+                    20, 20, "none", "floorTexture");
+            surfaceList.add(floor);
             System.out.println("floor added");
         }
 
         if (currentTask.equals("edit") && Gdx.input.isButtonJustPressed(Input.Buttons.LEFT) &&
-                (currentWall == null && currentSlave == null && currentFloor == null)){
+                (currentSurface == null && currentSlave == null)){
             setCurrentObject();
         }
         if (currentTask.equals("edit") && Gdx.input.isKeyJustPressed(Input.Keys.ENTER) &&
-                (currentWall != null || currentSlave != null || currentFloor != null)) {
-            if (currentWall != null) {
-                currentWall.setStandardTexture();
-                currentWall = null;
+                (currentSurface != null || currentSlave != null)) {
+            if (currentSurface != null) {
+                currentSurface.setStandardTexture();
+                currentSurface = null;
             }
             if (currentSlave != null) {
                 currentSlave = null;
-            }
-            if (currentFloor != null) {
-                currentFloor.setStandardTexture();
-                currentFloor = null;
             }
             currentTask = "";
         }
@@ -134,19 +126,20 @@ public class LevelEditor implements Screen {
             ));
         }
         if (currentTask.equals("generateWall") && Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)){
-            Wall wall = new Wall((int) getSynchronizedX(), (int) getSynchronizedY(), 20, 20);
-            wallsList.add(wall);
+            Surface wall = new Surface(getSynchronizedX(), getSynchronizedY(),
+                    20, 20, "solid", "wallTexture");
+            surfaceList.add(wall);
         }
         if (currentTask.equals("removeWall") && Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)){
             float y = getSynchronizedY();
             float x = getSynchronizedX();
-            wallsList.removeIf(wall -> (
+            surfaceList.removeIf(wall -> (wall.getEffect().equals("solid") &&
                     wall.getX() >= x - wall.getWidth() && wall.getX() <= x + 1 &&
-                            wall.getY() >= y - wall.getHeight() && wall.getY() <= y + 1)
+                    wall.getY() >= y - wall.getHeight() && wall.getY() <= y + 1)
             );
         }
         if (Gdx.input.isKeyPressed(Input.Keys.CONTROL_LEFT) && Gdx.input.isKeyJustPressed(Input.Keys.S)){
-            LevelSaver.save(wallsList, floorList, slaveList, masterList, "level0", "level0");
+            LevelSaver.save(surfaceList, slaveList, masterList, "level0", "level0");
         }
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
@@ -165,14 +158,6 @@ public class LevelEditor implements Screen {
     private void setCurrentObject(){
         float x = getSynchronizedX();
         float y = getSynchronizedY();
-        for (Wall wall : wallsList) {
-            if (findObjectFromCord(wall, x, y)){
-                currentWall = wall;
-                currentWall.setEditableTexture();
-                Collections.swap(wallsList, wallsList.indexOf(currentWall), wallsList.size()-1);
-                return;
-            }
-        }
         for (Slave slave : slaveList) {
             if (findObjectFromCord(slave, x, y)){
                 currentSlave = slave;
@@ -185,11 +170,11 @@ public class LevelEditor implements Screen {
                 return;
             }
         }
-        for (Floor floor : floorList) {
-            if (findObjectFromCord(floor, x, y)){
-                currentFloor = floor;
-                currentFloor.setEditableTexture();
-                Collections.swap(floorList, floorList.indexOf(currentFloor), floorList.size()-1);
+        for (Surface surface : surfaceList) {
+            if (findObjectFromCord(surface, x, y)){
+                currentSurface = surface;
+                currentSurface.setEditableTexture();
+                Collections.swap(surfaceList, surfaceList.indexOf(surface), surfaceList.size()-1);
                 return;
             }
         }
@@ -203,10 +188,8 @@ public class LevelEditor implements Screen {
     class EditorInputProcessor implements InputProcessor {
         private int touchDownX;
         private int touchDownY;
-        private boolean extensionWall;
-        private boolean moveWall;
-        private boolean extensionFloor;
-        private boolean moveFloor;
+        private boolean extensionCurrentRectangle;
+        private boolean moveCurrentRectangle;
         private boolean moveSlave;
         @Override public boolean keyDown(int keycode) {
             return false;
@@ -223,34 +206,21 @@ public class LevelEditor implements Screen {
                 touchDownY = screenY;
                 dragged = true;
             }
-            if (currentWall != null && !extensionWall &&
-                    getSynchronizedX() >= currentWall.x &&
-                    getSynchronizedX() <= currentWall.x + 10 &&
-                    getSynchronizedY() >= currentWall.y &&
-                    getSynchronizedY() <= currentWall.y + 10){
-                moveWall = true;
+            if (currentSurface != null && !extensionCurrentRectangle &&
+                    getSynchronizedX() >= currentSurface.x &&
+                    getSynchronizedX() <= currentSurface.x + 10 &&
+                    getSynchronizedY() >= currentSurface.y &&
+                    getSynchronizedY() <= currentSurface.y + 10){
+                moveCurrentRectangle = true;
             }
-            if (currentWall != null && !moveWall &&
-                    getSynchronizedX() >= currentWall.x + currentWall.width - 10 &&
-                    getSynchronizedX() <= currentWall.x + currentWall.width &&
-                    getSynchronizedY() >= currentWall.y + currentWall.height - 10 &&
-                    getSynchronizedY() <= currentWall.y + currentWall.height){
-                extensionWall = true;
+            if (currentSurface != null && !moveCurrentRectangle &&
+                    getSynchronizedX() >= currentSurface.x + currentSurface.width - 10 &&
+                    getSynchronizedX() <= currentSurface.x + currentSurface.width &&
+                    getSynchronizedY() >= currentSurface.y + currentSurface.height - 10 &&
+                    getSynchronizedY() <= currentSurface.y + currentSurface.height){
+                extensionCurrentRectangle = true;
             }
-            if (currentFloor != null && !extensionFloor &&
-                    getSynchronizedX() >= currentFloor.x &&
-                    getSynchronizedX() <= currentFloor.x + 10 &&
-                    getSynchronizedY() >= currentFloor.y &&
-                    getSynchronizedY() <= currentFloor.y + 10){
-                moveFloor = true;
-            }
-            if (currentFloor != null && !moveFloor &&
-                    getSynchronizedX() >= currentFloor.x + currentFloor.width - 10 &&
-                    getSynchronizedX() <= currentFloor.x + currentFloor.width &&
-                    getSynchronizedY() >= currentFloor.y + currentFloor.height - 10 &&
-                    getSynchronizedY() <= currentFloor.y + currentFloor.height){
-                extensionFloor = true;
-            }
+
             if (currentSlave != null && !moveSlave &&
                     getSynchronizedX() >= currentSlave.x &&
                     getSynchronizedX() <= currentSlave.x + currentSlave.width &&
@@ -262,40 +232,25 @@ public class LevelEditor implements Screen {
         }
         @Override public boolean touchUp(int screenX, int screenY, int pointer, int button) {
             dragged = false;
-            extensionWall = false;
-            extensionFloor = false;
-            moveFloor = false;
-            moveWall = false;
+            extensionCurrentRectangle = false;
+            moveCurrentRectangle = false;
             moveSlave = false;
             return false;
         }
         @Override public boolean touchDragged(int screenX, int screenY, int pointer) {
             deltaX = touchDownX - screenX;
             deltaY = touchDownY - screenY;
-            if (extensionWall){
-                int width = (int) getSynchronizedX() - (int) currentWall.getX();
-                int height = (int) getSynchronizedY() - (int) currentWall.getY();
-                currentWall.width = width;
-                currentWall.height = height;
-                currentWall.setEditableTexture();
+            if (extensionCurrentRectangle){
+                int width = (int) getSynchronizedX() - (int) currentSurface.getX();
+                int height = (int) getSynchronizedY() - (int) currentSurface.getY();
+                currentSurface.editExtension(width, height);
+                currentSurface.setEditableTexture();
             }
-            if (moveWall){
-                currentWall.x = getSynchronizedX();
-                currentWall.y = getSynchronizedY();
-                currentWall.setEditableTexture();
+            if (moveCurrentRectangle){
+                currentSurface.editMove(getSynchronizedX(), getSynchronizedY());
+                currentSurface.setEditableTexture();
             }
-            if (extensionFloor){
-                int width = (int) getSynchronizedX() - (int) currentFloor.getX();
-                int height = (int) getSynchronizedY() - (int) currentFloor.getY();
-                currentFloor.width = width;
-                currentFloor.height = height;
-                currentFloor.setEditableTexture();
-            }
-            if (moveFloor){
-                currentFloor.x = getSynchronizedX();
-                currentFloor.y = getSynchronizedY();
-                currentFloor.setEditableTexture();
-            }
+
             if (moveSlave){
                 currentSlave.x = getSynchronizedX();
                 currentSlave.y = getSynchronizedY();

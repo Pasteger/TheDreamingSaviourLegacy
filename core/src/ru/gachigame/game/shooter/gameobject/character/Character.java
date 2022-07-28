@@ -45,6 +45,6 @@ public class Character extends Rectangle {
             case "GOOD" -> cum.texture = getCumTexture();
             case "BAD" -> cum.texture = getBadCumTexture();
         }
-        ShooterLevelScreen.cumArray.add(cum);
+        ShooterLevelScreen.cumList.add(cum);
     }
 }

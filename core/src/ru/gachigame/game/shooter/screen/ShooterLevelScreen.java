@@ -1,16 +1,15 @@
 package ru.gachigame.game.shooter.screen;
 
 import com.badlogic.gdx.Input;
-import ru.gachigame.game.gameobject.Floor;
+import ru.gachigame.game.gameobject.Surface;
 import ru.gachigame.game.resourceloader.LevelLoader;
 import ru.gachigame.game.screen.MainMenuScreen;
 import ru.gachigame.game.shooter.gameobject.character.parts.Cum;
 import ru.gachigame.game.shooter.gameobject.character.Billy;
 import ru.gachigame.game.shooter.gameobject.character.Slave;
 import static ru.gachigame.game.resourceloader.LevelLoader.*;
-import static ru.gachigame.game.resourceloader.LevelLoader.getFloorList;
+import static ru.gachigame.game.resourceloader.LevelLoader.getSurfaceList;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import ru.gachigame.game.gameobject.Wall;
 import com.badlogic.gdx.graphics.GL20;
 import ru.gachigame.game.MyGdxGame;
 import com.badlogic.gdx.Screen;
@@ -19,13 +18,12 @@ import java.util.*;
 
 public class ShooterLevelScreen implements Screen {
     private final MyGdxGame game;
-    public static final List<Cum> cumArray = new ArrayList<>();
+    public static final List<Cum> cumList = new ArrayList<>();
     private final OrthographicCamera camera;
     private final Random random;
     private final Billy billy;
-    private final List<Slave> slaveArray;
-    private final List<Wall> wallsArray;
-    private final List<Floor> floorList;
+    private final List<Slave> slaveList;
+    private final List<Surface> surfaceList;
     private float billyX;
     private float billyY;
 
@@ -36,10 +34,9 @@ public class ShooterLevelScreen implements Screen {
         camera = game.getCamera();
         camera.setToOrtho(false, 200, 200);
 
-        floorList = getFloorList();
-        wallsArray = getWallsList();
-        slaveArray = getSlaveList();
-        slaveArray.addAll(getMasterList());
+        surfaceList = getSurfaceList();
+        slaveList = getSlaveList();
+        slaveList.addAll(getMasterList());
         billy = new Billy();
     }
 
@@ -51,8 +48,7 @@ public class ShooterLevelScreen implements Screen {
         game.batch.setProjectionMatrix(camera.combined);
 
         game.batch.begin();
-        floorList.forEach(floor -> floor.draw(game.batch));
-        wallsArray.forEach(wall -> game.batch.draw(wall.texture, wall.x, wall.y));
+        surfaceList.forEach(surface -> surface.draw(game.batch));
 
         game.batch.draw(billy.texture, billy.x, billy.y);
 
@@ -87,15 +83,17 @@ public class ShooterLevelScreen implements Screen {
     }
 
     private void billyAngWalls(){
-        for (Wall wall : wallsArray) {
-            if (billy.overlaps(wall) & billyX-billy.x != 0) {
-                billy.x = billyX;
-            }
-            if (billy.overlaps(wall) & billyY-billy.y != 0) {
-                billy.y = billyY;
+        for (Surface wall : surfaceList) {
+            if (billy.overlaps(wall) && wall.getEffect().equals("solid")) {
+                if (billyX - billy.x != 0) {
+                    billy.x = billyX;
+                }
+                if (billyY - billy.y != 0) {
+                    billy.y = billyY;
+                }
             }
         }
-        for (Slave slave : slaveArray) {
+        for (Slave slave : slaveList) {
             if (billy.overlaps(slave) & billyX - billy.x != 0) {
                 billy.x = billyX;
                 if(slave.type.equals("master")){
@@ -114,28 +112,29 @@ public class ShooterLevelScreen implements Screen {
     }
 
     private void slavesAngWalls(Slave slave){
-        for (Wall wall : wallsArray) {
-            if (slave.overlaps(wall) & slave.slaveX-slave.x != 0) {
-                slave.x = slave.slaveX;
-            }
-            if (slave.overlaps(wall) & slave.slaveY-slave.y != 0) {
-                slave.y = slave.slaveY;
+        for (Surface wall : surfaceList) {
+            if (slave.overlaps(wall) && wall.getEffect().equals("solid")) {
+                if (slave.slaveX - slave.x != 0) {
+                    slave.x = slave.slaveX;
+                }
+                if (slave.slaveY - slave.y != 0) {
+                    slave.y = slave.slaveY;
+                }
             }
         }
 
-        for (Slave slave1 : slaveArray) {
+        for (Slave slave1 : slaveList) {
             if (!slave.equals(slave1)) {
-                if (slave.overlaps(slave1) & slave.slaveX - slave.x != 0) {
+                if (slave.overlaps(slave1) && slave.slaveX - slave.x != 0) {
                     slave.x = slave.slaveX;
                 }
-                if (slave.overlaps(slave1) & slave.slaveY - slave.y != 0) {
+                if (slave.overlaps(slave1) && slave.slaveY - slave.y != 0) {
                     slave.y = slave.slaveY;
                 }
             }
         }
         slave.slaveX = slave.x;
         slave.slaveY = slave.y;
-
     }
 
 
@@ -169,8 +168,8 @@ public class ShooterLevelScreen implements Screen {
     }
 
     private void slaveLive(){
-        if(!slaveArray.isEmpty()) {
-            for (Slave slave : slaveArray) {
+        if(!slaveList.isEmpty()) {
+            for (Slave slave : slaveList) {
                 game.batch.draw(slave.texture, slave.x, slave.y);
                 slaveMoveToBilly(slave);
                 slavesAngWalls(slave);
@@ -178,14 +177,14 @@ public class ShooterLevelScreen implements Screen {
                 slaveShot(slave);
 
                 if (slave.HP <= 0) {
-                    slaveArray.remove(slave);
+                    slaveList.remove(slave);
                     if(billy.HP < 4) billy.HP++;
                     break;
                 }
             }
         }
         else {
-            cumArray.clear();
+            cumList.clear();
             try {
                 LevelLoader.load(getNextLevel());
                 game.setScreen(new ShooterLevelScreen(game));
@@ -197,19 +196,19 @@ public class ShooterLevelScreen implements Screen {
     }
 
     private void cumLogic(){
-        if (!cumArray.isEmpty()) {
-            Iterator<Cum> cumIterator = cumArray.iterator();
+        if (!cumList.isEmpty()) {
+            Iterator<Cum> cumIterator = cumList.iterator();
             while (cumIterator.hasNext()) {
                 Cum cum = cumIterator.next();
                 cum.move();
                 game.batch.draw(cum.texture, cum.x, cum.y);
-                for (Wall wall : wallsArray) {
-                    if (cum.overlaps(wall)) {
+                for (Surface wall : surfaceList) {
+                    if (cum.overlaps(wall) && wall.getEffect().equals("solid")) {
                         cumIterator.remove();
                         return;
                     }
                 }
-                for (Slave slave : slaveArray) {
+                for (Slave slave : slaveList) {
                     if (cum.overlaps(slave) && cum.type.equals("GOOD")) {
                         cumIterator.remove();
                         slave.HP--;
@@ -231,7 +230,7 @@ public class ShooterLevelScreen implements Screen {
 
     private void billyDeath(){
         if (billy.HP < 1) {
-            cumArray.clear();
+            cumList.clear();
             game.nickname = null;
             game.setScreen(new DeathScreen(game));
         }
