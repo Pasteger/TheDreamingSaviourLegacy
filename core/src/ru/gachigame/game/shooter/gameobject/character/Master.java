@@ -1,20 +1,26 @@
 package ru.gachigame.game.shooter.gameobject.character;
 
+import com.badlogic.gdx.math.Rectangle;
 import ru.gachigame.game.shooter.gameobject.character.parts.Cum;
 import ru.gachigame.game.shooter.screen.ShooterLevelScreen;
 import static ru.gachigame.game.resourceloader.TextureLoader.*;
 
 public class Master extends Slave {
     public Master(){
+        legs = new Rectangle();
         sprites = getShooterMasterTextures();
         texture = sprites.get(UP);
         width = 68;
         height = 68;
         HP = 25;
         recharge = 20;
+        speed = 1;
         fieldOfView.width = 500;
         fieldOfView.height = 500;
         type = "master";
+
+        legs.width = width;
+        legs.height = height;
     }
 
     @Override

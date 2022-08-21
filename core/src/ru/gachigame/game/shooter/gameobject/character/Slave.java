@@ -1,18 +1,19 @@
 package ru.gachigame.game.shooter.gameobject.character;
 
 import com.badlogic.gdx.math.Rectangle;
+import ru.gachigame.game.gameobject.Surface;
+import java.util.List;
+import static com.badlogic.gdx.math.MathUtils.random;
 import static ru.gachigame.game.resourceloader.TextureLoader.*;
 
 public class Slave extends Character {
     public byte recharge;
     public Rectangle shotDistanceHitBox = new Rectangle();
     public Rectangle fieldOfView = new Rectangle();
-    public float slaveX = 0;
-    public float slaveY = 0;
-    public float speed;
     public String type;
 
     public Slave(){
+        legs = new Rectangle();
         sprites = getShooterSlaveTextures();
         texture = sprites.get(UP);
 
@@ -22,29 +23,40 @@ public class Slave extends Character {
         recharge = 20;
         fieldOfView.width = 200;
         fieldOfView.height = 200;
-        speed = 0.8f;
+        speed = 1;
         type = "slave";
+
+        legs.width = width;
+        legs.height = height;
     }
 
-    public void moveUp(){
-        texture = sprites.get(UP);
-        y += speed;
-        direction = "NORTH";
+    public void slaveShot(Billy billy){
+        if (shotDistanceHitBox.overlaps(billy)) {
+            recharge--;
+            if (recharge <= 0) {
+                recharge = (byte) ((byte) 12 + random.nextInt(50));
+                shot("BAD");
+            }
+        }
     }
-    public void moveDown(){
-        texture = sprites.get(DOWN);
-        y -= speed;
-        direction = "SOUTH";
-    }
-    public void moveRight(){
-        texture = sprites.get(RIGHT);
-        x += speed;
-        direction = "EAST";
-    }
-    public void moveLeft(){
-        texture = sprites.get(LEFT);
-        x -= speed;
-        direction = "WEST";
+
+    public void moveToBilly(Billy billy, List<Surface> surfaceList, List<Slave> slaveList){
+        fieldOfView.x = x - fieldOfView.width/2;
+        fieldOfView.y = y - fieldOfView.height/2;
+        if (fieldOfView.overlaps(billy)) {
+            if (billy.x > x && billy.x - x >= width) {
+                moveRight(surfaceList, slaveList);
+            }
+            if (billy.x < x && x - billy.x >= width) {
+                moveLeft(surfaceList, slaveList);
+            }
+            if (billy.y > y && billy.y - y >= width) {
+                moveUp(surfaceList, slaveList);
+            }
+            if (billy.y < y && y - billy.y >= width) {
+                moveDown(surfaceList, slaveList);
+            }
+        }
     }
 
     public void sightCalibration(){

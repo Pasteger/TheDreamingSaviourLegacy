@@ -2,40 +2,40 @@ package ru.gachigame.game.shooter.gameobject.character;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.math.Rectangle;
+import ru.gachigame.game.gameobject.Surface;
+import java.util.List;
 import static ru.gachigame.game.resourceloader.TextureLoader.*;
 
 public class Billy extends Character {
     public Billy(){
+        legs = new Rectangle();
         sprites = getShooterBullyTextures();
 
         texture = sprites.get(UP);
         HP = 4;
-        x = 914;
-        y = 10;
+        setX(914);
+        setY(10);
         width = 8;
         height = 8;
+
+        legs.width = width;
+        legs.height = height;
     }
 
-    public void move(){
+    public void move(List<Surface> surfaces, List<Slave> slaves){
+        speed = 2;
         if(Gdx.input.isKeyPressed(Input.Keys.RIGHT)){
-            texture = sprites.get(RIGHT);
-            x += 2;
-            direction = "EAST";
+            moveRight(surfaces, slaves);
         }
         if(Gdx.input.isKeyPressed(Input.Keys.LEFT)){
-            texture = sprites.get(LEFT);
-            x -= 2;
-            direction = "WEST";
+            moveLeft(surfaces, slaves);
         }
         if(Gdx.input.isKeyPressed(Input.Keys.UP)){
-            texture = sprites.get(UP);
-            y += 2;
-            direction = "NORTH";
+            moveUp(surfaces, slaves);
         }
         if(Gdx.input.isKeyPressed(Input.Keys.DOWN)){
-            texture = sprites.get(DOWN);
-            y -= 2;
-            direction = "SOUTH";
+            moveDown(surfaces, slaves);
         }
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)){

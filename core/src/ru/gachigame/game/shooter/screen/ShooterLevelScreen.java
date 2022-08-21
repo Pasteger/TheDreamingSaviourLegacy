@@ -20,17 +20,13 @@ public class ShooterLevelScreen implements Screen {
     private final MyGdxGame game;
     public static final List<Cum> cumList = new ArrayList<>();
     private final OrthographicCamera camera;
-    private final Random random;
     private final Billy billy;
     private final List<Slave> slaveList;
     private final List<Surface> surfaceList;
-    private float billyX;
-    private float billyY;
 
     public ShooterLevelScreen(final MyGdxGame game){
         this.game = game;
         Gdx.gl.glClearColor(0, 0, 0.2f, 1);
-        random = new Random();
         camera = game.getCamera();
         camera.setToOrtho(false, 200, 200);
 
@@ -58,14 +54,17 @@ public class ShooterLevelScreen implements Screen {
 
         game.batch.end();
 
-        billy.move();
-        billyAngWalls();
+        billy.move(surfaceList, slaveList);
         camera.position.x = billy.x;
         camera.position.y = billy.y;
         billyDeath();
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
             game.setScreen(new MainMenuScreen(game));
+        }
+        if (Gdx.input.isKeyJustPressed(Input.Keys.T)) {
+            billy.setX(10);
+            billy.setY(10);
         }
     }
 
@@ -82,101 +81,16 @@ public class ShooterLevelScreen implements Screen {
         game.dispose();
     }
 
-    private void billyAngWalls(){
-        for (Surface wall : surfaceList) {
-            if (billy.overlaps(wall) && wall.getEffect().equals("solid")) {
-                if (billyX - billy.x != 0) {
-                    billy.x = billyX;
-                }
-                if (billyY - billy.y != 0) {
-                    billy.y = billyY;
-                }
-            }
-        }
-        for (Slave slave : slaveList) {
-            if (billy.overlaps(slave) & billyX - billy.x != 0) {
-                billy.x = billyX;
-                if(slave.type.equals("master")){
-                    billy.HP = 0;
-                }
-            }
-            if (billy.overlaps(slave) & billyY - billy.y != 0) {
-                billy.y = billyY;
-                if(slave.type.equals("master")){
-                    billy.HP = 0;
-                }
-            }
-        }
-        billyX = billy.x;
-        billyY = billy.y;
-    }
-
-    private void slavesAngWalls(Slave slave){
-        for (Surface wall : surfaceList) {
-            if (slave.overlaps(wall) && wall.getEffect().equals("solid")) {
-                if (slave.slaveX - slave.x != 0) {
-                    slave.x = slave.slaveX;
-                }
-                if (slave.slaveY - slave.y != 0) {
-                    slave.y = slave.slaveY;
-                }
-            }
-        }
-
-        for (Slave slave1 : slaveList) {
-            if (!slave.equals(slave1)) {
-                if (slave.overlaps(slave1) && slave.slaveX - slave.x != 0) {
-                    slave.x = slave.slaveX;
-                }
-                if (slave.overlaps(slave1) && slave.slaveY - slave.y != 0) {
-                    slave.y = slave.slaveY;
-                }
-            }
-        }
-        slave.slaveX = slave.x;
-        slave.slaveY = slave.y;
-    }
-
-
-    private void slaveMoveToBilly(Slave slave){
-        slave.fieldOfView.x = slave.x - slave.fieldOfView.width/2;
-        slave.fieldOfView.y = slave.y - slave.fieldOfView.height/2;
-        if (slave.fieldOfView.overlaps(billy)) {
-            if (billy.x > slave.x & billy.x - slave.x >= slave.width) {
-                slave.moveRight();
-            }
-            if (billy.x < slave.x & slave.x - billy.x >= slave.width) {
-                slave.moveLeft();
-            }
-            if (billy.y > slave.y & billy.y - slave.y >= slave.width) {
-                slave.moveUp();
-            }
-            if (billy.y < slave.y & slave.y - billy.y >= slave.width) {
-                slave.moveDown();
-            }
-        }
-    }
-
-    private void slaveShot(Slave slave){
-        if (slave.shotDistanceHitBox.overlaps(billy)) {
-            slave.recharge--;
-            if (slave.recharge <= 0) {
-                slave.recharge = (byte) ((byte) 12 + random.nextInt(50));
-                slave.shot("BAD");
-            }
-        }
-    }
-
     private void slaveLive(){
         if(!slaveList.isEmpty()) {
             for (Slave slave : slaveList) {
                 game.batch.draw(slave.texture, slave.x, slave.y);
-                slaveMoveToBilly(slave);
-                slavesAngWalls(slave);
+                slave.moveToBilly(billy, surfaceList, slaveList);
                 slave.sightCalibration();
-                slaveShot(slave);
+                slave.slaveShot(billy);
 
                 if (slave.HP <= 0) {
+                    System.out.println(slave + " died");
                     slaveList.remove(slave);
                     if(billy.HP < 4) billy.HP++;
                     break;
@@ -229,10 +143,12 @@ public class ShooterLevelScreen implements Screen {
     }
 
     private void billyDeath(){
-        if (billy.HP < 1) {
-            cumList.clear();
-            game.nickname = null;
-            game.setScreen(new DeathScreen(game));
+        for (Slave slave : slaveList){
+            if (billy.HP < 1 || billy.overlaps(slave) && slave.type.equals("master")){
+                cumList.clear();
+                game.nickname = null;
+                game.setScreen(new DeathScreen(game));
+            }
         }
     }
 }
