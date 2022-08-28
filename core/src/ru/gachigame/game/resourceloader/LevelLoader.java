@@ -12,6 +12,7 @@ public class LevelLoader {
     private static List<Slave> slaveList;
     private static List<Master> masterList;
     private static List<Surface> surfaceList;
+    private static String levelType;
     private static String nextLevel;
 
     public static void load(String levelName) throws Exception {
@@ -20,6 +21,7 @@ public class LevelLoader {
         slaveList = convertingToSlaves();
         surfaceList = convertingToSurface();
         nextLevel = (String) level.get("nextLevel");
+        levelType = (String) level.get("type");
     }
 
     private static List<Surface> convertingToSurface() {
@@ -101,5 +103,13 @@ public class LevelLoader {
     }
     public static String getNextLevel() {
         return nextLevel;
+    }
+
+    public static String getLevelType() {
+        return levelType;
+    }
+
+    public static void setLevelType(String levelType) {
+        LevelLoader.levelType = levelType;
     }
 }

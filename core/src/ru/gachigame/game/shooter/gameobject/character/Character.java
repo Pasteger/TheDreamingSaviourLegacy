@@ -3,8 +3,9 @@ package ru.gachigame.game.shooter.gameobject.character;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Rectangle;
 import ru.gachigame.game.gameobject.Surface;
+import ru.gachigame.game.logics.ShooterLevelsLogic;
 import ru.gachigame.game.shooter.gameobject.character.parts.Cum;
-import ru.gachigame.game.shooter.screen.ShooterLevelScreen;
+
 import java.util.List;
 import java.util.Map;
 import static ru.gachigame.game.resourceloader.TextureLoader.*;
@@ -130,7 +131,7 @@ public class Character extends Rectangle {
             case "GOOD" -> cum.texture = getCumTexture();
             case "BAD" -> cum.texture = getBadCumTexture();
         }
-        ShooterLevelScreen.cumList.add(cum);
+        ShooterLevelsLogic.cumList.add(cum);
     }
 
     @Override

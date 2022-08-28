@@ -33,7 +33,7 @@ public class LevelEditor implements Screen {
         this.game = game;
         currentTask = "";
         Gdx.gl.glClearColor(0, 0, 0.2f, 1);
-        camera = game.getCamera();
+        camera = game.camera;
         camera.setToOrtho(false, 400, 400);
 
         slaveList = getSlaveList();
@@ -139,7 +139,7 @@ public class LevelEditor implements Screen {
             );
         }
         if (Gdx.input.isKeyPressed(Input.Keys.CONTROL_LEFT) && Gdx.input.isKeyJustPressed(Input.Keys.S)){
-            LevelSaver.save(surfaceList, slaveList, masterList, "level0", "level0");
+            LevelSaver.save(surfaceList, slaveList, masterList, "level0", "level0", "shooter");
         }
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {

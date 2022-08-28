@@ -15,7 +15,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import ru.gachigame.game.LevelEditor;
 import ru.gachigame.game.MyGdxGame;
 import ru.gachigame.game.resourceloader.LevelLoader;
-import ru.gachigame.game.shooter.screen.ShooterLevelScreen;
+import ru.gachigame.game.shooter.screen.LevelsScreen;
 import static ru.gachigame.game.resourceloader.TextureLoader.*;
 
 public class MainMenuScreen implements Screen {
@@ -49,7 +49,7 @@ public class MainMenuScreen implements Screen {
         exitButton.setPosition(20, 100);
 
 
-        camera = game.getCamera();
+        camera = game.camera;
         camera.setToOrtho(false, 800, 480);
 
 
@@ -58,7 +58,7 @@ public class MainMenuScreen implements Screen {
             public void changed(ChangeEvent event, Actor actor) {
                 try {
                     LevelLoader.load("level0");
-                    game.setScreen(new ShooterLevelScreen(game));
+                    game.setScreen(new LevelsScreen(game));
                 }
                 catch (Exception exception){
                     exception.printStackTrace();

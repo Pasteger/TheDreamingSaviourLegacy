@@ -1,34 +1,31 @@
-package ru.gachigame.game.shooter.screen;
+package ru.gachigame.game.logics;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import ru.gachigame.game.MyGdxGame;
 import ru.gachigame.game.gameobject.Surface;
 import ru.gachigame.game.resourceloader.LevelLoader;
 import ru.gachigame.game.screen.MainMenuScreen;
-import ru.gachigame.game.shooter.gameobject.character.parts.Cum;
 import ru.gachigame.game.shooter.gameobject.character.Billy;
 import ru.gachigame.game.shooter.gameobject.character.Slave;
+import ru.gachigame.game.shooter.gameobject.character.parts.Cum;
+import ru.gachigame.game.shooter.screen.DeathScreen;
+import ru.gachigame.game.shooter.screen.LevelsScreen;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 import static ru.gachigame.game.resourceloader.LevelLoader.*;
-import static ru.gachigame.game.resourceloader.LevelLoader.getSurfaceList;
-import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.GL20;
-import ru.gachigame.game.MyGdxGame;
-import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.Gdx;
-import java.util.*;
 
-public class ShooterLevelScreen implements Screen {
+public class ShooterLevelsLogic {
     private final MyGdxGame game;
     public static final List<Cum> cumList = new ArrayList<>();
-    private final OrthographicCamera camera;
     private final Billy billy;
     private final List<Slave> slaveList;
     private final List<Surface> surfaceList;
 
-    public ShooterLevelScreen(final MyGdxGame game){
+    public ShooterLevelsLogic(final MyGdxGame game) {
         this.game = game;
-        Gdx.gl.glClearColor(0, 0, 0.2f, 1);
-        camera = game.getCamera();
-        camera.setToOrtho(false, 200, 200);
+        game.camera.setToOrtho(false, 200, 200);
 
         surfaceList = getSurfaceList();
         slaveList = getSlaveList();
@@ -36,14 +33,7 @@ public class ShooterLevelScreen implements Screen {
         billy = new Billy();
     }
 
-    @Override
-    public void render(float delta) {
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
-        camera.update();
-        game.batch.setProjectionMatrix(camera.combined);
-
-        game.batch.begin();
+    public void render(){
         surfaceList.forEach(surface -> surface.draw(game.batch));
 
         game.batch.draw(billy.texture, billy.x, billy.y);
@@ -52,11 +42,9 @@ public class ShooterLevelScreen implements Screen {
         cumLogic();
         game.font.draw(game.batch, billy.HP+"", billy.x-80, billy.y+80);
 
-        game.batch.end();
-
         billy.move(surfaceList, slaveList);
-        camera.position.x = billy.x;
-        camera.position.y = billy.y;
+        game.camera.position.x = billy.x;
+        game.camera.position.y = billy.y;
         billyDeath();
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
@@ -67,20 +55,6 @@ public class ShooterLevelScreen implements Screen {
             billy.setY(10);
         }
     }
-
-    @Override public void show(){}
-    @Override public void resize(int width, int height){}
-    @Override public void pause(){}
-    @Override public void resume(){}
-    @Override public void hide(){}
-
-    @Override
-    public void dispose() {
-        billy.texture.dispose();
-        game.batch.dispose();
-        game.dispose();
-    }
-
     private void slaveLive(){
         if(!slaveList.isEmpty()) {
             for (Slave slave : slaveList) {
@@ -90,7 +64,6 @@ public class ShooterLevelScreen implements Screen {
                 slave.slaveShot(billy);
 
                 if (slave.HP <= 0) {
-                    System.out.println(slave + " died");
                     slaveList.remove(slave);
                     if(billy.HP < 4) billy.HP++;
                     break;
@@ -101,7 +74,7 @@ public class ShooterLevelScreen implements Screen {
             cumList.clear();
             try {
                 LevelLoader.load(getNextLevel());
-                game.setScreen(new ShooterLevelScreen(game));
+                game.setScreen(new LevelsScreen(game));
             }
             catch (Exception exception){
                 exception.printStackTrace();

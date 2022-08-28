@@ -12,12 +12,13 @@ import java.util.List;
 
 public class LevelSaver {
     public static void save(List<Surface> surfaceList, List<Slave> slaveList,
-                            List<Master> masterList, String nextLevel, String levelName){
+                            List<Master> masterList, String nextLevel, String levelName, String levelType){
         JSONObject level = new JSONObject();
         level.put("surfaceList", saveSurfaceList(surfaceList));
         level.put("slaveList", saveSlaveList(slaveList));
         level.put("masterList", saveMasterList(masterList));
         level.put("nextLevel", nextLevel);
+        level.put("type", levelType);
         File levelFile = new File("levels/" + levelName + ".json");
         try {
             JSONReader.writeJson(levelFile, level);

@@ -1,8 +1,9 @@
 package ru.gachigame.game.shooter.gameobject.character;
 
 import com.badlogic.gdx.math.Rectangle;
+import ru.gachigame.game.logics.ShooterLevelsLogic;
 import ru.gachigame.game.shooter.gameobject.character.parts.Cum;
-import ru.gachigame.game.shooter.screen.ShooterLevelScreen;
+
 import static ru.gachigame.game.resourceloader.TextureLoader.*;
 
 public class Master extends Slave {
@@ -49,7 +50,7 @@ public class Master extends Slave {
         cum.direction = direction;
         cum.type = "MASTERS";
         cum.texture = getMasterCumTexture();
-        ShooterLevelScreen.cumList.add(cum);
+        ShooterLevelsLogic.cumList.add(cum);
     }
 
     @Override

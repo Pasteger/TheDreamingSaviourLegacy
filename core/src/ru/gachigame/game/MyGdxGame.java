@@ -10,7 +10,7 @@ public class MyGdxGame extends Game {
 	public SpriteBatch batch;
 	public BitmapFont font;
 	public String nickname;
-	private OrthographicCamera camera;
+	public OrthographicCamera camera;
 
 	@Override
 	public void create () {
@@ -30,6 +30,4 @@ public class MyGdxGame extends Game {
 		batch.dispose();
 		font.dispose();
 	}
-
-	public OrthographicCamera getCamera() {return camera;}
 }
