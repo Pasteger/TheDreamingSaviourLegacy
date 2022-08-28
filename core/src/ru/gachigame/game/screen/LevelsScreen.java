@@ -1,4 +1,4 @@
-package ru.gachigame.game.shooter.screen;
+package ru.gachigame.game.screen;
 
 import ru.gachigame.game.logics.ShooterLevelsLogic;
 import static ru.gachigame.game.resourceloader.LevelLoader.getLevelType;

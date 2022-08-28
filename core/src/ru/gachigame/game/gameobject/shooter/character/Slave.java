@@ -1,4 +1,4 @@
-package ru.gachigame.game.shooter.gameobject.character;
+package ru.gachigame.game.gameobject.shooter.character;
 
 import com.badlogic.gdx.math.Rectangle;
 import ru.gachigame.game.gameobject.Surface;

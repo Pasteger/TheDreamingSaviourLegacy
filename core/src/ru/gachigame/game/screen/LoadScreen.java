@@ -1,4 +1,4 @@
-package ru.gachigame.game.shooter.screen;
+package ru.gachigame.game.screen;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;

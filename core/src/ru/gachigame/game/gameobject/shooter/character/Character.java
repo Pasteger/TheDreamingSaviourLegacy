@@ -1,10 +1,10 @@
-package ru.gachigame.game.shooter.gameobject.character;
+package ru.gachigame.game.gameobject.shooter.character;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Rectangle;
 import ru.gachigame.game.gameobject.Surface;
+import ru.gachigame.game.gameobject.Cum;
 import ru.gachigame.game.logics.ShooterLevelsLogic;
-import ru.gachigame.game.shooter.gameobject.character.parts.Cum;
 
 import java.util.List;
 import java.util.Map;

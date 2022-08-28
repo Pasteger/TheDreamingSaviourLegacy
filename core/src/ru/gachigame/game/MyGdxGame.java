@@ -4,7 +4,7 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import ru.gachigame.game.shooter.screen.LoadScreen;
+import ru.gachigame.game.screen.LoadScreen;
 
 public class MyGdxGame extends Game {
 	public SpriteBatch batch;

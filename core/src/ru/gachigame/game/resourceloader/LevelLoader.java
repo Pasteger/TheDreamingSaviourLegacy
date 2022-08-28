@@ -2,8 +2,8 @@ package ru.gachigame.game.resourceloader;
 
 import org.json.simple.JSONObject;
 import ru.gachigame.game.gameobject.Surface;
-import ru.gachigame.game.shooter.gameobject.character.Master;
-import ru.gachigame.game.shooter.gameobject.character.Slave;
+import ru.gachigame.game.gameobject.shooter.character.Master;
+import ru.gachigame.game.gameobject.shooter.character.Slave;
 import java.util.ArrayList;
 import java.util.List;
 

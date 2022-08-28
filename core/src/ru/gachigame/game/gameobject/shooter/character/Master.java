@@ -1,8 +1,8 @@
-package ru.gachigame.game.shooter.gameobject.character;
+package ru.gachigame.game.gameobject.shooter.character;
 
 import com.badlogic.gdx.math.Rectangle;
+import ru.gachigame.game.gameobject.Cum;
 import ru.gachigame.game.logics.ShooterLevelsLogic;
-import ru.gachigame.game.shooter.gameobject.character.parts.Cum;
 
 import static ru.gachigame.game.resourceloader.TextureLoader.*;
 
