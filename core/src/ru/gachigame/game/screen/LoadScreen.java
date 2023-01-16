@@ -6,7 +6,6 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import ru.gachigame.game.MyGdxGame;
 import ru.gachigame.game.resourceloader.*;
-import ru.gachigame.game.screen.MainMenuScreen;
 import java.util.Arrays;
 
 public class LoadScreen implements Screen {
@@ -49,6 +48,7 @@ public class LoadScreen implements Screen {
                 success = true;
                 System.out.println(message);
             } catch (Exception exception) {
+                exception.printStackTrace();
                 message = error + "\n" + Arrays.toString(exception.getStackTrace());
             }
         })).start();

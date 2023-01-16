@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Rectangle;
 import ru.gachigame.game.gameobject.Surface;
+import ru.gachigame.game.guiobject.TextWindow;
 import ru.gachigame.game.resourceloader.LevelSaver;
 import ru.gachigame.game.screen.MainMenuScreen;
 import ru.gachigame.game.gameobject.shooter.character.Master;
@@ -19,6 +20,7 @@ import static ru.gachigame.game.resourceloader.LevelLoader.*;
 public class LevelEditor implements Screen {
     private final MyGdxGame game;
     private final OrthographicCamera camera;
+    TextWindow textWindow;
     private final List<Slave> slaveList;
     private final List<Master> masterList;
     private final List<Surface> surfaceList;
@@ -31,6 +33,7 @@ public class LevelEditor implements Screen {
 
     public LevelEditor(final MyGdxGame game){
         this.game = game;
+        textWindow = new TextWindow();
         currentTask = "";
         Gdx.gl.glClearColor(0, 0, 0.2f, 1);
         camera = game.camera;
@@ -59,6 +62,7 @@ public class LevelEditor implements Screen {
         game.font.draw(game.batch, camera.position.x + "  " + camera.position.y, camera.position.x-200, camera.position.y+190);
         game.font.draw(game.batch, currentTask, camera.position.x-200, camera.position.y+175);
 
+        textWindow.render(game);
         game.batch.end();
 
         if (dragged) {
@@ -170,11 +174,11 @@ public class LevelEditor implements Screen {
                 return;
             }
         }
-        for (Surface surface : surfaceList) {
-            if (findObjectFromCord(surface, x, y)){
-                currentSurface = surface;
+        for (int i = surfaceList.size()-1; i >= 0; i--) {
+            if (findObjectFromCord(surfaceList.get(i), x, y)){
+                currentSurface = surfaceList.get(i);
                 currentSurface.setEditableTexture();
-                Collections.swap(surfaceList, surfaceList.indexOf(surface), surfaceList.size()-1);
+                Collections.swap(surfaceList, surfaceList.indexOf(surfaceList.get(i)), surfaceList.size()-1);
                 return;
             }
         }

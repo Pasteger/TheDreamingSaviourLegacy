@@ -1,364 +1,326 @@
 {
-  "type": "shooter",
-  "surfaceList": [
-    {
-      "x": 0.0,
-      "width": 2000.0,
-      "y": -100.0,
-      "height": 100.0,
-      "effect": "solid",
-      "textureName": "wallTexture"
-    },
-    {
-      "x": 673.0,
-      "width": 229.0,
-      "y": 0.0,
-      "height": 342.0,
-      "effect": "solid",
-      "textureName": "wallTexture"
-    },
-    {
-      "x": 932.0,
-      "width": 300.0,
-      "y": 0.0,
-      "height": 342.0,
-      "effect": "solid",
-      "textureName": "wallTexture"
-    },
-    {
-      "x": 680.0,
-      "width": 100.0,
-      "y": 340.0,
-      "height": 404.0,
-      "effect": "solid",
-      "textureName": "wallTexture"
-    },
-    {
-      "x": 1068.0,
-      "width": 100.0,
-      "y": 342.0,
-      "height": 342.0,
-      "effect": "solid",
-      "textureName": "wallTexture"
-    },
-    {
-      "x": 500.0,
-      "width": 183.0,
-      "y": 1292.0,
-      "height": 183.0,
-      "effect": "solid",
-      "textureName": "wallTexture"
-    },
-    {
-      "x": 867.0,
-      "width": 40.0,
-      "y": 600.0,
-      "height": 537.0,
-      "effect": "solid",
-      "textureName": "wallTexture"
-    },
-    {
-      "x": 943.0,
-      "width": 735.0,
-      "y": 600.0,
-      "height": 260.0,
-      "effect": "solid",
-      "textureName": "wallTexture"
-    },
-    {
-      "x": 907.0,
-      "width": 412.0,
-      "y": 889.0,
-      "height": 40.0,
-      "effect": "solid",
-      "textureName": "wallTexture"
-    },
-    {
-      "x": 1352.0,
-      "width": 380.0,
-      "y": 858.0,
-      "height": 72.0,
-      "effect": "solid",
-      "textureName": "wallTexture"
-    },
-    {
-      "x": 867.0,
-      "width": 233.0,
-      "y": 928.0,
-      "height": 209.0,
-      "effect": "solid",
-      "textureName": "wallTexture"
-    },
-    {
-      "x": 1166.0,
-      "width": 67.0,
-      "y": 1000.0,
-      "height": 67.0,
-      "effect": "solid",
-      "textureName": "wallTexture"
-    },
-    {
-      "x": 1300.0,
-      "width": 67.0,
-      "y": 1000.0,
-      "height": 67.0,
-      "effect": "solid",
-      "textureName": "wallTexture"
-    },
-    {
-      "x": 1434.0,
-      "width": 67.0,
-      "y": 1000.0,
-      "height": 67.0,
-      "effect": "solid",
-      "textureName": "wallTexture"
-    },
-    {
-      "x": 1166.0,
-      "width": 67.0,
-      "y": 1134.0,
-      "height": 67.0,
-      "effect": "solid",
-      "textureName": "wallTexture"
-    },
-    {
-      "x": 1300.0,
-      "width": 67.0,
-      "y": 1134.0,
-      "height": 67.0,
-      "effect": "solid",
-      "textureName": "wallTexture"
-    },
-    {
-      "x": 1434.0,
-      "width": 67.0,
-      "y": 1134.0,
-      "height": 67.0,
-      "effect": "solid",
-      "textureName": "wallTexture"
-    },
-    {
-      "x": 1166.0,
-      "width": 67.0,
-      "y": 1268.0,
-      "height": 67.0,
-      "effect": "solid",
-      "textureName": "wallTexture"
-    },
-    {
-      "x": 1300.0,
-      "width": 67.0,
-      "y": 1268.0,
-      "height": 67.0,
-      "effect": "solid",
-      "textureName": "wallTexture"
-    },
-    {
-      "x": 1434.0,
-      "width": 67.0,
-      "y": 1268.0,
-      "height": 67.0,
-      "effect": "solid",
-      "textureName": "wallTexture"
-    },
-    {
-      "x": 1573.0,
-      "width": 100.0,
-      "y": 929.0,
-      "height": 580.0,
-      "effect": "solid",
-      "textureName": "wallTexture"
-    },
-    {
-      "x": 1100.0,
-      "width": 473.0,
-      "y": 1402.0,
-      "height": 100.0,
-      "effect": "solid",
-      "textureName": "wallTexture"
-    },
-    {
-      "x": 867.0,
-      "width": 233.0,
-      "y": 1203.0,
-      "height": 528.0,
-      "effect": "solid",
-      "textureName": "wallTexture"
-    },
-    {
-      "x": 315.0,
-      "width": 553.0,
-      "y": 1580.0,
-      "height": 100.0,
-      "effect": "solid",
-      "textureName": "wallTexture"
-    },
-    {
-      "x": 215.0,
-      "width": 100.0,
-      "y": 744.0,
-      "height": 936.0,
-      "effect": "solid",
-      "textureName": "wallTexture"
-    },
-    {
-      "x": 215.0,
-      "width": 650.0,
-      "y": 644.0,
-      "height": 100.0,
-      "effect": "solid",
-      "textureName": "wallTexture"
-    },
-    {
-      "x": 500.0,
-      "width": 183.0,
-      "y": 926.0,
-      "height": 183.0,
-      "effect": "solid",
-      "textureName": "wallTexture"
-    },
-    {
-      "x": 780.0,
-      "width": 126.0,
-      "y": 600.0,
-      "height": 144.0,
-      "effect": "solid",
-      "textureName": "wallTexture"
-    },
-    {
-      "x": 606.0,
-      "width": 62.0,
-      "y": 452.0,
-      "height": 141.0,
-      "effect": "solid",
-      "textureName": "wallTexture"
-    },
-    {
-      "x": 0.0,
-      "width": 1800.0,
-      "y": 0.0,
-      "height": 1800.0,
-      "effect": "none",
-      "textureName": "floorTexture"
-    }
-  ],
   "masterList": [
     {
       "x": 580.0,
-      "width": 68.0,
-      "y": 820.0,
-      "height": 68.0
+      "y": 820.0
+    }
+  ],
+  "surfaceList": [
+    {
+      "effect": "none",
+      "x": 0.0,
+      "width": 1800.0,
+      "y": 0.0,
+      "textureName": "floorTexture",
+      "height": 1800.0
+    },
+    {
+      "effect": "solid",
+      "x": 0.0,
+      "width": 2000.0,
+      "y": -100.0,
+      "textureName": "wallTexture",
+      "height": 100.0
+    },
+    {
+      "effect": "solid",
+      "x": 673.0,
+      "width": 229.0,
+      "y": 0.0,
+      "textureName": "wallTexture",
+      "height": 342.0
+    },
+    {
+      "effect": "solid",
+      "x": 932.0,
+      "width": 300.0,
+      "y": 0.0,
+      "textureName": "wallTexture",
+      "height": 342.0
+    },
+    {
+      "effect": "solid",
+      "x": 680.0,
+      "width": 100.0,
+      "y": 340.0,
+      "textureName": "wallTexture",
+      "height": 404.0
+    },
+    {
+      "effect": "solid",
+      "x": 1068.0,
+      "width": 100.0,
+      "y": 342.0,
+      "textureName": "wallTexture",
+      "height": 342.0
+    },
+    {
+      "effect": "solid",
+      "x": 500.0,
+      "width": 183.0,
+      "y": 1292.0,
+      "textureName": "wallTexture",
+      "height": 183.0
+    },
+    {
+      "effect": "solid",
+      "x": 867.0,
+      "width": 40.0,
+      "y": 600.0,
+      "textureName": "wallTexture",
+      "height": 537.0
+    },
+    {
+      "effect": "solid",
+      "x": 943.0,
+      "width": 735.0,
+      "y": 600.0,
+      "textureName": "wallTexture",
+      "height": 260.0
+    },
+    {
+      "effect": "solid",
+      "x": 907.0,
+      "width": 412.0,
+      "y": 889.0,
+      "textureName": "wallTexture",
+      "height": 40.0
+    },
+    {
+      "effect": "solid",
+      "x": 1352.0,
+      "width": 380.0,
+      "y": 858.0,
+      "textureName": "wallTexture",
+      "height": 72.0
+    },
+    {
+      "effect": "solid",
+      "x": 867.0,
+      "width": 233.0,
+      "y": 928.0,
+      "textureName": "wallTexture",
+      "height": 209.0
+    },
+    {
+      "effect": "solid",
+      "x": 1166.0,
+      "width": 67.0,
+      "y": 1000.0,
+      "textureName": "wallTexture",
+      "height": 67.0
+    },
+    {
+      "effect": "solid",
+      "x": 1300.0,
+      "width": 67.0,
+      "y": 1000.0,
+      "textureName": "wallTexture",
+      "height": 67.0
+    },
+    {
+      "effect": "solid",
+      "x": 1434.0,
+      "width": 67.0,
+      "y": 1000.0,
+      "textureName": "wallTexture",
+      "height": 67.0
+    },
+    {
+      "effect": "solid",
+      "x": 1166.0,
+      "width": 67.0,
+      "y": 1134.0,
+      "textureName": "wallTexture",
+      "height": 67.0
+    },
+    {
+      "effect": "solid",
+      "x": 1300.0,
+      "width": 67.0,
+      "y": 1134.0,
+      "textureName": "wallTexture",
+      "height": 67.0
+    },
+    {
+      "effect": "solid",
+      "x": 1434.0,
+      "width": 67.0,
+      "y": 1134.0,
+      "textureName": "wallTexture",
+      "height": 67.0
+    },
+    {
+      "effect": "solid",
+      "x": 1166.0,
+      "width": 67.0,
+      "y": 1268.0,
+      "textureName": "wallTexture",
+      "height": 67.0
+    },
+    {
+      "effect": "solid",
+      "x": 1300.0,
+      "width": 67.0,
+      "y": 1268.0,
+      "textureName": "wallTexture",
+      "height": 67.0
+    },
+    {
+      "effect": "solid",
+      "x": 1434.0,
+      "width": 67.0,
+      "y": 1268.0,
+      "textureName": "wallTexture",
+      "height": 67.0
+    },
+    {
+      "effect": "solid",
+      "x": 1573.0,
+      "width": 100.0,
+      "y": 929.0,
+      "textureName": "wallTexture",
+      "height": 580.0
+    },
+    {
+      "effect": "solid",
+      "x": 1100.0,
+      "width": 473.0,
+      "y": 1402.0,
+      "textureName": "wallTexture",
+      "height": 100.0
+    },
+    {
+      "effect": "solid",
+      "x": 867.0,
+      "width": 233.0,
+      "y": 1203.0,
+      "textureName": "wallTexture",
+      "height": 528.0
+    },
+    {
+      "effect": "solid",
+      "x": 315.0,
+      "width": 553.0,
+      "y": 1580.0,
+      "textureName": "wallTexture",
+      "height": 100.0
+    },
+    {
+      "effect": "solid",
+      "x": 215.0,
+      "width": 100.0,
+      "y": 744.0,
+      "textureName": "wallTexture",
+      "height": 936.0
+    },
+    {
+      "effect": "solid",
+      "x": 215.0,
+      "width": 650.0,
+      "y": 644.0,
+      "textureName": "wallTexture",
+      "height": 100.0
+    },
+    {
+      "effect": "solid",
+      "x": 500.0,
+      "width": 183.0,
+      "y": 926.0,
+      "textureName": "wallTexture",
+      "height": 183.0
+    },
+    {
+      "effect": "solid",
+      "x": 780.0,
+      "width": 126.0,
+      "y": 600.0,
+      "textureName": "wallTexture",
+      "height": 144.0
+    },
+    {
+      "effect": "solid",
+      "x": 509.5788,
+      "width": 163.0,
+      "y": 372.68005,
+      "textureName": "wallTexture",
+      "height": 244.0
     }
   ],
   "nextLevel": "level0",
+  "type": "shooter",
   "slaveList": [
     {
       "x": 800.0,
-      "width": 8.0,
-      "y": 400.0,
-      "height": 8.0
+      "y": 400.0
     },
     {
       "x": 820.0,
-      "width": 8.0,
-      "y": 420.0,
-      "height": 8.0
+      "y": 420.0
     },
     {
       "x": 1000.0,
-      "width": 8.0,
-      "y": 500.0,
-      "height": 8.0
+      "y": 500.0
     },
     {
       "x": 925.0,
-      "width": 8.0,
-      "y": 880.0,
-      "height": 8.0
+      "y": 880.0
     },
     {
       "x": 1260.0,
-      "width": 8.0,
-      "y": 872.0,
-      "height": 8.0
+      "y": 872.0
     },
     {
       "x": 1126.0,
-      "width": 8.0,
-      "y": 1030.0,
-      "height": 8.0
+      "y": 1030.0
     },
     {
       "x": 1264.0,
-      "width": 8.0,
-      "y": 1030.0,
-      "height": 8.0
+      "y": 1030.0
     },
     {
       "x": 1400.0,
-      "width": 8.0,
-      "y": 1030.0,
-      "height": 8.0
+      "y": 1030.0
     },
     {
       "x": 1538.0,
-      "width": 8.0,
-      "y": 1030.0,
-      "height": 8.0
+      "y": 1030.0
     },
     {
       "x": 1126.0,
-      "width": 8.0,
-      "y": 1166.0,
-      "height": 8.0
+      "y": 1166.0
     },
     {
       "x": 1264.0,
-      "width": 8.0,
-      "y": 1166.0,
-      "height": 8.0
+      "y": 1166.0
     },
     {
       "x": 1400.0,
-      "width": 8.0,
-      "y": 1166.0,
-      "height": 8.0
+      "y": 1166.0
     },
     {
       "x": 1538.0,
-      "width": 8.0,
-      "y": 1166.0,
-      "height": 8.0
+      "y": 1166.0
     },
     {
       "x": 1126.0,
-      "width": 8.0,
-      "y": 1302.0,
-      "height": 8.0
+      "y": 1302.0
     },
     {
       "x": 1264.0,
-      "width": 8.0,
-      "y": 1302.0,
-      "height": 8.0
+      "y": 1302.0
     },
     {
       "x": 1400.0,
-      "width": 8.0,
-      "y": 1302.0,
-      "height": 8.0
+      "y": 1302.0
     },
     {
       "x": 1538.0,
-      "width": 8.0,
-      "y": 1302.0,
-      "height": 8.0
+      "y": 1302.0
     },
     {
       "x": 810.0,
-      "width": 8.0,
-      "y": 410.0,
-      "height": 8.0
+      "y": 410.0
     }
   ]
 }

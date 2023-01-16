@@ -14,17 +14,19 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import ru.gachigame.game.LevelEditor;
 import ru.gachigame.game.MyGdxGame;
+import ru.gachigame.game.guiobject.TextWindow;
 import ru.gachigame.game.resourceloader.LevelLoader;
 
 import static ru.gachigame.game.resourceloader.TextureLoader.*;
 
 public class MainMenuScreen implements Screen {
+    TextWindow textWindow = new TextWindow();
     private final MyGdxGame game;
     private final OrthographicCamera camera;
     private final Texture background;
     private final Stage stage;
 
-    public MainMenuScreen(final MyGdxGame gam){
+    public MainMenuScreen(final MyGdxGame gam) {
         this.game = gam;
         stage = new Stage();
         Gdx.input.setInputProcessor(stage);
@@ -56,13 +58,7 @@ public class MainMenuScreen implements Screen {
         startButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                try {
-                    LevelLoader.load("level0");
-                    game.setScreen(new LevelsScreen(game));
-                }
-                catch (Exception exception){
-                    exception.printStackTrace();
-                }
+                textWindow.call(300, 210, 200, 40);
             }
         });
 
@@ -91,26 +87,59 @@ public class MainMenuScreen implements Screen {
         game.batch.setProjectionMatrix(camera.combined);
         game.batch.begin();
         game.batch.draw(background, 0, 0);
+        textWindow.render(game);
         game.batch.end();
         stage.draw();
 
-        if(Gdx.input.isKeyJustPressed(Input.Keys.E)){
+        if (!textWindow.isRendering()) {
+            if (Gdx.input.isKeyJustPressed(Input.Keys.E)) {
+                try {
+                    LevelLoader.load("level0");
+                    game.setScreen(new LevelEditor(game));
+                } catch (Exception exception) {
+                    exception.printStackTrace();
+                }
+            }
+            if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
+                throw new Error();
+            }
+        }
+        start();
+    }
+
+    private void start(){
+        String nickname = textWindow.getOutputText();
+        if (!nickname.equals("")) {
             try {
                 LevelLoader.load("level0");
-                game.setScreen(new LevelEditor(game));
-            }
-            catch (Exception exception){
+                game.setScreen(new LevelsScreen(game));
+            } catch (Exception exception) {
                 exception.printStackTrace();
             }
         }
-        if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
-            throw new Error();
-        }
     }
-    @Override public void show(){}
-    @Override public void resize(int width, int height){}
-    @Override public void pause(){}
-    @Override public void resume(){}
-    @Override public void hide(){}
-    @Override public void dispose(){}
+
+    @Override
+    public void show() {
+    }
+
+    @Override
+    public void resize(int width, int height) {
+    }
+
+    @Override
+    public void pause() {
+    }
+
+    @Override
+    public void resume() {
+    }
+
+    @Override
+    public void hide() {
+    }
+
+    @Override
+    public void dispose() {
+    }
 }
