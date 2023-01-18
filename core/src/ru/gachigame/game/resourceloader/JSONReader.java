@@ -9,6 +9,7 @@ import java.io.IOException;
 
 public class JSONReader {
     private static String mainMenuBackgroundTexturePath;
+    private static String bulletIlyaPath;
     private static String wallTexturePath;
     private static String editableWallTexturePath;
     private static String floorTexturePath;
@@ -18,6 +19,7 @@ public class JSONReader {
     public static void load() throws Exception {
         JSONObject paths = readJson(new File("paths.json"));
         mainMenuBackgroundTexturePath = (String) paths.get("mainMenuBackground");
+        bulletIlyaPath = (String) paths.get("bulletIlya");
         wallTexturePath = (String) paths.get("wallTexture");
         editableWallTexturePath = (String) paths.get("editableWallTexture");
         floorTexturePath = (String) paths.get("floorTexture");
@@ -66,5 +68,9 @@ public class JSONReader {
 
     public static String getEditableFloorTexturePath() {
         return editableFloorTexturePath;
+    }
+
+    public static String getBulletIlyaPath() {
+        return bulletIlyaPath;
     }
 }

@@ -1,7 +1,9 @@
 package ru.gachigame.game.screen;
 
 import ru.gachigame.game.logics.ShooterLevelsLogic;
+
 import static ru.gachigame.game.resourceloader.LevelLoader.getLevelType;
+
 import com.badlogic.gdx.graphics.GL20;
 import ru.gachigame.game.MyGdxGame;
 import com.badlogic.gdx.Screen;
@@ -11,11 +13,11 @@ public class LevelsScreen implements Screen {
     private final MyGdxGame game;
     private ShooterLevelsLogic shooterLevelsLogic;
 
-    public LevelsScreen(final MyGdxGame game){
+    public LevelsScreen(final MyGdxGame game) {
         this.game = game;
-        Gdx.gl.glClearColor(0, 0, 0.2f, 1);
+        Gdx.gl.glClearColor(0.5f, 0.5f, 0.5f, 1);
 
-        switch (getLevelType()){
+        switch (getLevelType()) {
             case "shooter":
                 shooterLevelsLogic = new ShooterLevelsLogic(this.game);
                 break;
@@ -34,7 +36,7 @@ public class LevelsScreen implements Screen {
 
         game.batch.begin();
 
-        switch (getLevelType()){
+        switch (getLevelType()) {
             case "shooter":
                 shooterLevelsLogic.render();
                 break;
@@ -46,11 +48,25 @@ public class LevelsScreen implements Screen {
 
     }
 
-    @Override public void show(){}
-    @Override public void resize(int width, int height){}
-    @Override public void pause(){}
-    @Override public void resume(){}
-    @Override public void hide(){}
+    @Override
+    public void show() {
+    }
+
+    @Override
+    public void resize(int width, int height) {
+    }
+
+    @Override
+    public void pause() {
+    }
+
+    @Override
+    public void resume() {
+    }
+
+    @Override
+    public void hide() {
+    }
 
     @Override
     public void dispose() {

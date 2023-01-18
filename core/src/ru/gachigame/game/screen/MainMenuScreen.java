@@ -12,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+//import ru.gachigame.game.LevelEditor;
 import ru.gachigame.game.LevelEditor;
 import ru.gachigame.game.MyGdxGame;
 import ru.gachigame.game.guiobject.TextWindow;
@@ -20,7 +21,7 @@ import ru.gachigame.game.resourceloader.LevelLoader;
 import static ru.gachigame.game.resourceloader.TextureLoader.*;
 
 public class MainMenuScreen implements Screen {
-    TextWindow textWindow = new TextWindow();
+    private final TextWindow textWindow = new TextWindow();
     private final MyGdxGame game;
     private final OrthographicCamera camera;
     private final Texture background;

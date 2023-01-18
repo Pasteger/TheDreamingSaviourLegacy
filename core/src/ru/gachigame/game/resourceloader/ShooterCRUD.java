@@ -4,10 +4,8 @@ import org.json.simple.JSONObject;
 import java.io.File;
 
 public class ShooterCRUD extends JSONReader {
-    private static JSONObject billySprites;
-    private static JSONObject slaveSprites;
-    private static JSONObject masterSprites;
-    private static JSONObject cumSprites;
+    private static JSONObject ilyaSprites;
+    private static JSONObject shortAttackEnemySprites;
     private static String shooterDeathBackgroundTexturePath;
 
     public static void load() throws Exception {
@@ -16,29 +14,19 @@ public class ShooterCRUD extends JSONReader {
 
         shooterDeathBackgroundTexturePath = (String) shooterResources.get("deathBackground");
 
-        billySprites = (JSONObject) shooterResources.get("billySprites");
-        slaveSprites = (JSONObject) shooterResources.get("slaveSprites");
-        masterSprites = (JSONObject) shooterResources.get("masterSprites");
-        cumSprites = (JSONObject) shooterResources.get("cumSprites");
-    }
-
-    public static JSONObject getBillySprites() {
-        return billySprites;
-    }
-
-    public static JSONObject getSlaveSprites() {
-        return slaveSprites;
-    }
-
-    public static JSONObject getMasterSprites() {
-        return masterSprites;
-    }
-
-    public static JSONObject getCumSprites() {
-        return cumSprites;
+        ilyaSprites = (JSONObject) shooterResources.get("ilyaSprites");
+        shortAttackEnemySprites = (JSONObject) shooterResources.get("shortAttackEnemySprites");
     }
 
     public static String getShooterDeathBackgroundTexturePath() {
         return shooterDeathBackgroundTexturePath;
+    }
+
+    public static JSONObject getIlyaSprites() {
+        return ilyaSprites;
+    }
+
+    public static JSONObject getShortAttackEnemySprites() {
+        return shortAttackEnemySprites;
     }
 }

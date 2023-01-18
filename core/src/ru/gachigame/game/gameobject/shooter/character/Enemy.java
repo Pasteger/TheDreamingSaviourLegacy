@@ -1,0 +1,12 @@
+package ru.gachigame.game.gameobject.shooter.character;
+
+import ru.gachigame.game.gameobject.Surface;
+
+import java.util.List;
+
+public abstract class Enemy extends Character{
+    public String type = "enemy";
+    public void moveToPlayer(Ilya ilya, List<Surface> surfaceList, List<Enemy> enemies){}
+    public void attack(Ilya ilya){}
+    public void sightCalibration(){}
+}

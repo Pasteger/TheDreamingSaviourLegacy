@@ -1,5 +1,6 @@
 {
   "mainMenuBackground": "sprites/main_menu_background.jpg",
+  "bulletIlya": "sprites/shooter/bullet/bullet_ilya_texture.png",
   "floorTexture": "sprites/floors/floor.jpg",
   "editableFloorTexture": "sprites/floors/editableFloor.jpg",
   "wallTexture": "sprites/walls/wall.png",
@@ -7,31 +8,17 @@
   "sometimesIRipTheSkinSound": "sounds/sometimes_i_rip_the_skin.wav",
   "shooterResources": {
     "wallsPath": "objects/shooter/walls.json",
-    "slavesPath": "objects/shooter/slaves.json",
-    "masterPath": "objects/shooter/masters.json",
-    "billySprites": {
-      "upSprite": "sprites/shooter/billy/up_sprite.png",
-      "downSprite": "sprites/shooter/billy/down_sprite.png",
-      "leftSprite": "sprites/shooter/billy/left_sprite.png",
-      "rightSprite": "sprites/shooter/billy/right_sprite.png"
+    "ilyaSprites": {
+      "upSprite": "sprites/shooter/ilya/up_sprite.png",
+      "downSprite": "sprites/shooter/ilya/down_sprite.png",
+      "leftSprite": "sprites/shooter/ilya/left_sprite.png",
+      "rightSprite": "sprites/shooter/ilya/right_sprite.png"
     },
-    "slaveSprites": {
-      "upSprite": "sprites/shooter/slave/up_sprite.png",
-      "downSprite": "sprites/shooter/slave/down_sprite.png",
-      "leftSprite": "sprites/shooter/slave/left_sprite.png",
-      "rightSprite": "sprites/shooter/slave/right_sprite.png"
-    },
-    "masterSprites": {
-      "upSprite": "sprites/shooter/master/up_sprite.png",
-      "downSprite": "sprites/shooter/master/down_sprite.png",
-      "leftSprite": "sprites/shooter/master/left_sprite.png",
-      "rightSprite": "sprites/shooter/master/right_sprite.png"
-    },
-    "cumSprites": {
-      "cum": "sprites/shooter/cum/cum.png",
-      "badCum": "sprites/shooter/cum/bad_cum.png",
-      "masterCum": "sprites/shooter/cum/master_cum.png",
-      "greyCum": "sprites/shooter/cum/grey_cum.png"
+    "shortAttackEnemySprites": {
+      "upSprite": "sprites/shooter/short_attack_enemy/up_sprite.png",
+      "downSprite": "sprites/shooter/short_attack_enemy/down_sprite.png",
+      "leftSprite": "sprites/shooter/short_attack_enemy/left_sprite.png",
+      "rightSprite": "sprites/shooter/short_attack_enemy/right_sprite.png"
     },
     "deathBackground": "sprites/shooter/death_background.png",
     "dungeon": "sprites/shooter/dungeon.jpg"

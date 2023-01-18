@@ -11,12 +11,9 @@ public class TextureLoader {
     private static Texture editWallTexture;
     private static Texture floorTexture;
     private static Texture editFloorTexture;
-    private static final Map<String, Texture> shooterSlaveTextures = new HashMap<>();
-    private static final Map<String, Texture> shooterBullyTextures = new HashMap<>();
-    private static final Map<String, Texture> shooterMasterTextures = new HashMap<>();
-    private static Texture cumTexture;
-    private static Texture badCumTexture;
-    private static Texture masterCumTexture;
+    private static final Map<String, Texture> shooterIlyaTextures = new HashMap<>();
+    private static final Map<String, Texture> shooterShortAttackEnemyTextures = new HashMap<>();
+    private static Texture bulletIlyaTexture;
     private static Texture mainMenuBackground;
     private static Texture shooterDeathBackground;
 
@@ -25,12 +22,9 @@ public class TextureLoader {
         editWallTexture = new Texture(getEditableWallTexturePath());
         floorTexture = new Texture(getFloorTexturePath());
         editFloorTexture = new Texture(getEditableFloorTexturePath());
-        fillSpritesMap(shooterBullyTextures, getBillySprites());
-        fillSpritesMap(shooterSlaveTextures, getSlaveSprites());
-        fillSpritesMap(shooterMasterTextures, getMasterSprites());
-        cumTexture = new Texture(getSpritePath(getCumSprites(), "cum"));
-        badCumTexture = new Texture(getSpritePath(getCumSprites(), "badCum"));
-        masterCumTexture = new Texture(getSpritePath(getCumSprites(), "masterCum"));
+        fillSpritesMap(shooterIlyaTextures, getIlyaSprites());
+        fillSpritesMap(shooterShortAttackEnemyTextures, getShortAttackEnemySprites());
+        bulletIlyaTexture = new Texture(getBulletIlyaPath());
         mainMenuBackground = new Texture(getMainMenuBackgroundTexturePath());
         shooterDeathBackground = new Texture(getShooterDeathBackgroundTexturePath());
     }
@@ -50,28 +44,16 @@ public class TextureLoader {
         return editWallTexture;
     }
 
-    public static Map<String, Texture> getShooterSlaveTextures() {
-        return shooterSlaveTextures;
+    public static Map<String, Texture> getShooterIlyaTextures() {
+        return shooterIlyaTextures;
     }
 
-    public static Map<String, Texture> getShooterBullyTextures() {
-        return shooterBullyTextures;
+    public static Map<String, Texture> getShooterShortAttackEnemyTextures() {
+        return shooterShortAttackEnemyTextures;
     }
 
-    public static Map<String, Texture> getShooterMasterTextures() {
-        return shooterMasterTextures;
-    }
-
-    public static Texture getCumTexture() {
-        return cumTexture;
-    }
-
-    public static Texture getBadCumTexture() {
-        return badCumTexture;
-    }
-
-    public static Texture getMasterCumTexture() {
-        return masterCumTexture;
+    public static Texture getBulletIlyaTexture() {
+        return bulletIlyaTexture;
     }
 
     public static Texture getMainMenuBackground() {

@@ -2,12 +2,13 @@ package ru.gachigame.game.gameobject.shooter.character;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Rectangle;
+import ru.gachigame.game.gameobject.Bullet;
 import ru.gachigame.game.gameobject.Surface;
-import ru.gachigame.game.gameobject.Cum;
 import ru.gachigame.game.logics.ShooterLevelsLogic;
 
 import java.util.List;
 import java.util.Map;
+
 import static ru.gachigame.game.resourceloader.TextureLoader.*;
 
 public class Character extends Rectangle {
@@ -22,10 +23,10 @@ public class Character extends Rectangle {
     Rectangle legs;
     int speed;
 
-    public void moveUp(List<Surface> surfaces, List<Slave> slaves){
+    public void moveUp(List<Surface> surfaces, List<Enemy> enemies) {
         texture = sprites.get(UP);
         direction = "NORTH";
-        for (int step = 0; step < speed; step++){
+        for (int step = 0; step < speed; step++) {
             legs.y++;
             for (Surface surface : surfaces) {
                 if (legs.overlaps(surface) && surface.getEffect().equals("solid")) {
@@ -33,8 +34,8 @@ public class Character extends Rectangle {
                     break;
                 }
             }
-            for (Slave slave : slaves) {
-                if (legs.overlaps(slave.legs) && !legs.equals(slave.legs)) {
+            for (Enemy enemy : enemies) {
+                if (legs.overlaps(enemy.legs) && !legs.equals(enemy.legs)) {
                     legs.y--;
                     break;
                 }
@@ -42,10 +43,11 @@ public class Character extends Rectangle {
         }
         y = legs.y;
     }
-    public void moveDown(List<Surface> surfaces, List<Slave> slaves){
+
+    public void moveDown(List<Surface> surfaces, List<Enemy> enemies) {
         texture = sprites.get(DOWN);
         direction = "SOUTH";
-        for (int step = 0; step < speed; step++){
+        for (int step = 0; step < speed; step++) {
             legs.y--;
             for (Surface surface : surfaces) {
                 if (legs.overlaps(surface) && surface.getEffect().equals("solid")) {
@@ -53,8 +55,8 @@ public class Character extends Rectangle {
                     break;
                 }
             }
-            for (Slave slave : slaves) {
-                if (legs.overlaps(slave.legs) && !legs.equals(slave.legs)) {
+            for (Enemy enemy : enemies) {
+                if (legs.overlaps(enemy.legs) && !legs.equals(enemy.legs)) {
                     legs.y++;
                     break;
                 }
@@ -62,10 +64,11 @@ public class Character extends Rectangle {
         }
         y = legs.y;
     }
-    public void moveRight(List<Surface> surfaces, List<Slave> slaves){
+
+    public void moveRight(List<Surface> surfaces, List<Enemy> enemies) {
         texture = sprites.get(RIGHT);
         direction = "EAST";
-        for (int step = 0; step < speed; step++){
+        for (int step = 0; step < speed; step++) {
             legs.x++;
             for (Surface surface : surfaces) {
                 if (legs.overlaps(surface) && surface.getEffect().equals("solid")) {
@@ -73,8 +76,8 @@ public class Character extends Rectangle {
                     break;
                 }
             }
-            for (Slave slave : slaves) {
-                if (legs.overlaps(slave.legs) && !legs.equals(slave.legs)) {
+            for (Enemy enemy : enemies) {
+                if (legs.overlaps(enemy.legs) && !legs.equals(enemy.legs)) {
                     legs.x--;
                     break;
                 }
@@ -82,19 +85,20 @@ public class Character extends Rectangle {
         }
         x = legs.x;
     }
-    public void moveLeft(List<Surface> surfaces, List<Slave> slaves){
+
+    public void moveLeft(List<Surface> surfaces, List<Enemy> enemies) {
         texture = sprites.get(LEFT);
         direction = "WEST";
-        for (int step = 0; step < speed; step++){
+        for (int step = 0; step < speed; step++) {
             legs.x--;
             for (Surface surface : surfaces) {
-                if (legs.overlaps(surface) && surface.getEffect().equals("solid")){
+                if (legs.overlaps(surface) && surface.getEffect().equals("solid")) {
                     legs.x++;
                     break;
                 }
             }
-            for (Slave slave : slaves) {
-                if (legs.overlaps(slave.legs) && !legs.equals(slave.legs)) {
+            for (Enemy enemy : enemies) {
+                if (legs.overlaps(enemy.legs) && !legs.equals(enemy.legs)) {
                     legs.x++;
                     break;
                 }
@@ -103,45 +107,46 @@ public class Character extends Rectangle {
         x = legs.x;
     }
 
-    public void shot(String cumType){
-        Cum cum = new Cum();
+    public void shot(String bulletType) {
+        Bullet bullet = new Bullet();
         switch (direction) {
             case "NORTH" -> {
-                cum.x = x + 2;
-                cum.y = y + 6;
+                bullet.x = x + 244;
+                bullet.y = y + 285;
             }
             case "SOUTH" -> {
-                cum.x = x + 2;
-                cum.y = y;
+                bullet.x = x + 28;
+                bullet.y = y + 15;
             }
             case "WEST" -> {
-                cum.x = x + 1;
-                cum.y = y + 2;
+                bullet.x = x + 15;
+                bullet.y = y + 243;
             }
             case "EAST" -> {
-                cum.x = x + 6;
-                cum.y = y + 2;
+                bullet.x = x + 285;
+                bullet.y = y + 28;
             }
         }
-        cum.height = 2;
-        cum.width = 2;
-        cum.direction = direction;
-        cum.type = cumType;
-        switch (cumType){
-            case "GOOD" -> cum.texture = getCumTexture();
-            case "BAD" -> cum.texture = getBadCumTexture();
+        bullet.height = 30;
+        bullet.width = 30;
+        bullet.direction = direction;
+        bullet.type = bulletType;
+        switch (bulletType) {
+            case "GOOD" -> bullet.texture = getBulletIlyaTexture();
+            case "BAD" -> bullet.texture = getBulletIlyaTexture();
         }
-        ShooterLevelsLogic.cumList.add(cum);
+        ShooterLevelsLogic.BULLET_LIST.add(bullet);
     }
 
     @Override
-    public Rectangle setX(float x){
+    public Rectangle setX(float x) {
         this.x = x;
         legs.x = x;
         return this;
     }
+
     @Override
-    public Rectangle setY(float y){
+    public Rectangle setY(float y) {
         this.y = y;
         legs.y = y;
         return this;
