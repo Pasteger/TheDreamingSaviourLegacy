@@ -20,7 +20,7 @@ public class LoadScreen implements Screen {
         message = "Loading...";
         this.game = gam;
         camera = new OrthographicCamera();
-        camera.setToOrtho(false, 800, 600);
+        camera.setToOrtho(false, 3000, 2500);
         Gdx.gl.glClearColor(0.2f, 0, 0.2f, 1);
 
         new Thread(() -> Gdx.app.postRunnable(() -> {
@@ -63,7 +63,7 @@ public class LoadScreen implements Screen {
         game.batch.setProjectionMatrix(camera.combined);
 
         game.batch.begin();
-        game.font.draw(game.batch, message, 10, 80);
+        game.universalFont.draw(game.batch, message, 80, 210);
         game.batch.end();
         if (success) {
             game.setScreen(new MainMenuScreen(game));

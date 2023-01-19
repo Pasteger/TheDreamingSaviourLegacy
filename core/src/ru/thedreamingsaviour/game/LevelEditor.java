@@ -65,8 +65,8 @@ public class LevelEditor implements Screen {
 
         game.batch.draw(ilya.texture, ilya.x, ilya.y);
 
-        game.font.draw(game.batch, camera.position.x + "  " + camera.position.y, camera.position.x - 2000, camera.position.y + 1900);
-        game.font.draw(game.batch, currentTask, camera.position.x - 2000, camera.position.y + 1750);
+        game.universalFont.draw(game.batch, camera.position.x + "  " + camera.position.y, camera.position.x - 2000, camera.position.y + 1900);
+        game.universalFont.draw(game.batch, currentTask, camera.position.x - 2000, camera.position.y + 1700);
 
         textWindow.render(game);
         game.batch.end();
@@ -83,10 +83,10 @@ public class LevelEditor implements Screen {
 
     private void buttons() {
         if (Gdx.input.isKeyJustPressed(Input.Keys.S)) {
-            currentTask = !currentTask.equals("spawnSlave") ? "spawnSlave" : "";
+            currentTask = !currentTask.equals("spawnEnemy") ? "spawnEnemy" : "";
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.D)) {
-            currentTask = !currentTask.equals("deleteSlave") ? "deleteSlave" : "";
+            currentTask = !currentTask.equals("deleteEnemy") ? "deleteEnemy" : "";
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.W)) {
             currentTask = !currentTask.equals("generateWall") ? "generateWall" : "";
@@ -124,13 +124,13 @@ public class LevelEditor implements Screen {
             currentTask = "";
         }
 
-        if (currentTask.equals("spawnSlave") && Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
+        if (currentTask.equals("spawnEnemy") && Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
             Enemy slave = new ShortAttackEnemy();
             slave.setX(getSynchronizedX());
             slave.setY(getSynchronizedY());
             enemyList.add(slave);
         }
-        if (currentTask.equals("deleteSlave") && Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
+        if (currentTask.equals("deleteEnemy") && Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
             float x = getSynchronizedX();
             float y = getSynchronizedY();
             enemyList.removeIf(enemy -> (
@@ -152,6 +152,7 @@ public class LevelEditor implements Screen {
             );
         }
         if (Gdx.input.isKeyPressed(Input.Keys.CONTROL_LEFT) && Gdx.input.isKeyJustPressed(Input.Keys.S)) {
+            currentTask = "save...";
             textWindow.call((int) camera.position.x - 1000, (int) camera.position.y, 2000, 400, "levelName nextLevel");
         }
 
@@ -172,8 +173,10 @@ public class LevelEditor implements Screen {
                 String[] save = text.split(" ");
 
                 LevelSaver.save(surfaceList, shortAttackEnemyList, save[1], save[0], "shooter");
+
+                currentTask = "saved!";
             } catch (Exception exception) {
-                exception.printStackTrace();
+                currentTask = "save exception";
             }
         }
     }

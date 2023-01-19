@@ -23,9 +23,9 @@ public class TextWindow {
         window.x = x;
         window.y = y;
 
-        background = new Surface(0, 0, width + 6, height + 6, "none", "wallTexture");
-        background.x = x - 3;
-        background.y = y - 3;
+        background = new Surface(0, 0, width + 50, height + 50, "none", "wallTexture");
+        background.x = x - 25;
+        background.y = y - 25;
 
         this.promptText = promptText;
 
@@ -38,8 +38,8 @@ public class TextWindow {
         }
         background.draw(game.batch);
         window.draw(game.batch);
-        game.font.draw(game.batch, promptText, window.x + 10, window.y + window.height / 2 + 15);
-        game.font.draw(game.batch, text.toString(), window.x + 10, window.y + window.height / 2);
+        game.universalFont.draw(game.batch, promptText, window.x + 25, window.y + window.height / 2 + 160);
+        game.universalFont.draw(game.batch, text.toString(), window.x + 25, window.y + window.height / 2);
     }
 
     public void recall() {
@@ -81,7 +81,8 @@ public class TextWindow {
                 return false;
             }
 
-            if (text.length() < (window.width - 10) / 8 - 1) {
+            //TODO Починить ограничение длины текста
+            if (text.length() < (window.width - 100) / 8 - 1) {
                 if (Input.Keys.toString(keycode).matches("[A-Z]")) {
                     if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT)) {
                         text.append(Input.Keys.toString(keycode));

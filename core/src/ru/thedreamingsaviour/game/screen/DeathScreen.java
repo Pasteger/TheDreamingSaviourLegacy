@@ -2,14 +2,11 @@ package ru.thedreamingsaviour.game.screen;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import ru.thedreamingsaviour.game.MyGdxGame;
 import ru.thedreamingsaviour.game.resourceloader.TextureLoader;
-
-import static ru.thedreamingsaviour.game.resourceloader.SoundLoader.getSometimesIRipTheSkin;
 
 public class DeathScreen implements Screen {
     private final MyGdxGame game;
@@ -23,8 +20,6 @@ public class DeathScreen implements Screen {
         camera.setToOrtho(false, 800, 480);
         background = TextureLoader.getShooterDeathBackground();
         startCurrentTime = System.currentTimeMillis();
-        Sound sound = getSometimesIRipTheSkin();
-        sound.play();
     }
 
     @Override

@@ -28,10 +28,10 @@ public class SettingsScreen implements Screen {
         stage = new Stage();
         Gdx.input.setInputProcessor(stage);
 
-        BitmapFont font = new BitmapFont();
+        BitmapFont universalFont = new BitmapFont();
         TextButton.TextButtonStyle textButtonStyle = new TextButton.TextButtonStyle();
-        textButtonStyle.font = font;
-        textButtonStyle.font.getData().setScale(2);
+        textButtonStyle.universalFont = universalFont;
+        textButtonStyle.universalFont.getData().setScale(2);
 
         Button musicLeft = new TextButton("(<)", textButtonStyle);
         stage.addActor(musicLeft);
@@ -131,10 +131,10 @@ public class SettingsScreen implements Screen {
 
         game.batch.begin();
         game.batch.draw(background, 0, 0);
-        game.font.getData().setScale(2);
-        game.font.draw(game.batch, game.musicID+"", 10, 400);
-        game.font.draw(game.batch, game.volume+"", 10, 350);
-        game.font.getData().setScale(1);
+        game.universalFont.getData().setScale(2);
+        game.universalFont.draw(game.batch, game.musicID+"", 10, 400);
+        game.universalFont.draw(game.batch, game.volume+"", 10, 350);
+        game.universalFont.getData().setScale(1);
         game.batch.end();
 
         stage.draw();

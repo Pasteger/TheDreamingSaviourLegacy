@@ -3,6 +3,7 @@ package ru.thedreamingsaviour.game.screen;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -27,22 +28,25 @@ public class MainMenuScreen implements Screen {
     private final Texture background;
     private final Stage stage;
     private String exceptionMessage = "";
+    private final BitmapFont headFont;
 
     public MainMenuScreen(final MyGdxGame gam) {
         this.game = gam;
+
         stage = new Stage();
         Gdx.input.setInputProcessor(stage);
 
+        headFont = game.getFont(100, Color.CYAN);
+        headFont.getData().scale(1);
+
         background = getMainMenuBackground();
 
-        BitmapFont font = new BitmapFont();
         TextButton.TextButtonStyle textButtonStyle = new TextButton.TextButtonStyle();
-        textButtonStyle.font = font;
-        textButtonStyle.font.getData().setScale(2);
+        textButtonStyle.font = game.getFont(45, new Color(0.9f, 0.9f, 0.9f, 1));
 
         Button startButton = new TextButton("Start", textButtonStyle);
         stage.addActor(startButton);
-        startButton.setPosition(20, 200);
+        startButton.setPosition(20, 230);
 
         Button settingsButton = new TextButton("Settings", textButtonStyle);
         stage.addActor(settingsButton);
@@ -50,17 +54,17 @@ public class MainMenuScreen implements Screen {
 
         Button exitButton = new TextButton("Exit", textButtonStyle);
         stage.addActor(exitButton);
-        exitButton.setPosition(20, 100);
+        exitButton.setPosition(20, 70);
 
 
         camera = game.camera;
-        camera.setToOrtho(false, 800, 480);
+        camera.setToOrtho(false, 3000, 2500);
 
 
         startButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                textWindow.call(300, 210, 200, 40, "level");
+                textWindow.call(1000, 1100, 1000, 400, "level");
             }
         });
 
@@ -68,7 +72,7 @@ public class MainMenuScreen implements Screen {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 //game.setScreen(new SettingsScreen(game));
-                System.out.println("WIP");
+                exceptionMessage = "WIP";
             }
         });
 
@@ -89,7 +93,8 @@ public class MainMenuScreen implements Screen {
         game.batch.setProjectionMatrix(camera.combined);
         game.batch.begin();
         game.batch.draw(background, 0, 0);
-        game.font.draw(game.batch, exceptionMessage, 350, 250);
+        headFont.draw(game.batch, "The Dreaming Saviour", 80, 2300);
+        game.universalFont.draw(game.batch, exceptionMessage, 80, 210);
         textWindow.render(game);
         editorTextWindow.render(game);
         game.batch.end();
@@ -97,7 +102,7 @@ public class MainMenuScreen implements Screen {
 
         if (!(textWindow.isRendering() || editorTextWindow.isRendering())) {
             if (Gdx.input.isKeyJustPressed(Input.Keys.E)) {
-                editorTextWindow.call(300, 210, 200, 40, "level");
+                editorTextWindow.call(1000, 1100, 1000, 400, "level");
             }
             if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
                 throw new Error();
@@ -107,7 +112,7 @@ public class MainMenuScreen implements Screen {
         startEditor();
     }
 
-    private void start(){
+    private void start() {
         String level = textWindow.getOutputText();
         if (!(level.equals("") || level.equals("new"))) {
             try {
@@ -119,7 +124,7 @@ public class MainMenuScreen implements Screen {
         }
     }
 
-    private void startEditor(){
+    private void startEditor() {
         String level = editorTextWindow.getOutputText();
         if (!level.equals("")) {
             try {

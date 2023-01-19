@@ -112,7 +112,6 @@ public class ShooterLevelsLogic {
     private void ilyaDeath() {
         if (ilya.HP < 1) {
             BULLET_LIST.clear();
-            game.nickname = null;
             game.setScreen(new DeathScreen(game));
         }
     }
