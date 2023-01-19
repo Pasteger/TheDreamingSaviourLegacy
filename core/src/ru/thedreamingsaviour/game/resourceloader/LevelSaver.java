@@ -19,6 +19,13 @@ public class LevelSaver {
         level.put("nextLevel", nextLevel);
         level.put("type", levelType);
         File levelFile = new File("levels/" + levelName + ".json");
+        if (!levelFile.exists()){
+            try {
+                levelFile.createNewFile();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
         try {
             JSONReader.writeJson(levelFile, level);
         } catch (IOException e) {

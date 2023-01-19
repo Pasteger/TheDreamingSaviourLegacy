@@ -12,7 +12,6 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-//import ru.gachigame.game.LevelEditor;
 import ru.thedreamingsaviour.game.LevelEditor;
 import ru.thedreamingsaviour.game.MyGdxGame;
 import ru.thedreamingsaviour.game.guiobject.TextWindow;
@@ -22,10 +21,12 @@ import static ru.thedreamingsaviour.game.resourceloader.TextureLoader.*;
 
 public class MainMenuScreen implements Screen {
     private final TextWindow textWindow = new TextWindow();
+    private final TextWindow editorTextWindow = new TextWindow();
     private final MyGdxGame game;
     private final OrthographicCamera camera;
     private final Texture background;
     private final Stage stage;
+    private String exceptionMessage = "";
 
     public MainMenuScreen(final MyGdxGame gam) {
         this.game = gam;
@@ -59,7 +60,7 @@ public class MainMenuScreen implements Screen {
         startButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                textWindow.call(300, 210, 200, 40);
+                textWindow.call(300, 210, 200, 40, "level");
             }
         });
 
@@ -88,34 +89,44 @@ public class MainMenuScreen implements Screen {
         game.batch.setProjectionMatrix(camera.combined);
         game.batch.begin();
         game.batch.draw(background, 0, 0);
+        game.font.draw(game.batch, exceptionMessage, 350, 250);
         textWindow.render(game);
+        editorTextWindow.render(game);
         game.batch.end();
         stage.draw();
 
-        if (!textWindow.isRendering()) {
+        if (!(textWindow.isRendering() || editorTextWindow.isRendering())) {
             if (Gdx.input.isKeyJustPressed(Input.Keys.E)) {
-                try {
-                    LevelLoader.load("level0");
-                    game.setScreen(new LevelEditor(game));
-                } catch (Exception exception) {
-                    exception.printStackTrace();
-                }
+                editorTextWindow.call(300, 210, 200, 40, "level");
             }
             if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
                 throw new Error();
             }
         }
         start();
+        startEditor();
     }
 
     private void start(){
-        String nickname = textWindow.getOutputText();
-        if (!nickname.equals("")) {
+        String level = textWindow.getOutputText();
+        if (!(level.equals("") || level.equals("new"))) {
             try {
-                LevelLoader.load("level0");
+                LevelLoader.load(level);
                 game.setScreen(new LevelsScreen(game));
             } catch (Exception exception) {
-                exception.printStackTrace();
+                exceptionMessage = "level not found";
+            }
+        }
+    }
+
+    private void startEditor(){
+        String level = editorTextWindow.getOutputText();
+        if (!level.equals("")) {
+            try {
+                LevelLoader.load(level);
+                game.setScreen(new LevelEditor(game));
+            } catch (Exception exception) {
+                exceptionMessage = "level not found";
             }
         }
     }

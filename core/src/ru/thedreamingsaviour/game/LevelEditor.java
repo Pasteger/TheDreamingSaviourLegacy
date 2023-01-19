@@ -23,7 +23,7 @@ import java.util.List;
 public class LevelEditor implements Screen {
     private final MyGdxGame game;
     private final OrthographicCamera camera;
-    TextWindow textWindow;
+    private final TextWindow textWindow;
     private final Ilya ilya;
     private final List<Enemy> enemyList;
     private final List<Surface> surfaceList;
@@ -53,6 +53,7 @@ public class LevelEditor implements Screen {
     @Override
     public void render(float delta) {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        Gdx.gl.glClearColor(0.5f, 0.5f, 0.5f, 1);
 
         camera.update();
         game.batch.setProjectionMatrix(camera.combined);
@@ -74,7 +75,10 @@ public class LevelEditor implements Screen {
             camera.position.x += (float) deltaX / 10;
             camera.position.y -= (float) deltaY / 10;
         }
-        buttons();
+        if (!textWindow.isRendering()) {
+            buttons();
+        }
+        save();
     }
 
     private void buttons() {
@@ -148,15 +152,29 @@ public class LevelEditor implements Screen {
             );
         }
         if (Gdx.input.isKeyPressed(Input.Keys.CONTROL_LEFT) && Gdx.input.isKeyJustPressed(Input.Keys.S)) {
-            List<ShortAttackEnemy> shortAttackEnemyList = new ArrayList<>();
-            enemyList.stream().filter(
-                    enemy -> enemy.type.equals("ShortAttackEnemy")).forEach(
-                    enemy -> shortAttackEnemyList.add((ShortAttackEnemy) enemy));
-            LevelSaver.save(surfaceList, shortAttackEnemyList, "level0", "level0", "shooter");
+            textWindow.call((int) camera.position.x - 1000, (int) camera.position.y, 2000, 400, "levelName nextLevel");
         }
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
             game.setScreen(new MainMenuScreen(game));
+        }
+    }
+
+    private void save(){
+        String text = textWindow.getOutputText();
+        if (!(text.equals("") || text.equals("new"))) {
+            try {
+                List<ShortAttackEnemy> shortAttackEnemyList = new ArrayList<>();
+                enemyList.stream().filter(
+                        enemy -> enemy.type.equals("ShortAttackEnemy")).forEach(
+                        enemy -> shortAttackEnemyList.add((ShortAttackEnemy) enemy));
+
+                String[] save = text.split(" ");
+
+                LevelSaver.save(surfaceList, shortAttackEnemyList, save[1], save[0], "shooter");
+            } catch (Exception exception) {
+                exception.printStackTrace();
+            }
         }
     }
 

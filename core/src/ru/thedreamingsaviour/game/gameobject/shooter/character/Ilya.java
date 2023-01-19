@@ -26,17 +26,17 @@ public class Ilya extends Character {
 
     public void move(List<Surface> surfaces, List<Enemy> enemies) {
         speed = 20;
-        if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
-            moveDown(surfaces, enemies);
-        }
         if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
             moveLeft(surfaces, enemies);
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
+            moveRight(surfaces, enemies);
         }
         if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
             moveUp(surfaces, enemies);
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-            moveRight(surfaces, enemies);
+        if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
+            moveDown(surfaces, enemies);
         }
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {

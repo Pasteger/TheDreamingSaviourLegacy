@@ -10,11 +10,12 @@ public class TextWindow {
     private Surface background;
     private Surface window;
     private final StringBuilder text = new StringBuilder();
+    private String promptText = "";
     private String outputText = "";
     private boolean rendering;
     private InputProcessor standardInputProcessor;
 
-    public void call(int x, int y, int width, int height){
+    public void call(int x, int y, int width, int height, String promptText) {
         standardInputProcessor = Gdx.input.getInputProcessor();
         Gdx.input.setInputProcessor(new TextInputProcessor());
 
@@ -26,19 +27,22 @@ public class TextWindow {
         background.x = x - 3;
         background.y = y - 3;
 
+        this.promptText = promptText;
+
         rendering = true;
     }
 
-    public void render(MyGdxGame game){
-        if (!rendering){
+    public void render(MyGdxGame game) {
+        if (!rendering) {
             return;
         }
         background.draw(game.batch);
         window.draw(game.batch);
-        game.font.draw(game.batch, text.toString(), window.x + 10, window.y + window.height / 2 + 5);
+        game.font.draw(game.batch, promptText, window.x + 10, window.y + window.height / 2 + 15);
+        game.font.draw(game.batch, text.toString(), window.x + 10, window.y + window.height / 2);
     }
 
-    public void recall(){
+    public void recall() {
         Gdx.input.setInputProcessor(standardInputProcessor);
         rendering = false;
         window = null;
@@ -46,7 +50,7 @@ public class TextWindow {
         text.delete(0, text.length());
     }
 
-    public String getOutputText(){
+    public String getOutputText() {
         String out = outputText;
         outputText = "";
         return out;
@@ -56,7 +60,7 @@ public class TextWindow {
         return rendering;
     }
 
-    class TextInputProcessor implements InputProcessor{
+    class TextInputProcessor implements InputProcessor {
 
         @Override
         public boolean keyDown(int keycode) {
@@ -84,6 +88,9 @@ public class TextWindow {
                     } else {
                         text.append(Input.Keys.toString(keycode).toLowerCase());
                     }
+                }
+                if (keycode == Input.Keys.SPACE) {
+                    text.append(' ');
                 }
                 if (Input.Keys.toString(keycode).equals("0")) {
                     if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT)) {
@@ -246,10 +253,29 @@ public class TextWindow {
             return false;
         }
 
-        @Override public boolean touchDown(int screenX, int screenY, int pointer, int button) {return false;}
-        @Override public boolean touchUp(int screenX, int screenY, int pointer, int button) {return false;}
-        @Override public boolean touchDragged(int screenX, int screenY, int pointer) {return false;}
-        @Override public boolean mouseMoved(int screenX, int screenY) {return false;}
-        @Override public boolean scrolled(float amountX, float amountY) {return false;}
+        @Override
+        public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+            return false;
+        }
+
+        @Override
+        public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+            return false;
+        }
+
+        @Override
+        public boolean touchDragged(int screenX, int screenY, int pointer) {
+            return false;
+        }
+
+        @Override
+        public boolean mouseMoved(int screenX, int screenY) {
+            return false;
+        }
+
+        @Override
+        public boolean scrolled(float amountX, float amountY) {
+            return false;
+        }
     }
 }

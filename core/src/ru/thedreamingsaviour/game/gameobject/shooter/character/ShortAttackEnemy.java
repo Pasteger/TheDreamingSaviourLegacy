@@ -33,7 +33,7 @@ public class ShortAttackEnemy extends Enemy {
         if (this.overlaps(ilya)) {
             recharge--;
             if (recharge <= 0) {
-                recharge = (byte) ((byte) 12 + random.nextInt(50));
+                recharge = (byte) ((byte) 5 + random.nextInt(20));
                 ilya.HP--;
             }
         }
