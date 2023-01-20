@@ -57,7 +57,7 @@ public class LevelLoader {
                 float width = Float.parseFloat(String.valueOf(thisObject.get("width")));
                 float height = Float.parseFloat(String.valueOf(thisObject.get("height")));
                 String effect = String.valueOf(thisObject.get("effect"));
-                String textureName = String.valueOf(thisObject.get("textureName"));
+                String textureName = String.valueOf(thisObject.get("standardColor"));
                 surfaceList.add(new Surface(x, y, width, height, effect, textureName));
             }
         }

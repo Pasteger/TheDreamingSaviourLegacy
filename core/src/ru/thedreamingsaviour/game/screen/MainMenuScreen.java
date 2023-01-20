@@ -44,27 +44,39 @@ public class MainMenuScreen implements Screen {
         TextButton.TextButtonStyle textButtonStyle = new TextButton.TextButtonStyle();
         textButtonStyle.font = game.getFont(45, new Color(0.9f, 0.9f, 0.9f, 1));
 
-        Button startButton = new TextButton("Start", textButtonStyle);
-        stage.addActor(startButton);
-        startButton.setPosition(20, 230);
+        Button loadGameButton = new TextButton("Продолжить", textButtonStyle);
+        stage.addActor(loadGameButton);
+        loadGameButton.setPosition(20, 330);
 
-        Button settingsButton = new TextButton("Settings", textButtonStyle);
+        Button newGameButton = new TextButton("Новая игра", textButtonStyle);
+        stage.addActor(newGameButton);
+        newGameButton.setPosition(20, 250);
+
+        Button settingsButton = new TextButton("Настройки", textButtonStyle);
         stage.addActor(settingsButton);
-        settingsButton.setPosition(20, 150);
+        settingsButton.setPosition(20, 170);
 
-        Button exitButton = new TextButton("Exit", textButtonStyle);
+        Button exitButton = new TextButton("Выход", textButtonStyle);
         stage.addActor(exitButton);
-        exitButton.setPosition(20, 70);
+        exitButton.setPosition(20, 90);
 
 
         camera = game.camera;
         camera.setToOrtho(false, 3000, 2500);
 
 
-        startButton.addListener(new ChangeListener() {
+        loadGameButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                textWindow.call(1000, 1100, 1000, 400, "level");
+                textWindow.call(1500, 1100, 1000, 400, "level");
+            }
+        });
+
+        newGameButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+
+                exceptionMessage = "WIP";
             }
         });
 
@@ -102,7 +114,7 @@ public class MainMenuScreen implements Screen {
 
         if (!(textWindow.isRendering() || editorTextWindow.isRendering())) {
             if (Gdx.input.isKeyJustPressed(Input.Keys.E)) {
-                editorTextWindow.call(1000, 1100, 1000, 400, "level");
+                editorTextWindow.call(1500, 1100, 1000, 400, "level");
             }
             if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
                 throw new Error();
@@ -131,6 +143,7 @@ public class MainMenuScreen implements Screen {
                 LevelLoader.load(level);
                 game.setScreen(new LevelEditor(game));
             } catch (Exception exception) {
+                exception.printStackTrace();
                 exceptionMessage = "level not found";
             }
         }

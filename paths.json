@@ -1,5 +1,6 @@
 {
   "mainMenuBackground": "sprites/main_menu_background.jpg",
+  "nullTexture": "sprites/nullTexture.png",
   "bulletIlya": "sprites/shooter/bullet/bullet_ilya_texture.png",
   "floorTexture": "sprites/floors/floor.jpg",
   "editableFloorTexture": "sprites/floors/editableFloor.jpg",

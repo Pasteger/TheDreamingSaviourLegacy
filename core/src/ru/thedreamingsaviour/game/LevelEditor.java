@@ -23,7 +23,9 @@ import java.util.List;
 public class LevelEditor implements Screen {
     private final MyGdxGame game;
     private final OrthographicCamera camera;
-    private final TextWindow textWindow;
+    private final TextWindow saveTextWindow;
+    private final TextWindow colorTextWindow;
+    private final TextWindow effectTextWindow;
     private final Ilya ilya;
     private final List<Enemy> enemyList;
     private final List<Surface> surfaceList;
@@ -33,12 +35,20 @@ public class LevelEditor implements Screen {
     private int deltaY;
     private Surface currentSurface;
     private Enemy currentEnemy;
+    private String drawingSurfaceColor;
+    private String drawingSurfaceEffect;
+    private final Surface demoDrawingSurface;
 
     public LevelEditor(final MyGdxGame game) {
         this.game = game;
-        textWindow = new TextWindow();
+        saveTextWindow = new TextWindow();
+        colorTextWindow = new TextWindow();
+        effectTextWindow = new TextWindow();
         currentTask = "";
-        Gdx.gl.glClearColor(0, 0, 0.2f, 1);
+        drawingSurfaceColor = "0.5;0.5;0.5;1";
+        drawingSurfaceEffect = "color";
+        demoDrawingSurface = new Surface(0, 0, 100, 100, drawingSurfaceEffect, drawingSurfaceColor);
+        Gdx.gl.glClearColor(0.5f, 0.5f, 0.5f, 1);
         camera = game.camera;
         camera.setToOrtho(false, 4000, 4000);
 
@@ -53,7 +63,6 @@ public class LevelEditor implements Screen {
     @Override
     public void render(float delta) {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        Gdx.gl.glClearColor(0.5f, 0.5f, 0.5f, 1);
 
         camera.update();
         game.batch.setProjectionMatrix(camera.combined);
@@ -67,21 +76,31 @@ public class LevelEditor implements Screen {
 
         game.universalFont.draw(game.batch, camera.position.x + "  " + camera.position.y, camera.position.x - 2000, camera.position.y + 1900);
         game.universalFont.draw(game.batch, currentTask, camera.position.x - 2000, camera.position.y + 1700);
+        demoDrawingSurface.setX(camera.position.x - 2000);
+        demoDrawingSurface.setY(camera.position.y + 1400);
+        demoDrawingSurface.draw(game.batch);
 
-        textWindow.render(game);
+        saveTextWindow.render(game);
+        colorTextWindow.render(game);
+        effectTextWindow.render(game);
         game.batch.end();
 
         if (dragged) {
             camera.position.x += (float) deltaX / 10;
             camera.position.y -= (float) deltaY / 10;
         }
-        if (!textWindow.isRendering()) {
+        if (!(saveTextWindow.isRendering() || colorTextWindow.isRendering() || effectTextWindow.isRendering())) {
             buttons();
         }
         save();
+        changeColor();
+        changeEffect();
     }
 
     private void buttons() {
+        if (Gdx.input.isKeyJustPressed(Input.Keys.G)) {
+            currentTask = !currentTask.equals("addDrawingSurface") ? "addDrawingSurface" : "";
+        }
         if (Gdx.input.isKeyJustPressed(Input.Keys.S)) {
             currentTask = !currentTask.equals("spawnEnemy") ? "spawnEnemy" : "";
         }
@@ -101,9 +120,25 @@ public class LevelEditor implements Screen {
             currentTask = !currentTask.equals("addFloor") ? "addFloor" : "";
         }
 
+        if (Gdx.input.isKeyJustPressed(Input.Keys.C)) {
+            currentTask = "change color...";
+            colorTextWindow.call((int) camera.position.x - 1000, (int) camera.position.y, 2000, 400, "Color");
+        }
+        if (Gdx.input.isKeyJustPressed(Input.Keys.V)) {
+            currentTask = "change effect...";
+            effectTextWindow.call((int) camera.position.x - 1000, (int) camera.position.y, 2000, 400, "Effect");
+        }
+
+        if (currentTask.equals("addDrawingSurface") && Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
+            Surface drawingSurface = new Surface(getSynchronizedX(), getSynchronizedY(),
+                    200, 200, drawingSurfaceEffect, drawingSurfaceColor);
+            surfaceList.add(drawingSurface);
+            System.out.println("drawing surface added");
+        }
+
         if (currentTask.equals("addFloor") && Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
             Surface floor = new Surface(getSynchronizedX(), getSynchronizedY(),
-                    200, 200, "none", "floorTexture");
+                    200, 200, "none", "1;0.8902;0.6941;1");
             surfaceList.add(floor);
             System.out.println("floor added");
         }
@@ -115,7 +150,7 @@ public class LevelEditor implements Screen {
         if (currentTask.equals("edit") && Gdx.input.isKeyJustPressed(Input.Keys.ENTER) &&
                 (currentSurface != null || currentEnemy != null)) {
             if (currentSurface != null) {
-                currentSurface.setStandardTexture();
+                currentSurface.setStandardColor();
                 currentSurface = null;
             }
             if (currentEnemy != null) {
@@ -140,7 +175,7 @@ public class LevelEditor implements Screen {
         }
         if (currentTask.equals("generateWall") && Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
             Surface wall = new Surface(getSynchronizedX(), getSynchronizedY(),
-                    200, 200, "solid", "wallTexture");
+                    200, 200, "solid", "0;0;0;1");
             surfaceList.add(wall);
         }
         if (currentTask.equals("removeWall") && Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
@@ -153,7 +188,7 @@ public class LevelEditor implements Screen {
         }
         if (Gdx.input.isKeyPressed(Input.Keys.CONTROL_LEFT) && Gdx.input.isKeyJustPressed(Input.Keys.S)) {
             currentTask = "save...";
-            textWindow.call((int) camera.position.x - 1000, (int) camera.position.y, 2000, 400, "levelName nextLevel");
+            saveTextWindow.call((int) camera.position.x - 1000, (int) camera.position.y, 2000, 400, "levelName nextLevel");
         }
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
@@ -161,8 +196,8 @@ public class LevelEditor implements Screen {
         }
     }
 
-    private void save(){
-        String text = textWindow.getOutputText();
+    private void save() {
+        String text = saveTextWindow.getOutputText();
         if (!(text.equals("") || text.equals("new"))) {
             try {
                 List<ShortAttackEnemy> shortAttackEnemyList = new ArrayList<>();
@@ -177,6 +212,34 @@ public class LevelEditor implements Screen {
                 currentTask = "saved!";
             } catch (Exception exception) {
                 currentTask = "save exception";
+            }
+        }
+    }
+
+    private void changeColor() {
+        String text = colorTextWindow.getOutputText();
+        if (!text.equals("")) {
+            try {
+                demoDrawingSurface.setStandardColor(text);
+                drawingSurfaceColor = text;
+                currentTask = "color set";
+            } catch (Exception exception) {
+                demoDrawingSurface.setStandardColor(drawingSurfaceColor);
+                currentTask = "color exception";
+            }
+        }
+    }
+
+    private void changeEffect() {
+        String text = effectTextWindow.getOutputText();
+        if (!text.equals("")) {
+            try {
+                demoDrawingSurface.setEffect(text);
+                drawingSurfaceEffect = text;
+                currentTask = "effect set";
+            } catch (Exception exception) {
+                demoDrawingSurface.setStandardColor(drawingSurfaceEffect);
+                currentTask = "effect exception";
             }
         }
     }
@@ -203,7 +266,7 @@ public class LevelEditor implements Screen {
         for (int i = surfaceList.size() - 1; i >= 0; i--) {
             if (findObjectFromCord(surfaceList.get(i), x, y)) {
                 currentSurface = surfaceList.get(i);
-                currentSurface.setEditableTexture();
+                currentSurface.setEditableColor();
                 Collections.swap(surfaceList, surfaceList.indexOf(surfaceList.get(i)), surfaceList.size() - 1);
                 return;
             }
@@ -286,11 +349,11 @@ public class LevelEditor implements Screen {
                 int width = (int) getSynchronizedX() - (int) currentSurface.getX();
                 int height = (int) getSynchronizedY() - (int) currentSurface.getY();
                 currentSurface.editExtension(width, height);
-                currentSurface.setEditableTexture();
+                currentSurface.setEditableColor();
             }
             if (moveCurrentRectangle) {
                 currentSurface.editMove(getSynchronizedX(), getSynchronizedY());
-                currentSurface.setEditableTexture();
+                currentSurface.setEditableColor();
             }
 
             if (moveSlave) {

@@ -7,6 +7,7 @@ import java.util.Map;
 import static ru.thedreamingsaviour.game.resourceloader.ShooterCRUD.*;
 
 public class TextureLoader {
+    private static Texture nullTexture;
     private static Texture wallTexture;
     private static Texture editWallTexture;
     private static Texture floorTexture;
@@ -18,6 +19,7 @@ public class TextureLoader {
     private static Texture shooterDeathBackground;
 
     public static void load() {
+        nullTexture = new Texture(getNullTexturePath());
         wallTexture = new Texture(getWallTexturePath());
         editWallTexture = new Texture(getEditableWallTexturePath());
         floorTexture = new Texture(getFloorTexturePath());
@@ -69,5 +71,9 @@ public class TextureLoader {
     }
     public static Texture getEditFloorTexture() {
         return editFloorTexture;
+    }
+
+    public static Texture getNullTexture() {
+        return nullTexture;
     }
 }

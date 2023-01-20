@@ -42,7 +42,7 @@ public class LevelSaver {
             json.put("width", surface.getWidth());
             json.put("height", surface.getHeight());
             json.put("effect", surface.getEffect());
-            json.put("textureName", surface.getTextureName());
+            json.put("standardColor", surface.getStandardColor());
             jsonObjectList.add(json);
         }
         return jsonObjectList;

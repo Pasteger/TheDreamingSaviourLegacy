@@ -19,11 +19,11 @@ public class TextWindow {
         standardInputProcessor = Gdx.input.getInputProcessor();
         Gdx.input.setInputProcessor(new TextInputProcessor());
 
-        window = new Surface(0, 0, width, height, "none", "floorTexture");
+        window = new Surface(0, 0, width, height, "none", "0.5;0.5;0.5;1");
         window.x = x;
         window.y = y;
 
-        background = new Surface(0, 0, width + 50, height + 50, "none", "wallTexture");
+        background = new Surface(0, 0, width + 50, height + 50, "none", "0;0;0;1");
         background.x = x - 25;
         background.y = y - 25;
 
