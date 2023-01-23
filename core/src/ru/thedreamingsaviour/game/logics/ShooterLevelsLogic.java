@@ -27,16 +27,23 @@ public class ShooterLevelsLogic {
 
     private final Texture emptyCellTexture = new Texture("emptyCell.png");
 
+    int fps;
+    long startFPSTime;
+    int countRenders;
+
     public ShooterLevelsLogic(final MyGdxGame game) {
         this.game = game;
-        game.camera.setToOrtho(false, 9000, 9000);
+        game.camera.setToOrtho(false, 4000, 4000);
 
         surfaceList = LevelLoader.getSurfaceList();
         enemyList = LevelLoader.getEnemyList();
         ilya = new Ilya();
+        startFPSTime = System.currentTimeMillis();
     }
 
     public void render() {
+        long finishFPSTime = System.currentTimeMillis();
+
         surfaceList.forEach(surface -> surface.draw(game.batch));
 
         game.batch.draw(ilya.texture, ilya.x, ilya.y);
@@ -53,6 +60,14 @@ public class ShooterLevelsLogic {
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
             game.setScreen(new MainMenuScreen(game));
         }
+
+        countRenders++;
+        if(finishFPSTime - startFPSTime >= 1000){
+            startFPSTime = finishFPSTime;
+            fps = countRenders;
+            System.out.println(fps);
+            countRenders = 0;
+        }
     }
 
     private void enemyLive() {
@@ -68,13 +83,6 @@ public class ShooterLevelsLogic {
                     game.batch.draw(cell.texture, cell.x, cell.y);
                 }
 
-                /*if (ilya.overlaps(enemy.fieldOfView)) {
-                    try {
-                        Thread.sleep(1000);
-                    } catch (InterruptedException e) {
-                        throw new RuntimeException(e);
-                    }
-                }*/
 
                 for (Cell cell : enemy.cellsOfView) {
                     cell.texture = emptyCellTexture;

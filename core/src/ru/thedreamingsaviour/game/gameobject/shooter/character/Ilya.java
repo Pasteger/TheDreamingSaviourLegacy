@@ -15,8 +15,8 @@ public class Ilya extends Character {
 
         texture = sprites.get(UP);
         HP = 4;
-        setX(0);
-        setY(0);
+        setX(3000);
+        setY(3000);
         width = 300;
         height = 300;
 

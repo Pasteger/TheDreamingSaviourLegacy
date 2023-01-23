@@ -16,6 +16,7 @@ public class ShortAttackEnemy extends Enemy {
     private final Texture impassableCellTexture = new Texture("impassableCell.png");
     private final Texture targetCellTexture = new Texture("targetCell.png");
     private final Texture thisCellTexture = new Texture("thisCell.png");
+    private final Texture preWayCellTexture = new Texture("preWayCell.png");
     private final Texture wayCellTexture = new Texture("wayCell.png");
 
     public ShortAttackEnemy() {
@@ -26,8 +27,8 @@ public class ShortAttackEnemy extends Enemy {
         height = 300;
         HP = 3;
         recharge = 20;
-        fieldOfView.width = 5000;
-        fieldOfView.height = 5000;
+        fieldOfView.width = 4000;
+        fieldOfView.height = 4000;
         fieldOfView.x = x - fieldOfView.width / 2;
         fieldOfView.y = y - fieldOfView.height / 2;
 
@@ -84,7 +85,7 @@ public class ShortAttackEnemy extends Enemy {
                 enemyCell = cell;
             }
             for (Surface surface : surfaceList) {
-                if (cell.overlaps(surface)) {
+                if (cell.overlaps(surface) && surface.getEffect().equals("solid")) {
                     cell.property = "impassable";
                     cell.texture = impassableCellTexture;
                 }
@@ -92,129 +93,67 @@ public class ShortAttackEnemy extends Enemy {
         }
 
         int half = (int) Math.sqrt(cellsOfView.size());
-        while (true) {
-            int step = 0;
+        int step = 0;
+        do {
+            step++;
             for (int i = 0; i < cellsOfView.size(); i++) {
                 Cell thisCell = cellsOfView.get(i);
-                if (thisCell.property.equals("target") || thisCell.property.equals("way")) {
-                    //Дальше Бога нет
+                if (thisCell.property.equals("target") ||
+                        thisCell.property.equals("way") ||
+                        thisCell.property.equals("preWay")) {
                     try {
                         Cell cell = cellsOfView.get(i - 1);
-                        if (cell.property.equals("this")) {
+                        if (thisCell.y == cell.y && paintCell(thisCell, cell)) {
                             return thisCell;
-                        }
-                        if (!(cell.property.equals("target") ||
-                                cell.property.equals("way") ||
-                                cell.property.equals("impassable"))) {
-                            cell.property = "way";
-                            cell.texture = wayCellTexture;
                         }
                     } catch (Exception ignored) {
                     }
                     try {
                         Cell cell = cellsOfView.get(i + 1);
-                        if (cell.property.equals("this")) {
+                        if (thisCell.y == cell.y && paintCell(thisCell, cell)) {
                             return thisCell;
-                        }
-                        if (!(cell.property.equals("target") ||
-                                cell.property.equals("way") ||
-                                cell.property.equals("impassable"))) {
-                            cell.property = "way";
-                            cell.texture = wayCellTexture;
                         }
                     } catch (Exception ignored) {
                     }
-                    /*try {
-                        Cell cell = cellsOfView.get(i + half - 1);
-                        if (cell.property.equals("this")) {
-                            return thisCell;
-                        }
-                        if (!(cell.property.equals("target") ||
-                                cell.property.equals("way") ||
-                                cell.property.equals("impassable"))) {
-                            cell.property = "way";
-                            cell.texture = wayCellTexture;
-                        }
-                    } catch (Exception ignored) {
-                    }
-                    try {
-                        Cell cell = cellsOfView.get(i + half + 1);
-                        if (cell.property.equals("this")) {
-                            return thisCell;
-                        }
-                        if (!(cell.property.equals("target") ||
-                                cell.property.equals("way") ||
-                                cell.property.equals("impassable"))) {
-                            cell.property = "way";
-                            cell.texture = wayCellTexture;
-                        }
-                    } catch (Exception ignored) {
-                    }*/
                     try {
                         Cell cell = cellsOfView.get(i + half);
-                        if (cell.property.equals("this")) {
+                        if (thisCell.x == cell.x && paintCell(thisCell, cell)) {
                             return thisCell;
-                        }
-                        if (!(cell.property.equals("target") ||
-                                cell.property.equals("way") ||
-                                cell.property.equals("impassable"))) {
-                            cell.property = "way";
-                            cell.texture = wayCellTexture;
                         }
                     } catch (Exception ignored) {
                     }
-                    /*try {
-                        Cell cell = cellsOfView.get(i - half - 1);
-                        if (cell.property.equals("this")) {
-                            return thisCell;
-                        }
-                        if (!(cell.property.equals("target") ||
-                                cell.property.equals("way") ||
-                                cell.property.equals("impassable"))) {
-                            cell.property = "way";
-                            cell.texture = wayCellTexture;
-                        }
-                    } catch (Exception ignored) {
-                    }
-                    try {
-                        Cell cell = cellsOfView.get(i - half + 1);
-                        if (cell.property.equals("this")) {
-                            return thisCell;
-                        }
-                        if (!(cell.property.equals("target") ||
-                                cell.property.equals("way") ||
-                                cell.property.equals("impassable"))) {
-                            cell.property = "way";
-                            cell.texture = wayCellTexture;
-                        }
-                    } catch (Exception ignored) {
-                    }*/
                     try {
                         Cell cell = cellsOfView.get(i - half);
-                        if (cell.property.equals("this")) {
+                        if (thisCell.x == cell.x && paintCell(thisCell, cell)) {
                             return thisCell;
-                        }
-                        if (!(cell.property.equals("target") ||
-                                cell.property.equals("way") ||
-                                cell.property.equals("impassable"))) {
-                            cell.property = "way";
-                            cell.texture = wayCellTexture;
                         }
                     } catch (Exception ignored) {
                     }
-                    //Только лягушечка
-                    step++;
                 }
             }
-            if (step == 0) {
-                break;
-            }
-        }
+        } while (step < Math.sqrt(cellsOfView.size()));
         return enemyCell;
     }
 
+    private boolean paintCell(Cell thisCell, Cell cell){
+        if (cell.property.equals("this")) {
+            return true;
+        }
+        if ((thisCell.property.equals("way") || thisCell.property.equals("target")) &&
+                cell.property.equals("preWay")) {
+            cell.property = "way";
+            cell.texture = wayCellTexture;
+        }
+        if ((thisCell.property.equals("way") || thisCell.property.equals("target")) &&
+                cell.property.equals("")) {
+            cell.property = "preWay";
+            cell.texture = preWayCellTexture;
+        }
+        return false;
+    }
+
     private void generateCells() {
-        int squareSpace = (int) ((fieldOfView.width * fieldOfView.width) / (width * width));
+        int squareSpace = (int) ((fieldOfView.width * fieldOfView.width) / ((width / 2) * (width / 2)));
         int row = (int) Math.sqrt(squareSpace);
         if (row < Math.sqrt(squareSpace)) {
             row++;
@@ -222,8 +161,8 @@ public class ShortAttackEnemy extends Enemy {
         for (int i = 0; i < row; i++) {
             for (int j = 0; j < row; j++) {
                 Cell cell = new Cell();
-                cell.x = fieldOfView.x + (width * i);
-                cell.y = fieldOfView.y + (height * j);
+                cell.x = fieldOfView.x + (width / 2 * i);
+                cell.y = fieldOfView.y + (height / 2 * j);
                 cell.width = width;
                 cell.height = height;
                 cell.texture = emptyCellTexture;
@@ -236,10 +175,9 @@ public class ShortAttackEnemy extends Enemy {
         int n = 0;
         for (int i = 0; i < Math.sqrt(cellsOfView.size()); i++) {
             for (int j = 0; j < Math.sqrt(cellsOfView.size()); j++) {
-                cellsOfView.get(n).x = fieldOfView.x + (width * j);
-                cellsOfView.get(n).y = fieldOfView.y + (width * i);
+                cellsOfView.get(n).x = fieldOfView.x + (width / 2 * j);
+                cellsOfView.get(n).y = fieldOfView.y + (width / 2 * i);
                 cellsOfView.get(n).property = "";
-                //cellsOfView.get(n).texture = emptyCellTexture;
                 n++;
             }
         }
