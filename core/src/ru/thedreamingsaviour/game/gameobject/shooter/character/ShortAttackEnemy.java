@@ -1,6 +1,5 @@
 package ru.thedreamingsaviour.game.gameobject.shooter.character;
 
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Rectangle;
 import ru.thedreamingsaviour.game.gameobject.Surface;
 import ru.thedreamingsaviour.game.resourceloader.TextureLoader;
@@ -10,14 +9,7 @@ import java.util.List;
 import static com.badlogic.gdx.math.MathUtils.random;
 
 public class ShortAttackEnemy extends Enemy {
-    public byte recharge;
-
-    private final Texture emptyCellTexture = new Texture("emptyCell.png");
-    private final Texture impassableCellTexture = new Texture("impassableCell.png");
-    private final Texture targetCellTexture = new Texture("targetCell.png");
-    private final Texture thisCellTexture = new Texture("thisCell.png");
-    private final Texture preWayCellTexture = new Texture("preWayCell.png");
-    private final Texture wayCellTexture = new Texture("wayCell.png");
+    private byte recharge;
 
     public ShortAttackEnemy() {
         legs = new Rectangle();
@@ -56,16 +48,16 @@ public class ShortAttackEnemy extends Enemy {
         fieldOfView.y = y - fieldOfView.height / 2;
         if (fieldOfView.overlaps(ilya)) {
             Cell cell = findWay(ilya, surfaceList);
-            if (cell.x > x) {
+            if (cell.x > x && !this.overlaps(ilya)) {
                 moveRight(surfaceList, enemies);
             }
-            if (cell.x < x) {
+            if (cell.x < x && !this.overlaps(ilya)) {
                 moveLeft(surfaceList, enemies);
             }
-            if (cell.y > y) {
+            if (cell.y > y && !this.overlaps(ilya)) {
                 moveUp(surfaceList, enemies);
             }
-            if (cell.y < y) {
+            if (cell.y < y && !this.overlaps(ilya)) {
                 moveDown(surfaceList, enemies);
             }
         }
@@ -77,17 +69,14 @@ public class ShortAttackEnemy extends Enemy {
         for (Cell cell : cellsOfView) {
             if (cell.overlaps(ilya)) {
                 cell.property = "target";
-                cell.texture = targetCellTexture;
             }
             if (cell.overlaps(this)) {
                 cell.property = "this";
-                cell.texture = thisCellTexture;
                 enemyCell = cell;
             }
             for (Surface surface : surfaceList) {
                 if (cell.overlaps(surface) && surface.getEffect().equals("solid")) {
                     cell.property = "impassable";
-                    cell.texture = impassableCellTexture;
                 }
             }
         }
@@ -142,12 +131,10 @@ public class ShortAttackEnemy extends Enemy {
         if ((thisCell.property.equals("way") || thisCell.property.equals("target")) &&
                 cell.property.equals("preWay")) {
             cell.property = "way";
-            cell.texture = wayCellTexture;
         }
         if ((thisCell.property.equals("way") || thisCell.property.equals("target")) &&
                 cell.property.equals("")) {
             cell.property = "preWay";
-            cell.texture = preWayCellTexture;
         }
         return false;
     }
@@ -165,7 +152,6 @@ public class ShortAttackEnemy extends Enemy {
                 cell.y = fieldOfView.y + (height / 2 * j);
                 cell.width = width;
                 cell.height = height;
-                cell.texture = emptyCellTexture;
                 cellsOfView.add(cell);
             }
         }

@@ -2,11 +2,9 @@ package ru.thedreamingsaviour.game.logics;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.graphics.Texture;
 import ru.thedreamingsaviour.game.MyGdxGame;
 import ru.thedreamingsaviour.game.gameobject.Bullet;
 import ru.thedreamingsaviour.game.gameobject.Surface;
-import ru.thedreamingsaviour.game.gameobject.shooter.character.Cell;
 import ru.thedreamingsaviour.game.gameobject.shooter.character.Enemy;
 import ru.thedreamingsaviour.game.gameobject.shooter.character.Ilya;
 import ru.thedreamingsaviour.game.resourceloader.LevelLoader;
@@ -25,8 +23,7 @@ public class ShooterLevelsLogic {
     private final List<Enemy> enemyList;
     private final List<Surface> surfaceList;
 
-    private final Texture emptyCellTexture = new Texture("emptyCell.png");
-
+    //Необходимое для отладки
     int fps;
     long startFPSTime;
     int countRenders;
@@ -42,8 +39,6 @@ public class ShooterLevelsLogic {
     }
 
     public void render() {
-        long finishFPSTime = System.currentTimeMillis();
-
         surfaceList.forEach(surface -> surface.draw(game.batch));
 
         game.batch.draw(ilya.texture, ilya.x, ilya.y);
@@ -61,7 +56,9 @@ public class ShooterLevelsLogic {
             game.setScreen(new MainMenuScreen(game));
         }
 
+        //Необходимое для отладки
         countRenders++;
+        long finishFPSTime = System.currentTimeMillis();
         if(finishFPSTime - startFPSTime >= 1000){
             startFPSTime = finishFPSTime;
             fps = countRenders;
@@ -77,17 +74,6 @@ public class ShooterLevelsLogic {
                 enemy.moveToPlayer(ilya, surfaceList, enemyList);
                 enemy.sightCalibration();
                 enemy.attack(ilya);
-
-
-                for (Cell cell : enemy.cellsOfView) {
-                    game.batch.draw(cell.texture, cell.x, cell.y);
-                }
-
-
-                for (Cell cell : enemy.cellsOfView) {
-                    cell.texture = emptyCellTexture;
-                    game.batch.draw(cell.texture, cell.x, cell.y);
-                }
 
                 if (enemy.HP <= 0) {
                     enemyList.remove(enemy);
