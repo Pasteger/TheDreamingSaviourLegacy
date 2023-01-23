@@ -2,9 +2,11 @@ package ru.thedreamingsaviour.game.logics;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.graphics.Texture;
 import ru.thedreamingsaviour.game.MyGdxGame;
 import ru.thedreamingsaviour.game.gameobject.Bullet;
 import ru.thedreamingsaviour.game.gameobject.Surface;
+import ru.thedreamingsaviour.game.gameobject.shooter.character.Cell;
 import ru.thedreamingsaviour.game.gameobject.shooter.character.Enemy;
 import ru.thedreamingsaviour.game.gameobject.shooter.character.Ilya;
 import ru.thedreamingsaviour.game.resourceloader.LevelLoader;
@@ -23,9 +25,11 @@ public class ShooterLevelsLogic {
     private final List<Enemy> enemyList;
     private final List<Surface> surfaceList;
 
+    private final Texture emptyCellTexture = new Texture("emptyCell.png");
+
     public ShooterLevelsLogic(final MyGdxGame game) {
         this.game = game;
-        game.camera.setToOrtho(false, 2500, 2500);
+        game.camera.setToOrtho(false, 9000, 9000);
 
         surfaceList = LevelLoader.getSurfaceList();
         enemyList = LevelLoader.getEnemyList();
@@ -58,6 +62,24 @@ public class ShooterLevelsLogic {
                 enemy.moveToPlayer(ilya, surfaceList, enemyList);
                 enemy.sightCalibration();
                 enemy.attack(ilya);
+
+
+                for (Cell cell : enemy.cellsOfView) {
+                    game.batch.draw(cell.texture, cell.x, cell.y);
+                }
+
+                /*if (ilya.overlaps(enemy.fieldOfView)) {
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
+                }*/
+
+                for (Cell cell : enemy.cellsOfView) {
+                    cell.texture = emptyCellTexture;
+                    game.batch.draw(cell.texture, cell.x, cell.y);
+                }
 
                 if (enemy.HP <= 0) {
                     enemyList.remove(enemy);
