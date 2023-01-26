@@ -1,29 +1,21 @@
 package ru.thedreamingsaviour.game.screen;
 
-import ru.thedreamingsaviour.game.logics.ShooterLevelsLogic;
+import ru.thedreamingsaviour.game.logics.LevelsLogic;
 
 import com.badlogic.gdx.graphics.GL20;
 import ru.thedreamingsaviour.game.MyGdxGame;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.Gdx;
-import ru.thedreamingsaviour.game.resourceloader.LevelLoader;
 
 public class LevelsScreen implements Screen {
     private final MyGdxGame game;
-    private ShooterLevelsLogic shooterLevelsLogic;
+    private final LevelsLogic levelsLogic;
 
     public LevelsScreen(final MyGdxGame game) {
         this.game = game;
         Gdx.gl.glClearColor(0.5f, 0.5f, 0.5f, 1);
 
-        switch (LevelLoader.getLevelType()) {
-            case "shooter":
-                shooterLevelsLogic = new ShooterLevelsLogic(this.game);
-                break;
-            case "platformer":
-                break;
-        }
-
+        levelsLogic = new LevelsLogic(this.game);
     }
 
     @Override
@@ -35,16 +27,9 @@ public class LevelsScreen implements Screen {
 
         game.batch.begin();
 
-        switch (LevelLoader.getLevelType()) {
-            case "shooter":
-                shooterLevelsLogic.render();
-                break;
-            case "platformer":
-                break;
-        }
+        levelsLogic.render();
 
         game.batch.end();
-
     }
 
     @Override

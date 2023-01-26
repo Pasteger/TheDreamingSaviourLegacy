@@ -3,7 +3,7 @@ package ru.thedreamingsaviour.game.resourceloader;
 import com.badlogic.gdx.math.Rectangle;
 import org.json.simple.JSONObject;
 import ru.thedreamingsaviour.game.gameobject.Surface;
-import ru.thedreamingsaviour.game.gameobject.shooter.character.ShortAttackEnemy;
+import ru.thedreamingsaviour.game.gameobject.character.ShortAttackEnemy;
 
 import java.io.File;
 import java.io.IOException;
@@ -12,12 +12,11 @@ import java.util.List;
 
 public class LevelSaver {
     public static void save(List<Surface> surfaceList, List<ShortAttackEnemy> shortAttackEnemyList,
-                            String nextLevel, String levelName, String levelType) {
+                            String nextLevel, String levelName) {
         JSONObject level = new JSONObject();
         level.put("surfaceList", saveSurfaceList(surfaceList));
         level.put("shortAttackEnemyList", saveShortAttackEnemyList(shortAttackEnemyList));
         level.put("nextLevel", nextLevel);
-        level.put("type", levelType);
         File levelFile = new File("levels/" + levelName + ".json");
         if (!levelFile.exists()){
             try {

@@ -8,9 +8,9 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Rectangle;
 import ru.thedreamingsaviour.game.gameobject.Surface;
-import ru.thedreamingsaviour.game.gameobject.shooter.character.Enemy;
-import ru.thedreamingsaviour.game.gameobject.shooter.character.Ilya;
-import ru.thedreamingsaviour.game.gameobject.shooter.character.ShortAttackEnemy;
+import ru.thedreamingsaviour.game.gameobject.character.Enemy;
+import ru.thedreamingsaviour.game.gameobject.character.Ilya;
+import ru.thedreamingsaviour.game.gameobject.character.ShortAttackEnemy;
 import ru.thedreamingsaviour.game.guiobject.TextWindow;
 import ru.thedreamingsaviour.game.resourceloader.LevelSaver;
 import ru.thedreamingsaviour.game.screen.MainMenuScreen;
@@ -207,7 +207,7 @@ public class LevelEditor implements Screen {
 
                 String[] save = text.split(" ");
 
-                LevelSaver.save(surfaceList, shortAttackEnemyList, save[1], save[0], "shooter");
+                LevelSaver.save(surfaceList, shortAttackEnemyList, save[1], save[0]);
 
                 currentTask = "saved!";
             } catch (Exception exception) {

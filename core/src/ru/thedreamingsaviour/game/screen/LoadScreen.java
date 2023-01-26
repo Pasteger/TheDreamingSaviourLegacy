@@ -25,14 +25,6 @@ public class LoadScreen implements Screen {
 
         new Thread(() -> Gdx.app.postRunnable(() -> {
             try {
-                message = "Loading jsons";
-                error = "Error from jsons";
-                System.out.println(message);
-                JSONReader.load();
-                message = "Loading shooter jsons";
-                error = "Error from shooter jsons";
-                System.out.println(message);
-                ShooterCRUD.load();
                 message = "Loading textures";
                 error = "Error from textures";
                 System.out.println(message);

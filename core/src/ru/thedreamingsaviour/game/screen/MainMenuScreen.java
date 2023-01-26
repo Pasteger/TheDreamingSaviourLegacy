@@ -3,6 +3,7 @@ package ru.thedreamingsaviour.game.screen;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -18,6 +19,7 @@ import ru.thedreamingsaviour.game.MyGdxGame;
 import ru.thedreamingsaviour.game.guiobject.TextWindow;
 import ru.thedreamingsaviour.game.resourceloader.LevelLoader;
 
+import static ru.thedreamingsaviour.game.resourceloader.MusicLoader.getMenuMusic;
 import static ru.thedreamingsaviour.game.resourceloader.TextureLoader.*;
 
 public class MainMenuScreen implements Screen {
@@ -29,6 +31,7 @@ public class MainMenuScreen implements Screen {
     private final Stage stage;
     private String exceptionMessage = "";
     private final BitmapFont headFont;
+    private final Music music;
 
     public MainMenuScreen(final MyGdxGame gam) {
         this.game = gam;
@@ -40,6 +43,7 @@ public class MainMenuScreen implements Screen {
         headFont.getData().scale(1);
 
         background = getMainMenuBackground();
+        music = getMenuMusic();
 
         TextButton.TextButtonStyle textButtonStyle = new TextButton.TextButtonStyle();
         textButtonStyle.font = game.getFont(45, new Color(0.9f, 0.9f, 0.9f, 1));
@@ -75,7 +79,6 @@ public class MainMenuScreen implements Screen {
         newGameButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-
                 exceptionMessage = "WIP";
             }
         });
@@ -96,6 +99,8 @@ public class MainMenuScreen implements Screen {
             }
         });
         Gdx.gl.glClearColor(0, 0, 0.2f, 1);
+        music.setLooping(true);
+        music.play();
     }
 
     @Override
@@ -128,6 +133,7 @@ public class MainMenuScreen implements Screen {
         String level = textWindow.getOutputText();
         if (!(level.equals("") || level.equals("new"))) {
             try {
+                music.stop();
                 LevelLoader.load(level);
                 game.setScreen(new LevelsScreen(game));
             } catch (Exception exception) {
@@ -140,6 +146,7 @@ public class MainMenuScreen implements Screen {
         String level = editorTextWindow.getOutputText();
         if (!level.equals("")) {
             try {
+                music.stop();
                 LevelLoader.load(level);
                 game.setScreen(new LevelEditor(game));
             } catch (Exception exception) {

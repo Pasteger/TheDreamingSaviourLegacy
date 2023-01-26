@@ -1,49 +1,43 @@
 package ru.thedreamingsaviour.game.resourceloader;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
-import org.json.simple.JSONObject;
-import java.util.HashMap;
-import java.util.Map;
-import static ru.thedreamingsaviour.game.resourceloader.ShooterCRUD.*;
+
+import java.io.File;
+import java.util.*;
 
 public class TextureLoader {
     private static Texture nullTexture;
-    private static Texture wallTexture;
-    private static Texture editWallTexture;
-    private static Texture floorTexture;
-    private static Texture editFloorTexture;
+    private static Texture mainMenuBackground;
     private static final Map<String, Texture> shooterIlyaTextures = new HashMap<>();
     private static final Map<String, Texture> shooterShortAttackEnemyTextures = new HashMap<>();
-    private static Texture bulletIlyaTexture;
-    private static Texture mainMenuBackground;
-    private static Texture shooterDeathBackground;
+    public static final List<Texture> BULLET_ILYA = new ArrayList<>();
+    public static final List<Texture> DEATH_BACKGROUND = new ArrayList<>();
 
     public static void load() {
-        nullTexture = new Texture(getNullTexturePath());
-        wallTexture = new Texture(getWallTexturePath());
-        editWallTexture = new Texture(getEditableWallTexturePath());
-        floorTexture = new Texture(getFloorTexturePath());
-        editFloorTexture = new Texture(getEditableFloorTexturePath());
-        fillSpritesMap(shooterIlyaTextures, getIlyaSprites());
-        fillSpritesMap(shooterShortAttackEnemyTextures, getShortAttackEnemySprites());
-        bulletIlyaTexture = new Texture(getBulletIlyaPath());
-        mainMenuBackground = new Texture(getMainMenuBackgroundTexturePath());
-        shooterDeathBackground = new Texture(getShooterDeathBackgroundTexturePath());
+        nullTexture = new Texture("sprites/nullTexture.png");
+        mainMenuBackground = new Texture("sprites/main_menu_background.jpg");
+        fillSpritesMap(shooterShortAttackEnemyTextures, "short_attack_enemy");
+        fillSpritesMap(shooterIlyaTextures, "ilya");
+        readAnimationTextures(DEATH_BACKGROUND, "sprites/death_background/");
+        readAnimationTextures(BULLET_ILYA, "sprites/bullet/bullet_ilya/");
     }
 
-    private static void fillSpritesMap(Map<String, Texture> sprites, JSONObject spriteJSONObject){
-        sprites.put("upSprite", new Texture(getSpritePath(spriteJSONObject, "upSprite")));
-        sprites.put("downSprite", new Texture(getSpritePath(spriteJSONObject, "downSprite")));
-        sprites.put("leftSprite", new Texture(getSpritePath(spriteJSONObject, "leftSprite")));
-        sprites.put("rightSprite", new Texture(getSpritePath(spriteJSONObject, "rightSprite")));
+    private static void fillSpritesMap(Map<String, Texture> sprites, String path) {
+        sprites.put("upSprite", new Texture("sprites/" + path + "/up_sprite.png"));
+        sprites.put("downSprite", new Texture("sprites/" + path + "/down_sprite.png"));
+        sprites.put("leftSprite", new Texture("sprites/" + path + "/left_sprite.png"));
+        sprites.put("rightSprite", new Texture("sprites/" + path + "/right_sprite.png"));
+        sprites.put("rightSpriteP", new Texture("sprites/" + path + "/right_sprite_p.png"));
+        sprites.put("leftSpriteP", new Texture("sprites/" + path + "/left_sprite_p.png"));
     }
 
-    public static Texture getWallTexture() {
-        return wallTexture;
-    }
-
-    public static Texture getEditWallTexture() {
-        return editWallTexture;
+    private static void readAnimationTextures(List<Texture> textures, String path) {
+        File directory = new File(Gdx.files.getLocalStoragePath() + "core/assets/" + path);
+        int count = Objects.requireNonNull(directory.listFiles()).length;
+        for (int i = 1; i <= count; i++) {
+            textures.add(new Texture(path + i + ".png"));
+        }
     }
 
     public static Map<String, Texture> getShooterIlyaTextures() {
@@ -54,23 +48,8 @@ public class TextureLoader {
         return shooterShortAttackEnemyTextures;
     }
 
-    public static Texture getBulletIlyaTexture() {
-        return bulletIlyaTexture;
-    }
-
     public static Texture getMainMenuBackground() {
         return mainMenuBackground;
-    }
-
-    public static Texture getShooterDeathBackground() {
-        return shooterDeathBackground;
-    }
-
-    public static Texture getFloorTexture() {
-        return floorTexture;
-    }
-    public static Texture getEditFloorTexture() {
-        return editFloorTexture;
     }
 
     public static Texture getNullTexture() {

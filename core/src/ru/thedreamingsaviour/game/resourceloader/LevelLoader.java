@@ -2,8 +2,8 @@ package ru.thedreamingsaviour.game.resourceloader;
 
 import org.json.simple.JSONObject;
 import ru.thedreamingsaviour.game.gameobject.Surface;
-import ru.thedreamingsaviour.game.gameobject.shooter.character.Enemy;
-import ru.thedreamingsaviour.game.gameobject.shooter.character.ShortAttackEnemy;
+import ru.thedreamingsaviour.game.gameobject.character.Enemy;
+import ru.thedreamingsaviour.game.gameobject.character.ShortAttackEnemy;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,14 +12,12 @@ public class LevelLoader {
     private static JSONObject level;
     private static List<Enemy> enemyList;
     private static List<Surface> surfaceList;
-    private static String levelType;
     private static String nextLevel;
 
     public static void load(String levelName) throws Exception {
         level = JSONReader.getLevel(levelName);
         surfaceList = convertingToSurface();
         nextLevel = (String) level.get("nextLevel");
-        levelType = (String) level.get("type");
 
         List<ShortAttackEnemy> shortAttackEnemyList = convertingToShortAttackEnemy();
         enemyList = new ArrayList<>();
@@ -79,15 +77,6 @@ public class LevelLoader {
     public static String getNextLevel() {
         return nextLevel;
     }
-
-    public static String getLevelType() {
-        return levelType;
-    }
-
-    public static void setLevelType(String levelType) {
-        LevelLoader.levelType = levelType;
-    }
-
     public static List<Enemy> getEnemyList() {
         return enemyList;
     }
