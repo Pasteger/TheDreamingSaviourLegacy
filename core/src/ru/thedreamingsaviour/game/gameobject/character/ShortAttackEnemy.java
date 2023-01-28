@@ -58,7 +58,7 @@ public class ShortAttackEnemy extends Enemy {
             }
             if (cell.y > y && !this.overlaps(ilya)) {
                 if (gravitated) {
-                    jump(surfaceList, enemies);
+                    jump(surfaceList);
                 } else {
                     moveUp(surfaceList, enemies);
                 }

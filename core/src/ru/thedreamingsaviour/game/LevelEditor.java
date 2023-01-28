@@ -220,8 +220,15 @@ public class LevelEditor implements Screen {
         String text = colorTextWindow.getOutputText();
         if (!text.equals("")) {
             try {
-                demoDrawingSurface.setStandardColor(text);
+                String[] rgbaS = text.split(";");
+                Float[] rgba = new Float[3];
+                for (int i = 0; i < 3; i++){
+                    rgba[i] = Float.parseFloat(rgbaS[i]) / 255;
+                }
+                text = rgba[0] + ";" + rgba[1] + ";" + rgba[2] + ";" + rgbaS[3];
+
                 drawingSurfaceColor = text;
+                demoDrawingSurface.setStandardColor(text);
                 currentTask = "color set";
             } catch (Exception exception) {
                 demoDrawingSurface.setStandardColor(drawingSurfaceColor);

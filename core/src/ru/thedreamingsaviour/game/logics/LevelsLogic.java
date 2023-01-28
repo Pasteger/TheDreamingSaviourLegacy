@@ -84,6 +84,10 @@ public class LevelsLogic {
         characterList.add(ilya);
         characterList.addAll(enemyList);
 
+        for (Character character : characterList) {
+            character.jumpRender(surfaceList);
+        }
+
         for (Surface surface : surfaceList) {
             for (Character character : characterList) {
                 if (surface.overlaps(character)) {
@@ -92,8 +96,11 @@ public class LevelsLogic {
                         character.fall(surfaceList, enemyList);
                     } else if (surface.getEffect().equals("death")) {
                         character.HP = 0;
+                        return;
                     } else {
                         character.gravitated = false;
+                        if (character.timeFall != 0 && System.currentTimeMillis() - character.deltaTime > 1000)
+                            character.timeFall = 0;
                     }
                 }
             }

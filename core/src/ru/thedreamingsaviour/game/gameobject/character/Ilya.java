@@ -34,7 +34,7 @@ public class Ilya extends Character {
             moveRight(surfaces, enemies);
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.UP) && gravitated) {
-            jump(surfaces, enemies);
+            jump(surfaces);
         }
         else if (Gdx.input.isKeyPressed(Input.Keys.UP) && !gravitated) {
             moveUp(surfaces, enemies);

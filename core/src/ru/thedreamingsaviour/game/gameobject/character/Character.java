@@ -23,6 +23,9 @@ public abstract class Character extends Rectangle {
     Rectangle legs;
     int speed;
     public boolean gravitated;
+    public int jumped;
+    public int timeFall;
+    public long deltaTime;
 
 
     public void moveUp(List<Surface> surfaces, List<Enemy> enemies) {
@@ -71,8 +74,7 @@ public abstract class Character extends Rectangle {
         if (gravitated) {
             texture = sprites.get("rightSpriteP");
             direction = "RIGHT";
-        }
-        else {
+        } else {
             texture = sprites.get(RIGHT);
             direction = "EAST";
         }
@@ -98,8 +100,7 @@ public abstract class Character extends Rectangle {
         if (gravitated) {
             texture = sprites.get("leftSpriteP");
             direction = "LEFT";
-        }
-        else {
+        } else {
             texture = sprites.get(LEFT);
             direction = "WEST";
         }
@@ -160,13 +161,16 @@ public abstract class Character extends Rectangle {
         LevelsLogic.BULLET_LIST.add(bullet);
     }
 
-    public void fall(List<Surface> surfaces, List<Enemy> enemies){
+    public void fall(List<Surface> surfaces, List<Enemy> enemies) {
         if (gravitated) {
-            for (int step = 0; step < speed * 1.5; step++) {
+            timeFall++;
+            deltaTime = System.currentTimeMillis();
+            for (int step = 0; step < timeFall; step++) {
                 legs.y--;
                 for (Surface surface : surfaces) {
                     if (legs.overlaps(surface) && surface.getEffect().equals("solid")) {
                         legs.y++;
+                        timeFall = 0;
                         break;
                     }
                 }
@@ -181,30 +185,49 @@ public abstract class Character extends Rectangle {
         }
     }
 
-    public void jump(List<Surface> surfaces, List<Enemy> enemies) {
+    public void jump(List<Surface> surfaces) {
         for (Surface floor : surfaces) {
             legs.y--;
             if (floor.overlaps(legs) && floor.y < y && floor.getEffect().equals("solid")) {
-                legs.y++;
-                for (int step = 0; step < 600; step++) {
-                    legs.y++;
-                    for (Surface surface : surfaces) {
-                        if (legs.overlaps(surface) && surface.getEffect().equals("solid")) {
-                            legs.y--;
-                            break;
-                        }
-                    }
-                    for (Enemy enemy : enemies) {
-                        if (legs.overlaps(enemy.legs) && !legs.equals(enemy.legs)) {
-                            legs.y--;
-                            break;
-                        }
-                    }
-                }
-                y = legs.y;
-                return;
+                if (jumped == 0)
+                    jumped = 50;
             }
             legs.y++;
+        }
+    }
+
+    public void jumpRender(List<Surface> surfaces) {
+        if (jumped > 0) {
+            if (!gravitated) {
+                jumped = 0;
+                return;
+            }
+            jumped--;
+            float delta;
+            if (jumped > 9) {
+                delta = Float.parseFloat("1." + jumped);
+            } else {
+                delta = Float.parseFloat("1.0" + jumped);
+            }
+
+            for (int step = 0; step < speed * delta * 1.1; step++) {
+                legs.y++;
+                for (Surface surface : surfaces) {
+                    if (legs.overlaps(surface) && surface.getEffect().equals("solid")) {
+                        legs.y--;
+                        jumped = 0;
+                        break;
+                    }
+                    legs.y -= 2;
+                    if (jumped < 48 && legs.overlaps(surface) && surface.getEffect().equals("solid")) {
+                        legs.y++;
+                        jumped = 0;
+                        break;
+                    }
+                    legs.y += 2;
+                }
+            }
+            y = legs.y;
         }
     }
 
