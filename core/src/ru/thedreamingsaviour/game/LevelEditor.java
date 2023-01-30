@@ -20,6 +20,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import static ru.thedreamingsaviour.game.utility.SurfaceListSorter.sortSurfaceList;
+
 public class LevelEditor implements Screen {
     private final MyGdxGame game;
     private final OrthographicCamera camera;
@@ -28,16 +30,16 @@ public class LevelEditor implements Screen {
     private final TextWindow effectTextWindow;
     private final Ilya ilya;
     private final List<Enemy> enemyList;
-    private final List<Surface> surfaceList;
+    private List<Surface> surfaceList;
     private boolean dragged;
     private String currentTask;
     private int deltaX;
     private int deltaY;
     private Surface currentSurface;
     private Enemy currentEnemy;
-    private String drawingSurfaceColor;
-    private String drawingSurfaceEffect;
-    private final Surface demoDrawingSurface;
+    private String currentSurfaceColor;
+    private String currentSurfaceEffect;
+    private final Surface demoSurface;
 
     public LevelEditor(final MyGdxGame game) {
         this.game = game;
@@ -45,9 +47,9 @@ public class LevelEditor implements Screen {
         colorTextWindow = new TextWindow();
         effectTextWindow = new TextWindow();
         currentTask = "";
-        drawingSurfaceColor = "0.5;0.5;0.5;1";
-        drawingSurfaceEffect = "color";
-        demoDrawingSurface = new Surface(0, 0, 100, 100, drawingSurfaceEffect, drawingSurfaceColor);
+        currentSurfaceColor = "0.5;0.5;0.5;1";
+        currentSurfaceEffect = "color";
+        demoSurface = new Surface(0, 0, 100, 100, currentSurfaceEffect, currentSurfaceColor);
         Gdx.gl.glClearColor(0.5f, 0.5f, 0.5f, 1);
         camera = game.camera;
         camera.setToOrtho(false, 4000, 4000);
@@ -76,9 +78,9 @@ public class LevelEditor implements Screen {
 
         game.universalFont.draw(game.batch, camera.position.x + "  " + camera.position.y, camera.position.x - 2000, camera.position.y + 1900);
         game.universalFont.draw(game.batch, currentTask, camera.position.x - 2000, camera.position.y + 1700);
-        demoDrawingSurface.setX(camera.position.x - 2000);
-        demoDrawingSurface.setY(camera.position.y + 1400);
-        demoDrawingSurface.draw(game.batch);
+        demoSurface.setX(camera.position.x - 2000);
+        demoSurface.setY(camera.position.y + 1400);
+        demoSurface.draw(game.batch);
 
         saveTextWindow.render(game);
         colorTextWindow.render(game);
@@ -98,7 +100,7 @@ public class LevelEditor implements Screen {
     }
 
     private void buttons() {
-        if (Gdx.input.isKeyJustPressed(Input.Keys.G)) {
+        if (Gdx.input.isKeyJustPressed(Input.Keys.H)) {
             currentTask = !currentTask.equals("addDrawingSurface") ? "addDrawingSurface" : "";
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.S)) {
@@ -108,16 +110,42 @@ public class LevelEditor implements Screen {
             currentTask = !currentTask.equals("deleteEnemy") ? "deleteEnemy" : "";
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.W)) {
-            currentTask = !currentTask.equals("generateWall") ? "generateWall" : "";
+            currentTask = !currentTask.equals("addWall") ? "addWall" : "";
+            currentSurfaceEffect = "solid";
+            currentSurfaceColor = "0;0;0;1";
+            demoSurface.setStandardColor(currentSurfaceColor);
+        }
+
+        if (Gdx.input.isKeyJustPressed(Input.Keys.Q)) {
+            if (currentSurfaceColor.equals("0;0;0;1")) {
+                currentSurfaceColor = "0.36;0.63;0.19;1";
+            } else {
+                currentSurfaceColor = "0;0;0;1";
+            }
+            demoSurface.setStandardColor(currentSurfaceColor);
+        }
+
+        if (Gdx.input.isKeyJustPressed(Input.Keys.F)) {
+            currentTask = !currentTask.equals("addFloor") ? "addFloor" : "";
+            currentSurfaceEffect = "none";
+            currentSurfaceColor = "1;0.8902;0.6941;1";
+            demoSurface.setStandardColor(currentSurfaceColor);
+        }
+        if (Gdx.input.isKeyJustPressed(Input.Keys.G)) {
+            currentTask = !currentTask.equals("addSky") ? "addSky" : "";
+            currentSurfaceEffect = "gravity";
+            currentSurfaceColor = "0.30;0.56;0.87;1";
+            demoSurface.setStandardColor(currentSurfaceColor);
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.R)) {
-            currentTask = !currentTask.equals("removeWall") ? "removeWall" : "";
+            currentTask = !currentTask.equals("removeSurface") ? "removeSurface" : "";
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.E)) {
             currentTask = !currentTask.equals("edit") ? "edit" : "";
         }
-        if (Gdx.input.isKeyJustPressed(Input.Keys.F)) {
-            currentTask = !currentTask.equals("addFloor") ? "addFloor" : "";
+
+        if (Gdx.input.isKeyJustPressed(Input.Keys.P)) {
+            surfaceList = sortSurfaceList(surfaceList);
         }
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.C)) {
@@ -131,16 +159,24 @@ public class LevelEditor implements Screen {
 
         if (currentTask.equals("addDrawingSurface") && Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
             Surface drawingSurface = new Surface(getSynchronizedX(), getSynchronizedY(),
-                    200, 200, drawingSurfaceEffect, drawingSurfaceColor);
+                    200, 200, currentSurfaceEffect, currentSurfaceColor);
             surfaceList.add(drawingSurface);
-            System.out.println("drawing surface added");
         }
 
         if (currentTask.equals("addFloor") && Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
             Surface floor = new Surface(getSynchronizedX(), getSynchronizedY(),
-                    200, 200, "none", "1;0.8902;0.6941;1");
+                    200, 200, currentSurfaceEffect, currentSurfaceColor);
             surfaceList.add(floor);
-            System.out.println("floor added");
+        }
+        if (currentTask.equals("addWall") && Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
+            Surface wall = new Surface(getSynchronizedX(), getSynchronizedY(),
+                    200, 200, currentSurfaceEffect, currentSurfaceColor);
+            surfaceList.add(wall);
+        }
+        if (currentTask.equals("addSky") && Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
+            Surface sky = new Surface(getSynchronizedX(), getSynchronizedY(),
+                    200, 200, currentSurfaceEffect, currentSurfaceColor);
+            surfaceList.add(sky);
         }
 
         if (currentTask.equals("edit") && Gdx.input.isButtonJustPressed(Input.Buttons.LEFT) &&
@@ -173,19 +209,21 @@ public class LevelEditor implements Screen {
                             enemy.getY() >= y - enemy.getHeight() && enemy.getY() <= y + 1
             ));
         }
-        if (currentTask.equals("generateWall") && Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
-            Surface wall = new Surface(getSynchronizedX(), getSynchronizedY(),
-                    200, 200, "solid", "0;0;0;1");
-            surfaceList.add(wall);
-        }
-        if (currentTask.equals("removeWall") && Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
+
+        if (currentTask.equals("removeSurface") && Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
             float y = getSynchronizedY();
             float x = getSynchronizedX();
-            surfaceList.removeIf(wall -> (wall.getEffect().equals("solid") &&
-                    wall.getX() >= x - wall.getWidth() && wall.getX() <= x + 1 &&
-                    wall.getY() >= y - wall.getHeight() && wall.getY() <= y + 1)
-            );
+            Collections.reverse(surfaceList);
+            for (Surface surface : surfaceList) {
+                if (surface.getX() >= x - surface.getWidth() && surface.getX() <= x + 1 &&
+                        surface.getY() >= y - surface.getHeight() && surface.getY() <= y + 1) {
+                    surfaceList.remove(surface);
+                    break;
+                }
+            }
+            surfaceList = sortSurfaceList(surfaceList);
         }
+
         if (Gdx.input.isKeyPressed(Input.Keys.CONTROL_LEFT) && Gdx.input.isKeyJustPressed(Input.Keys.S)) {
             currentTask = "save...";
             saveTextWindow.call((int) camera.position.x - 1000, (int) camera.position.y, 2000, 400, "levelName nextLevel");
@@ -222,16 +260,16 @@ public class LevelEditor implements Screen {
             try {
                 String[] rgbaS = text.split(";");
                 Float[] rgba = new Float[3];
-                for (int i = 0; i < 3; i++){
+                for (int i = 0; i < 3; i++) {
                     rgba[i] = Float.parseFloat(rgbaS[i]) / 255;
                 }
                 text = rgba[0] + ";" + rgba[1] + ";" + rgba[2] + ";" + rgbaS[3];
 
-                drawingSurfaceColor = text;
-                demoDrawingSurface.setStandardColor(text);
+                currentSurfaceColor = text;
+                demoSurface.setStandardColor(text);
                 currentTask = "color set";
             } catch (Exception exception) {
-                demoDrawingSurface.setStandardColor(drawingSurfaceColor);
+                demoSurface.setStandardColor(currentSurfaceColor);
                 currentTask = "color exception";
             }
         }
@@ -241,11 +279,11 @@ public class LevelEditor implements Screen {
         String text = effectTextWindow.getOutputText();
         if (!text.equals("")) {
             try {
-                demoDrawingSurface.setEffect(text);
-                drawingSurfaceEffect = text;
+                demoSurface.setEffect(text);
+                currentSurfaceEffect = text;
                 currentTask = "effect set";
             } catch (Exception exception) {
-                demoDrawingSurface.setStandardColor(drawingSurfaceEffect);
+                demoSurface.setStandardColor(currentSurfaceEffect);
                 currentTask = "effect exception";
             }
         }

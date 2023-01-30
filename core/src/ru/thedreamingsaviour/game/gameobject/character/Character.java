@@ -161,7 +161,7 @@ public abstract class Character extends Rectangle {
         LevelsLogic.BULLET_LIST.add(bullet);
     }
 
-    public void fall(List<Surface> surfaces, List<Enemy> enemies) {
+    public void fall(List<Surface> surfaces) {
         if (gravitated) {
             timeFall++;
             deltaTime = System.currentTimeMillis();
@@ -171,12 +171,6 @@ public abstract class Character extends Rectangle {
                     if (legs.overlaps(surface) && surface.getEffect().equals("solid")) {
                         legs.y++;
                         timeFall = 0;
-                        break;
-                    }
-                }
-                for (Enemy enemy : enemies) {
-                    if (legs.overlaps(enemy.legs) && !legs.equals(enemy.legs)) {
-                        legs.y++;
                         break;
                     }
                 }
@@ -210,7 +204,9 @@ public abstract class Character extends Rectangle {
                 delta = Float.parseFloat("1.0" + jumped);
             }
 
-            for (int step = 0; step < speed * delta * 1.1; step++) {
+            int localSpeed = Math.max(speed, 20);
+
+            for (int step = 0; step < localSpeed * delta * 1.1; step++) {
                 legs.y++;
                 for (Surface surface : surfaces) {
                     if (legs.overlaps(surface) && surface.getEffect().equals("solid")) {

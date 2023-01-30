@@ -93,11 +93,13 @@ public class LevelsLogic {
                 if (surface.overlaps(character)) {
                     if (surface.getEffect().equals("gravity")) {
                         character.gravitated = true;
-                        character.fall(surfaceList, enemyList);
-                    } else if (surface.getEffect().equals("death")) {
+                        character.fall(surfaceList);
+                    }
+                    if (surface.getEffect().equals("death")) {
                         character.HP = 0;
                         return;
-                    } else {
+                    }
+                    if (surface.getEffect().equals("none")) {
                         character.gravitated = false;
                         if (character.timeFall != 0 && System.currentTimeMillis() - character.deltaTime > 1000)
                             character.timeFall = 0;

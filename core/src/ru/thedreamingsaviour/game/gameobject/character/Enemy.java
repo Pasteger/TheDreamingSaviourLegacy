@@ -2,6 +2,7 @@ package ru.thedreamingsaviour.game.gameobject.character;
 
 import com.badlogic.gdx.math.Rectangle;
 import ru.thedreamingsaviour.game.gameobject.Surface;
+import ru.thedreamingsaviour.game.gameobject.character.part.Cell;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -8,6 +8,8 @@ import ru.thedreamingsaviour.game.gameobject.character.ShortAttackEnemy;
 import java.util.ArrayList;
 import java.util.List;
 
+import static ru.thedreamingsaviour.game.utility.SurfaceListSorter.sortSurfaceList;
+
 public class LevelLoader {
     private static JSONObject level;
     private static List<Enemy> enemyList;
@@ -63,12 +65,6 @@ public class LevelLoader {
             exception.printStackTrace();
         }
         return sortSurfaceList(surfaceList);
-    }
-    private static List<Surface> sortSurfaceList(List<Surface> surfaceList){
-        List<Surface> newSurfaceList = new ArrayList<>();
-        surfaceList.stream().filter(surface -> surface.getEffect().equals("none")).forEach(newSurfaceList::add);
-        surfaceList.stream().filter(surface -> !surface.getEffect().equals("none")).forEach(newSurfaceList::add);
-        return newSurfaceList;
     }
 
     public static List<Surface> getSurfaceList() {
