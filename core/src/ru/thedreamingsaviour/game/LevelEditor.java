@@ -7,6 +7,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Rectangle;
+import ru.thedreamingsaviour.game.gameobject.Coin;
 import ru.thedreamingsaviour.game.gameobject.Surface;
 import ru.thedreamingsaviour.game.gameobject.character.Enemy;
 import ru.thedreamingsaviour.game.gameobject.character.Ilya;
@@ -31,6 +32,7 @@ public class LevelEditor implements Screen {
     private final Ilya ilya;
     private final List<Enemy> enemyList;
     private List<Surface> surfaceList;
+    private final List<Coin> coinList;
     private boolean dragged;
     private String currentTask;
     private int deltaX;
@@ -40,6 +42,7 @@ public class LevelEditor implements Screen {
     private String currentSurfaceColor;
     private String currentSurfaceEffect;
     private final Surface demoSurface;
+    private int currentCoinValue = 1;
 
     public LevelEditor(final MyGdxGame game) {
         this.game = game;
@@ -58,6 +61,7 @@ public class LevelEditor implements Screen {
 
         enemyList = LevelLoader.getEnemyList();
         surfaceList = LevelLoader.getSurfaceList();
+        coinList = LevelLoader.getCoinList();
 
         Gdx.input.setInputProcessor(new EditorInputProcessor());
     }
@@ -71,6 +75,7 @@ public class LevelEditor implements Screen {
 
         game.batch.begin();
         surfaceList.forEach(surface -> surface.draw(game.batch));
+        coinList.forEach(coin -> coin.textures.draw(game.batch, coin.x, coin.y, 5));
 
         enemyList.forEach(enemy -> game.batch.draw(enemy.texture, enemy.x, enemy.y));
 
@@ -81,6 +86,7 @@ public class LevelEditor implements Screen {
         demoSurface.setX(camera.position.x - 2000);
         demoSurface.setY(camera.position.y + 1400);
         demoSurface.draw(game.batch);
+        game.universalFont.draw(game.batch, "Coin: " + currentCoinValue, camera.position.x - 2000, camera.position.y + 1200);
 
         saveTextWindow.render(game);
         colorTextWindow.render(game);
@@ -155,6 +161,38 @@ public class LevelEditor implements Screen {
         if (Gdx.input.isKeyJustPressed(Input.Keys.V)) {
             currentTask = "change effect...";
             effectTextWindow.call((int) camera.position.x - 1000, (int) camera.position.y, 2000, 400, "Effect");
+        }
+
+        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_1)) {
+            currentTask = !currentTask.equals("addCoin") ? "addCoin" : "";
+        }
+        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_3)) {
+            currentTask = !currentTask.equals("deleteCoin") ? "deleteCoin" : "";
+        }
+        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_2)) {
+            switch (currentCoinValue) {
+                case 1 -> currentCoinValue = 10;
+                case 10 -> currentCoinValue = 100;
+                case 100 -> currentCoinValue = 1000;
+                case 1000 -> currentCoinValue = 5000;
+                case 5000 -> currentCoinValue = 1;
+            }
+        }
+        if (currentTask.equals("addCoin") && Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
+            Coin coin = new Coin(getSynchronizedX(), getSynchronizedY(), currentCoinValue);
+            coinList.add(coin);
+        }
+        if (currentTask.equals("deleteCoin") && Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
+            float y = getSynchronizedY();
+            float x = getSynchronizedX();
+            for (Coin coin : coinList) {
+                if (coin.getX() >= x - coin.getWidth() && coin.getX() <= x + 1 &&
+                        coin.getY() >= y - coin.getHeight() && coin.getY() <= y + 1) {
+                    coinList.remove(coin);
+                    break;
+                }
+            }
+            surfaceList = sortSurfaceList(surfaceList);
         }
 
         if (currentTask.equals("addDrawingSurface") && Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
@@ -245,7 +283,7 @@ public class LevelEditor implements Screen {
 
                 String[] save = text.split(" ");
 
-                LevelSaver.save(surfaceList, shortAttackEnemyList, save[1], save[0]);
+                LevelSaver.save(surfaceList, shortAttackEnemyList, coinList, save[1], save[0]);
 
                 currentTask = "saved!";
             } catch (Exception exception) {

@@ -5,6 +5,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.audio.Music;
 import ru.thedreamingsaviour.game.MyGdxGame;
 import ru.thedreamingsaviour.game.gameobject.Bullet;
+import ru.thedreamingsaviour.game.gameobject.Coin;
 import ru.thedreamingsaviour.game.gameobject.Surface;
 import ru.thedreamingsaviour.game.gameobject.character.Enemy;
 import ru.thedreamingsaviour.game.gameobject.character.Ilya;
@@ -26,7 +27,9 @@ public class LevelsLogic {
     private final Ilya ilya;
     private final List<Enemy> enemyList;
     private final List<Surface> surfaceList;
+    private final List<Coin> coinList;
     private final Music music;
+    private long score;
 
     //Необходимое для отладки
     int fps;
@@ -39,6 +42,7 @@ public class LevelsLogic {
 
         surfaceList = LevelLoader.getSurfaceList();
         enemyList = LevelLoader.getEnemyList();
+        coinList = LevelLoader.getCoinList();
         ilya = new Ilya();
         music = getFactoryMusic();
         music.setLooping(true);
@@ -53,6 +57,8 @@ public class LevelsLogic {
         surfaceLogic();
         enemyLive();
         bulletLogic();
+        coinLogic();
+        coinList.forEach(coin -> coin.textures.draw(game.batch, coin.x, coin.y, 5));
 
         ilya.move(surfaceList, enemyList);
         game.camera.position.x = ilya.x;
@@ -60,6 +66,7 @@ public class LevelsLogic {
 
 
         game.universalFont.draw(game.batch, "HP: " + ilya.HP, ilya.x - 1900, ilya.y + 1900);
+        game.universalFont.draw(game.batch, "score: " + score, ilya.x - 1900, ilya.y + 1700);
 
         ilyaDeath();
 
@@ -76,6 +83,16 @@ public class LevelsLogic {
             fps = countRenders;
             System.out.println(fps);
             countRenders = 0;
+        }
+    }
+
+    private void coinLogic(){
+        for (Coin coin : coinList) {
+            if (ilya.overlaps(coin)){
+                score += coin.value;
+                coinList.remove(coin);
+                return;
+            }
         }
     }
 

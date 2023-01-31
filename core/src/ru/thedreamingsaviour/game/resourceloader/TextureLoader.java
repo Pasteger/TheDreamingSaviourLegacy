@@ -12,6 +12,11 @@ public class TextureLoader {
     private static final Map<String, Texture> shooterIlyaTextures = new HashMap<>();
     private static final Map<String, Texture> shooterShortAttackEnemyTextures = new HashMap<>();
     public static final List<Texture> BULLET_ILYA = new ArrayList<>();
+    public static final List<Texture> COIN_1 = new ArrayList<>();
+    public static final List<Texture> COIN_10 = new ArrayList<>();
+    public static final List<Texture> COIN_100 = new ArrayList<>();
+    public static final List<Texture> COIN_1000 = new ArrayList<>();
+    public static final List<Texture> COIN_5000 = new ArrayList<>();
     public static final List<Texture> DEATH_BACKGROUND = new ArrayList<>();
 
     public static void load() {
@@ -21,6 +26,11 @@ public class TextureLoader {
         fillSpritesMap(shooterIlyaTextures, "ilya");
         readAnimationTextures(DEATH_BACKGROUND, "sprites/death_background/");
         readAnimationTextures(BULLET_ILYA, "sprites/bullet/bullet_ilya/");
+        readAnimationTextures(COIN_1, "sprites/coin/coin_1/");
+        readAnimationTextures(COIN_10, "sprites/coin/coin_10/");
+        readAnimationTextures(COIN_100, "sprites/coin/coin_100/");
+        readAnimationTextures(COIN_1000, "sprites/coin/coin_1000/");
+        readAnimationTextures(COIN_5000, "sprites/coin/coin_5000/");
     }
 
     private static void fillSpritesMap(Map<String, Texture> sprites, String path) {

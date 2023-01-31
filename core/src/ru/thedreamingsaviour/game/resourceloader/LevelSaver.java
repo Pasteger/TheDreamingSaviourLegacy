@@ -2,6 +2,7 @@ package ru.thedreamingsaviour.game.resourceloader;
 
 import com.badlogic.gdx.math.Rectangle;
 import org.json.simple.JSONObject;
+import ru.thedreamingsaviour.game.gameobject.Coin;
 import ru.thedreamingsaviour.game.gameobject.Surface;
 import ru.thedreamingsaviour.game.gameobject.character.ShortAttackEnemy;
 
@@ -12,8 +13,10 @@ import java.util.List;
 
 public class LevelSaver {
     public static void save(List<Surface> surfaceList, List<ShortAttackEnemy> shortAttackEnemyList,
+                            List<Coin> coinList,
                             String nextLevel, String levelName) {
         JSONObject level = new JSONObject();
+        level.put("coinList", saveCoinList(coinList));
         level.put("surfaceList", saveSurfaceList(surfaceList));
         level.put("shortAttackEnemyList", saveShortAttackEnemyList(shortAttackEnemyList));
         level.put("nextLevel", nextLevel);
@@ -42,6 +45,18 @@ public class LevelSaver {
             json.put("height", surface.getHeight());
             json.put("effect", surface.getEffect());
             json.put("standardColor", surface.getStandardColor());
+            jsonObjectList.add(json);
+        }
+        return jsonObjectList;
+    }
+
+    private static List<JSONObject> saveCoinList(List<Coin> coins) {
+        List<JSONObject> jsonObjectList = new ArrayList<>();
+        for (Coin coin : coins) {
+            JSONObject json = new JSONObject();
+            json.put("x", coin.getX());
+            json.put("y", coin.getY());
+            json.put("value", coin.value);
             jsonObjectList.add(json);
         }
         return jsonObjectList;

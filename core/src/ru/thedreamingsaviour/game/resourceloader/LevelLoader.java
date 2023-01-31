@@ -1,6 +1,7 @@
 package ru.thedreamingsaviour.game.resourceloader;
 
 import org.json.simple.JSONObject;
+import ru.thedreamingsaviour.game.gameobject.Coin;
 import ru.thedreamingsaviour.game.gameobject.Surface;
 import ru.thedreamingsaviour.game.gameobject.character.Enemy;
 import ru.thedreamingsaviour.game.gameobject.character.ShortAttackEnemy;
@@ -14,11 +15,13 @@ public class LevelLoader {
     private static JSONObject level;
     private static List<Enemy> enemyList;
     private static List<Surface> surfaceList;
+    private static List<Coin> coinList;
     private static String nextLevel;
 
     public static void load(String levelName) throws Exception {
         level = JSONReader.getLevel(levelName);
         surfaceList = convertingToSurface();
+        coinList = convertingToCoin();
         nextLevel = (String) level.get("nextLevel");
 
         List<ShortAttackEnemy> shortAttackEnemyList = convertingToShortAttackEnemy();
@@ -67,6 +70,24 @@ public class LevelLoader {
         return sortSurfaceList(surfaceList);
     }
 
+    private static List<Coin> convertingToCoin() {
+        List<Coin> coins = new ArrayList<>();
+        try {
+            @SuppressWarnings("unchecked")
+            List<JSONObject> JSONFloorsList = (List<JSONObject>) level.get("coinList");
+            for (JSONObject thisObject : JSONFloorsList) {
+                int value = Integer.parseInt(String.valueOf(thisObject.get("value")));
+                float y = Float.parseFloat(String.valueOf(thisObject.get("y")));
+                float x = Float.parseFloat(String.valueOf(thisObject.get("x")));
+                coins.add(new Coin(x, y, value));
+            }
+        }
+        catch (Exception exception){
+            exception.printStackTrace();
+        }
+        return coins;
+    }
+
     public static List<Surface> getSurfaceList() {
         return surfaceList;
     }
@@ -75,5 +96,9 @@ public class LevelLoader {
     }
     public static List<Enemy> getEnemyList() {
         return enemyList;
+    }
+
+    public static List<Coin> getCoinList() {
+        return coinList;
     }
 }
