@@ -3,6 +3,7 @@ package ru.thedreamingsaviour.game.gameobject.character;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.math.Rectangle;
+import ru.thedreamingsaviour.game.gameobject.Box;
 import ru.thedreamingsaviour.game.gameobject.Surface;
 import ru.thedreamingsaviour.game.resourceloader.TextureLoader;
 
@@ -26,21 +27,21 @@ public class Ilya extends Character {
         legs.height = height;
     }
 
-    public void move(List<Surface> surfaces, List<Enemy> enemies) {
+    public void move(List<Surface> surfaces, List<Enemy> enemies, List<Box> boxList) {
         if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
-            moveLeft(surfaces, enemies);
+            moveLeft(surfaces, enemies, boxList);
         }
         if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-            moveRight(surfaces, enemies);
+            moveRight(surfaces, enemies, boxList);
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.UP) && gravitated) {
             jump(surfaces);
         }
         else if (Gdx.input.isKeyPressed(Input.Keys.UP) && !gravitated) {
-            moveUp(surfaces, enemies);
+            moveUp(surfaces, enemies, boxList);
         }
         if (Gdx.input.isKeyPressed(Input.Keys.DOWN) && !gravitated) {
-            moveDown(surfaces, enemies);
+            moveDown(surfaces, enemies, boxList);
         }
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
@@ -48,14 +49,20 @@ public class Ilya extends Character {
         }
     }
 
-    @Override
-    public void moveUp(List<Surface> surfaces, List<Enemy> enemies) {
+
+    public void moveUp(List<Surface> surfaces, List<Enemy> enemies, List<Box> boxList) {
         texture = sprites.get(UP);
         direction = "NORTH";
         for (int step = 0; step < speed; step++) {
             legs.y++;
             for (Surface surface : surfaces) {
                 if (legs.overlaps(surface) && surface.getEffect().equals("solid")) {
+                    legs.y--;
+                    break;
+                }
+            }
+            for (Box box : boxList) {
+                if (legs.overlaps(box) && box.blocked) {
                     legs.y--;
                     break;
                 }
@@ -70,8 +77,8 @@ public class Ilya extends Character {
         y = legs.y;
     }
 
-    @Override
-    public void moveRight(List<Surface> surfaces, List<Enemy> enemies) {
+
+    public void moveRight(List<Surface> surfaces, List<Enemy> enemies, List<Box> boxList) {
         if (gravitated) {
             texture = sprites.get("rightSpriteP");
             direction = "RIGHT";
@@ -89,6 +96,12 @@ public class Ilya extends Character {
                     break;
                 }
             }
+            for (Box box : boxList) {
+                if (legs.overlaps(box) && box.blocked) {
+                    legs.y++;
+                    break;
+                }
+            }
         }
         for (Enemy enemy : enemies) {
             if (legs.overlaps(enemy.legs) && !legs.equals(enemy.legs)) {
@@ -99,8 +112,8 @@ public class Ilya extends Character {
         x = legs.x;
     }
 
-    @Override
-    public void moveLeft(List<Surface> surfaces, List<Enemy> enemies) {
+
+    public void moveLeft(List<Surface> surfaces, List<Enemy> enemies, List<Box> boxList) {
         if (gravitated) {
             texture = sprites.get("leftSpriteP");
             direction = "LEFT";
@@ -118,6 +131,12 @@ public class Ilya extends Character {
                     break;
                 }
             }
+            for (Box box : boxList) {
+                if (legs.overlaps(box) && box.blocked) {
+                    legs.x++;
+                    break;
+                }
+            }
         }
         for (Enemy enemy : enemies) {
             if (legs.overlaps(enemy.legs) && !legs.equals(enemy.legs)) {
@@ -125,11 +144,12 @@ public class Ilya extends Character {
                 break;
             }
         }
+
         x = legs.x;
     }
 
-    @Override
-    public void moveDown(List<Surface> surfaces, List<Enemy> enemies) {
+
+    public void moveDown(List<Surface> surfaces, List<Enemy> enemies, List<Box> boxList) {
         texture = sprites.get(DOWN);
         direction = "SOUTH";
         for (int step = 0; step < speed; step++) {
@@ -140,6 +160,12 @@ public class Ilya extends Character {
                     break;
                 }
             }
+            for (Box box : boxList) {
+                if (legs.overlaps(box) && box.blocked) {
+                    legs.x--;
+                    break;
+                }
+            }
         }
         for (Enemy enemy : enemies) {
             if (legs.overlaps(enemy.legs)) {
@@ -147,6 +173,7 @@ public class Ilya extends Character {
                 break;
             }
         }
+
         y = legs.y;
     }
 }

@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.audio.Music;
 import ru.thedreamingsaviour.game.MyGdxGame;
+import ru.thedreamingsaviour.game.gameobject.Box;
 import ru.thedreamingsaviour.game.gameobject.Bullet;
 import ru.thedreamingsaviour.game.gameobject.Coin;
 import ru.thedreamingsaviour.game.gameobject.Surface;
@@ -20,6 +21,8 @@ import java.util.Iterator;
 import java.util.List;
 
 import static ru.thedreamingsaviour.game.resourceloader.MusicLoader.getFactoryMusic;
+import static ru.thedreamingsaviour.game.resourceloader.TextureLoader.BULLET_ILYA;
+import static ru.thedreamingsaviour.game.resourceloader.TextureLoader.WOODEN_BOX;
 
 public class LevelsLogic {
     private final MyGdxGame game;
@@ -28,6 +31,7 @@ public class LevelsLogic {
     private final List<Enemy> enemyList;
     private final List<Surface> surfaceList;
     private final List<Coin> coinList;
+    private final List<Box> boxList;
     private final Music music;
     private long score;
 
@@ -43,6 +47,9 @@ public class LevelsLogic {
         surfaceList = LevelLoader.getSurfaceList();
         enemyList = LevelLoader.getEnemyList();
         coinList = LevelLoader.getCoinList();
+        boxList = new ArrayList<>();//LevelLoader.getBoxList();
+        Box box = new Box(3000, 3500, 300, 300, WOODEN_BOX, 5);
+        boxList.add(box);
         ilya = new Ilya();
         music = getFactoryMusic();
         music.setLooping(true);
@@ -56,11 +63,13 @@ public class LevelsLogic {
         game.batch.draw(ilya.texture, ilya.x, ilya.y);
         surfaceLogic();
         enemyLive();
-        bulletLogic();
         coinLogic();
+        boxLogic();
+        bulletLogic();
+        boxList.forEach(box -> box.textures.draw(game.batch, box.x, box.y, 5));
         coinList.forEach(coin -> coin.textures.draw(game.batch, coin.x, coin.y, 5));
 
-        ilya.move(surfaceList, enemyList);
+        ilya.move(surfaceList, enemyList, boxList);
         game.camera.position.x = ilya.x;
         game.camera.position.y = ilya.y;
 
@@ -83,6 +92,22 @@ public class LevelsLogic {
             fps = countRenders;
             System.out.println(fps);
             countRenders = 0;
+        }
+    }
+
+    private void boxLogic(){
+        for (Box box : boxList) {
+            if (box.HP < 1) {
+                boxList.remove(box);
+                return;
+            }
+            if (ilya.overlaps(box)){
+                List<Character> characters = new ArrayList<>();
+                characters.add(ilya);
+                characters.addAll(enemyList);
+                box.move(ilya, surfaceList, characters, boxList);
+                return;
+            }
         }
     }
 
@@ -170,6 +195,13 @@ public class LevelsLogic {
                     if (bullet.overlaps(enemy) && bullet.type.equals("GOOD")) {
                         bulletIterator.remove();
                         enemy.HP--;
+                        return;
+                    }
+                }
+                for (Box box : boxList) {
+                    if (bullet.overlaps(box)) {
+                        bulletIterator.remove();
+                        box.HP--;
                         return;
                     }
                 }

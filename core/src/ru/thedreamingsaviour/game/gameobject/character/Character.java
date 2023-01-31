@@ -240,4 +240,8 @@ public abstract class Character extends Rectangle {
         legs.y = y;
         return this;
     }
+
+    public int getSpeed() {
+        return speed;
+    }
 }
