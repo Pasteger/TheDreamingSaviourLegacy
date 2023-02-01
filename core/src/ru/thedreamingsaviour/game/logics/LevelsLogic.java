@@ -21,7 +21,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import static ru.thedreamingsaviour.game.resourceloader.MusicLoader.getFactoryMusic;
-import static ru.thedreamingsaviour.game.resourceloader.TextureLoader.BULLET_ILYA;
+import static ru.thedreamingsaviour.game.resourceloader.TextureLoader.STEEL_BOX;
 import static ru.thedreamingsaviour.game.resourceloader.TextureLoader.WOODEN_BOX;
 
 public class LevelsLogic {
@@ -49,7 +49,9 @@ public class LevelsLogic {
         coinList = LevelLoader.getCoinList();
         boxList = new ArrayList<>();//LevelLoader.getBoxList();
         Box box = new Box(3000, 3500, 300, 300, WOODEN_BOX, 5);
+        Box box2 = new Box(3000, 4000, 300, 300, WOODEN_BOX, 5);
         boxList.add(box);
+        boxList.add(box2);
         ilya = new Ilya();
         music = getFactoryMusic();
         music.setLooping(true);
@@ -66,6 +68,7 @@ public class LevelsLogic {
         coinLogic();
         boxLogic();
         bulletLogic();
+
         boxList.forEach(box -> box.textures.draw(game.batch, box.x, box.y, 5));
         coinList.forEach(coin -> coin.textures.draw(game.batch, coin.x, coin.y, 5));
 
@@ -90,7 +93,7 @@ public class LevelsLogic {
         if (finishFPSTime - startFPSTime >= 1000) {
             startFPSTime = finishFPSTime;
             fps = countRenders;
-            System.out.println(fps);
+            //System.out.println(fps);
             countRenders = 0;
         }
     }
@@ -99,13 +102,6 @@ public class LevelsLogic {
         for (Box box : boxList) {
             if (box.HP < 1) {
                 boxList.remove(box);
-                return;
-            }
-            if (ilya.overlaps(box)){
-                List<Character> characters = new ArrayList<>();
-                characters.add(ilya);
-                characters.addAll(enemyList);
-                box.move(ilya, surfaceList, characters, boxList);
                 return;
             }
         }
