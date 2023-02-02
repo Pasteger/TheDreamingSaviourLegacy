@@ -30,6 +30,7 @@ public class LevelsLogic {
     private final List<Surface> surfaceList;
     private final List<Coin> coinList;
     private final List<Box> boxList;
+    private final List<Entity> entityList;
     private final Music music;
     private long score;
 
@@ -55,6 +56,7 @@ public class LevelsLogic {
         boxList.add(new Box(-3491, 9338, 300, 300, "WOODEN", 5));
         boxList.add(new Box(-2510, 10345, 300, 300, "WOODEN", 5));
         boxList.add(new Box(-2605, 10678, 300, 300, "WOODEN", 5));
+        entityList = new ArrayList<>();
         ilya = new Ilya();
         music = getFactoryMusic();
         music.setLooping(true);
@@ -63,6 +65,10 @@ public class LevelsLogic {
     }
 
     public void render() {
+        entityList.clear();
+        entityList.add(ilya);
+        entityList.addAll(enemyList);
+        entityList.addAll(boxList);
         surfaceList.forEach(surface -> surface.draw(game.batch));
 
         ilya.sprite.draw(game.batch, ilya.x, ilya.y, 20);
@@ -75,7 +81,7 @@ public class LevelsLogic {
         boxList.forEach(box -> box.sprite.draw(game.batch, box.x, box.y, 5));
         coinList.forEach(coin -> coin.textures.draw(game.batch, coin.x, coin.y, 5));
 
-        ilya.move(surfaceList, enemyList, boxList);
+        ilya.move(surfaceList, entityList);
         game.camera.position.x = ilya.x;
         game.camera.position.y = ilya.y;
 
@@ -101,7 +107,7 @@ public class LevelsLogic {
         }
     }
 
-    private void boxLogic(){
+    private void boxLogic() {
         for (Box box : boxList) {
             if (box.HP < 1) {
                 boxList.remove(box);
@@ -110,9 +116,9 @@ public class LevelsLogic {
         }
     }
 
-    private void coinLogic(){
+    private void coinLogic() {
         for (Coin coin : coinList) {
-            if (ilya.overlaps(coin)){
+            if (ilya.overlaps(coin)) {
                 score += coin.value;
                 coinList.remove(coin);
                 return;
@@ -155,7 +161,7 @@ public class LevelsLogic {
         if (!enemyList.isEmpty()) {
             for (Enemy enemy : enemyList) {
                 enemy.sprite.draw(game.batch, enemy.x, enemy.y, 20);
-                enemy.moveToPlayer(ilya, surfaceList, enemyList, boxList);
+                enemy.moveToPlayer(ilya, surfaceList, entityList);
                 enemy.sightCalibration();
                 enemy.attack(ilya);
 

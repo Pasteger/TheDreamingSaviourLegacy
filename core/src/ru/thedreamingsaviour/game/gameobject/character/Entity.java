@@ -7,7 +7,6 @@ import ru.thedreamingsaviour.game.gameobject.Bullet;
 import ru.thedreamingsaviour.game.gameobject.Surface;
 import ru.thedreamingsaviour.game.logics.LevelsLogic;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -27,11 +26,8 @@ public abstract class Entity extends Rectangle {
     public int timeFall;
     public long deltaTime;
 
-    public void move(List<Surface> surfaces, List<Enemy> enemies, List<Box> boxes) {
+    public void move(List<Surface> surfaces, List<Entity> entities) {
         speed = saveSpeed;
-        List<Entity> entities = new ArrayList<>();
-        entities.add(this);
-        entities.addAll(enemies);
 
         sprite.setTextures(sprites.get(direction));
 
@@ -42,8 +38,8 @@ public abstract class Entity extends Rectangle {
             case "EAST", "RIGHT" -> legs.x += saveSpeed;
             case "WEST", "LEFT" -> legs.x -= saveSpeed;
         }
-        for (Box box : boxes) {
-            if (legs.overlaps(box)) {
+        for (Entity box : entities) {
+            if (box.type.equals("Box") && legs.overlaps(box)) {
                 speed -= box.HP;
             }
         }
@@ -68,18 +64,17 @@ public abstract class Entity extends Rectangle {
                 }
             }
         }
-        for (Box box : boxes) {
-            if (legs.overlaps(box) && !this.legs.equals(box.legs)) {
-                box.moveBox(this, surfaces, entities, boxes);
-                backLegsDirection(box);
+        for (Entity entity : entities) {
+            if (entity.type.equals("Box") && legs.overlaps(entity) && !this.legs.equals(entity.legs)) {
+                entity.moveBox(this, surfaces, entities);
+                backLegsDirection((Box) entity);
             }
-        }
-        for (Enemy enemy : enemies) {
-            if (legs.overlaps(enemy.legs) && !this.legs.equals(enemy.legs)) {
+            if (legs.overlaps(entity.legs) && !this.legs.equals(entity.legs)) {
                 backLegsSpeed();
                 break;
             }
         }
+
         y = legs.y;
         x = legs.x;
     }
@@ -173,7 +168,7 @@ public abstract class Entity extends Rectangle {
         }
     }
 
-    public void jump(List<Surface> surfaces, List<Box> boxes) {
+    public void jump(List<Surface> surfaces, List<Entity> entities) {
         for (Surface surface : surfaces) {
             legs.y--;
             if (surface.overlaps(legs) && surface.y < y && surface.getEffect().equals("solid")) {
@@ -182,9 +177,9 @@ public abstract class Entity extends Rectangle {
             }
             legs.y++;
         }
-        for (Box box : boxes) {
+        for (Entity entity : entities) {
             legs.y--;
-            if (legs.overlaps(box) && y - box.y >= box.width - 1) {
+            if (entity.type.equals("Box") && legs.overlaps(entity) && y - entity.y >= entity.width - 1) {
                 if (jumped == 0)
                     jumped = 50;
             }
@@ -233,6 +228,9 @@ public abstract class Entity extends Rectangle {
             }
             y = legs.y;
         }
+    }
+
+    public void moveBox(Entity summoner, List<Surface> surfaces, List<Entity> entities) {
     }
 
     @Override

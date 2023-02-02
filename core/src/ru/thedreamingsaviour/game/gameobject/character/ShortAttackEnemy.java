@@ -4,7 +4,6 @@ import com.badlogic.gdx.math.Rectangle;
 import ru.thedreamingsaviour.game.gameobject.Surface;
 import ru.thedreamingsaviour.game.gameobject.character.part.Cell;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static com.badlogic.gdx.math.MathUtils.random;
@@ -48,31 +47,30 @@ public class ShortAttackEnemy extends Enemy {
     }
 
     @Override
-    public void moveToPlayer(Ilya ilya, List<Surface> surfaceList, List<Enemy> enemies, List<Box> boxes) {
+    public void moveToPlayer(Ilya ilya, List<Surface> surfaceList, List<Entity> entities) {
         fieldOfView.x = x - fieldOfView.width / 2;
         fieldOfView.y = y - fieldOfView.height / 2;
         if (fieldOfView.overlaps(ilya)) {
             Cell cell = findWay(ilya, surfaceList);
             if (cell.x > x && !this.overlaps(ilya)) {
                 direction = gravitated ? "RIGHT" : "EAST";
-                move(surfaceList, enemies, boxes);
+                move(surfaceList, entities);
             }
             if (cell.x < x && !this.overlaps(ilya)) {
                 direction = gravitated ? "LEFT" : "WEST";
-                move(surfaceList, enemies, boxes);
+                move(surfaceList, entities);
             }
             if (cell.y > y && !this.overlaps(ilya)) {
                 if (gravitated) {
-                    List<Entity> entities = new ArrayList<>();
-                    jump(surfaceList, boxes);
+                    jump(surfaceList, entities);
                 } else {
                     direction = "NORTH";
-                    move(surfaceList, enemies, boxes);
+                    move(surfaceList, entities);
                 }
             }
             if (cell.y < y && !this.overlaps(ilya) && !gravitated) {
                 direction = "SOUTH";
-                move(surfaceList, enemies, boxes);
+                move(surfaceList, entities);
             }
         }
         moveCells();
@@ -138,7 +136,7 @@ public class ShortAttackEnemy extends Enemy {
         return enemyCell;
     }
 
-    private boolean paintCell(Cell thisCell, Cell cell){
+    private boolean paintCell(Cell thisCell, Cell cell) {
         if (cell.property.equals("this")) {
             return true;
         }

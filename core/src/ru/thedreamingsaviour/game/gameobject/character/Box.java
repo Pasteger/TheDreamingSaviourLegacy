@@ -13,7 +13,7 @@ public class Box extends Entity {
     public boolean westBlocked;
     private long blockTime;
 
-    public Box(float x, float y, int width, int height, String texturesKey, int hp){
+    public Box(float x, float y, int width, int height, String texturesKey, int hp) {
         type = "Box";
         this.x = x;
         this.y = y;
@@ -28,7 +28,8 @@ public class Box extends Entity {
         legs.height = height;
     }
 
-    public void moveBox(Entity summoner, List<Surface> surfaces, List<Entity> entities, List<Box> boxes){
+    @Override
+    public void moveBox(Entity summoner, List<Surface> surfaces, List<Entity> entities) {
         if (System.currentTimeMillis() - blockTime > 1000) {
             northBlocked = false;
             southBlocked = false;
@@ -52,15 +53,13 @@ public class Box extends Entity {
                 }
             }
             for (Entity entity : entities) {
-                if (legs.overlaps(entity) && !entity.equals(summoner)) {
+                if (entity.type.equals("Box") && legs.overlaps(entity) && !legs.equals(entity.legs)) {
+                    entity.moveBox(this, surfaces, entities);
                     backLegs();
                     blockDirection();
                     break;
                 }
-            }
-            for (Box box : boxes) {
-                if (legs.overlaps(box) && !legs.equals(box.legs)) {
-                    box.moveBox(this, surfaces, entities, boxes);
+                if (!entity.equals(this) && legs.overlaps(entity) && !entity.equals(summoner)) {
                     backLegs();
                     blockDirection();
                     break;
@@ -71,7 +70,7 @@ public class Box extends Entity {
         x = legs.x;
     }
 
-    private void blockDirection(){
+    private void blockDirection() {
         switch (direction) {
             case "NORTH" -> northBlocked = true;
             case "SOUTH" -> southBlocked = true;

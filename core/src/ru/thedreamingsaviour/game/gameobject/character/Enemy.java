@@ -10,7 +10,13 @@ import java.util.List;
 public abstract class Enemy extends Entity {
     public Rectangle fieldOfView = new Rectangle();
     public final List<Cell> cellsOfView = new ArrayList<>();
-    public void moveToPlayer(Ilya ilya, List<Surface> surfaceList, List<Enemy> enemies, List<Box> boxes){}
-    public void attack(Ilya ilya){}
-    public void sightCalibration(){}
+
+    public void moveToPlayer(Ilya ilya, List<Surface> surfaceList, List<Entity> entities) {
+    }
+
+    public void attack(Ilya ilya) {
+    }
+
+    public void sightCalibration() {
+    }
 }

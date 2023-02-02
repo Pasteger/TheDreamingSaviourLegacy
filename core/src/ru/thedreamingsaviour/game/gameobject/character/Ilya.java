@@ -14,7 +14,7 @@ public class Ilya extends Entity {
         type = "Ilya";
         sprites = ILYA;
         sprite.setTextures(sprites.get("NORTH"));
-        HP = 8;
+        HP = 4;
         setX(3000);
         setY(3000);
         width = 300;
@@ -27,29 +27,29 @@ public class Ilya extends Entity {
     }
 
     @Override
-    public void move(List<Surface> surfaces, List<Enemy> enemies, List<Box> boxes) {
+    public void move(List<Surface> surfaces, List<Entity> entities) {
         if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
             shot("GOOD");
         }
 
         if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
             direction = gravitated ? "LEFT" : "WEST";
-            super.move(surfaces, enemies, boxes);
+            super.move(surfaces, entities);
         }
         if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
             direction = gravitated ? "RIGHT" : "EAST";
-            super.move(surfaces, enemies, boxes);
+            super.move(surfaces, entities);
         }
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.UP) && gravitated) {
-            jump(surfaces, boxes);
+            jump(surfaces, entities);
         } else if (Gdx.input.isKeyPressed(Input.Keys.UP) && !gravitated) {
             direction = "NORTH";
-            super.move(surfaces, enemies, boxes);
+            super.move(surfaces, entities);
         }
         if (Gdx.input.isKeyPressed(Input.Keys.DOWN) && !gravitated) {
             direction = "SOUTH";
-            super.move(surfaces, enemies, boxes);
+            super.move(surfaces, entities);
         }
     }
 }

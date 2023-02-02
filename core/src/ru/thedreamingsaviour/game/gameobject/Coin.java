@@ -10,7 +10,7 @@ public class Coin extends Rectangle {
     public final int value;
     public final AnimatedObject textures = new AnimatedObject(new ArrayList<>());
 
-    public Coin(float x, float y, int value){
+    public Coin(float x, float y, int value) {
         this.x = x;
         this.y = y;
         this.value = value;
