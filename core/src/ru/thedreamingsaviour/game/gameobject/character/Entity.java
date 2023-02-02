@@ -2,124 +2,111 @@ package ru.thedreamingsaviour.game.gameobject.character;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Rectangle;
+import ru.thedreamingsaviour.game.gameobject.AnimatedObject;
 import ru.thedreamingsaviour.game.gameobject.Bullet;
 import ru.thedreamingsaviour.game.gameobject.Surface;
 import ru.thedreamingsaviour.game.logics.LevelsLogic;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 import static ru.thedreamingsaviour.game.resourceloader.TextureLoader.BULLET_ILYA;
 
-public abstract class Character extends Rectangle {
-    final String UP = "upSprite";
-    final String DOWN = "downSprite";
-    final String LEFT = "leftSprite";
-    final String RIGHT = "rightSprite";
-    Map<String, Texture> sprites;
+public abstract class Entity extends Rectangle {
+    public String type;
+    Map<String, List<Texture>> sprites;
     public byte HP;
     public String direction = "NORTH";
-    public Texture texture;
-    Rectangle legs;
+    public AnimatedObject sprite = new AnimatedObject();
+    Rectangle legs = new Rectangle();
+    int saveSpeed;
     int speed;
     public boolean gravitated;
     public int jumped;
     public int timeFall;
     public long deltaTime;
 
+    public void move(List<Surface> surfaces, List<Enemy> enemies, List<Box> boxes) {
+        speed = saveSpeed;
+        List<Entity> entities = new ArrayList<>();
+        entities.add(this);
+        entities.addAll(enemies);
 
-    public void moveUp(List<Surface> surfaces, List<Enemy> enemies) {
-        texture = sprites.get(UP);
-        direction = "NORTH";
+        sprite.setTextures(sprites.get(direction));
+
+
+        switch (direction) {
+            case "NORTH" -> legs.y += saveSpeed;
+            case "SOUTH" -> legs.y -= saveSpeed;
+            case "EAST", "RIGHT" -> legs.x += saveSpeed;
+            case "WEST", "LEFT" -> legs.x -= saveSpeed;
+        }
+        for (Box box : boxes) {
+            if (legs.overlaps(box)) {
+                speed -= box.HP;
+            }
+        }
+        switch (direction) {
+            case "NORTH" -> legs.y -= saveSpeed;
+            case "SOUTH" -> legs.y += saveSpeed;
+            case "EAST", "RIGHT" -> legs.x -= saveSpeed;
+            case "WEST", "LEFT" -> legs.x += saveSpeed;
+        }
+
         for (int step = 0; step < speed; step++) {
-            legs.y++;
+            switch (direction) {
+                case "NORTH" -> legs.y++;
+                case "SOUTH" -> legs.y--;
+                case "EAST", "RIGHT" -> legs.x++;
+                case "WEST", "LEFT" -> legs.x--;
+            }
             for (Surface surface : surfaces) {
                 if (legs.overlaps(surface) && surface.getEffect().equals("solid")) {
-                    legs.y--;
+                    backLegs();
                     break;
                 }
             }
-            for (Enemy enemy : enemies) {
-                if (legs.overlaps(enemy.legs) && !legs.equals(enemy.legs)) {
-                    legs.y--;
-                    break;
-                }
+        }
+        for (Box box : boxes) {
+            if (legs.overlaps(box) && !this.legs.equals(box.legs)) {
+                box.moveBox(this, surfaces, entities, boxes);
+                backLegsDirection(box);
+            }
+        }
+        for (Enemy enemy : enemies) {
+            if (legs.overlaps(enemy.legs) && !this.legs.equals(enemy.legs)) {
+                backLegsSpeed();
+                break;
             }
         }
         y = legs.y;
-    }
-
-    public void moveDown(List<Surface> surfaces, List<Enemy> enemies) {
-        texture = sprites.get(DOWN);
-        direction = "SOUTH";
-        for (int step = 0; step < speed; step++) {
-            legs.y--;
-            for (Surface surface : surfaces) {
-                if (legs.overlaps(surface) && surface.getEffect().equals("solid")) {
-                    legs.y++;
-                    break;
-                }
-            }
-            for (Enemy enemy : enemies) {
-                if (legs.overlaps(enemy.legs) && !legs.equals(enemy.legs)) {
-                    legs.y++;
-                    break;
-                }
-            }
-        }
-        y = legs.y;
-    }
-
-    public void moveRight(List<Surface> surfaces, List<Enemy> enemies) {
-        if (gravitated) {
-            texture = sprites.get("rightSpriteP");
-            direction = "RIGHT";
-        } else {
-            texture = sprites.get(RIGHT);
-            direction = "EAST";
-        }
-        for (int step = 0; step < speed; step++) {
-            legs.x++;
-            for (Surface surface : surfaces) {
-                if (legs.overlaps(surface) && surface.getEffect().equals("solid")) {
-                    legs.x--;
-                    break;
-                }
-            }
-            for (Enemy enemy : enemies) {
-                if (legs.overlaps(enemy.legs) && !legs.equals(enemy.legs)) {
-                    legs.x--;
-                    break;
-                }
-            }
-        }
         x = legs.x;
     }
 
-    public void moveLeft(List<Surface> surfaces, List<Enemy> enemies) {
-        if (gravitated) {
-            texture = sprites.get("leftSpriteP");
-            direction = "LEFT";
-        } else {
-            texture = sprites.get(LEFT);
-            direction = "WEST";
+    void backLegs() {
+        switch (direction) {
+            case "NORTH" -> legs.y--;
+            case "SOUTH" -> legs.y++;
+            case "EAST", "RIGHT" -> legs.x--;
+            case "WEST", "LEFT" -> legs.x++;
         }
-        for (int step = 0; step < speed; step++) {
-            legs.x--;
-            for (Surface surface : surfaces) {
-                if (legs.overlaps(surface) && surface.getEffect().equals("solid")) {
-                    legs.x++;
-                    break;
-                }
-            }
-            for (Enemy enemy : enemies) {
-                if (legs.overlaps(enemy.legs) && !legs.equals(enemy.legs)) {
-                    legs.x++;
-                    break;
-                }
-            }
+    }
+
+    void backLegsDirection(Box box) {
+        if (box.northBlocked && direction.equals("NORTH")) legs.y -= speed;
+        if (box.southBlocked && direction.equals("SOUTH")) legs.y += speed;
+        if (box.eastBlocked && direction.equals("EAST")) legs.x -= speed;
+        if (box.westBlocked && direction.equals("WEST")) legs.x += speed;
+    }
+
+    void backLegsSpeed() {
+        switch (direction) {
+            case "NORTH" -> legs.y -= speed;
+            case "SOUTH" -> legs.y += speed;
+            case "EAST", "RIGHT" -> legs.x -= speed;
+            case "WEST", "LEFT" -> legs.x += speed;
         }
-        x = legs.x;
     }
 
     public void shot(String bulletType) {
@@ -161,7 +148,7 @@ public abstract class Character extends Rectangle {
         LevelsLogic.BULLET_LIST.add(bullet);
     }
 
-    public void fall(List<Surface> surfaces) {
+    public void fall(List<Surface> surfaces, List<Entity> entities) {
         if (gravitated) {
             timeFall++;
             deltaTime = System.currentTimeMillis();
@@ -174,15 +161,30 @@ public abstract class Character extends Rectangle {
                         break;
                     }
                 }
+                for (Entity entity : entities) {
+                    if ((entity.type.equals("Box") || type.equals("Box")) && legs.overlaps(entity) && !legs.equals(entity.legs)) {
+                        legs.y++;
+                        timeFall = 0;
+                        break;
+                    }
+                }
             }
             y = legs.y;
         }
     }
 
-    public void jump(List<Surface> surfaces) {
-        for (Surface floor : surfaces) {
+    public void jump(List<Surface> surfaces, List<Box> boxes) {
+        for (Surface surface : surfaces) {
             legs.y--;
-            if (floor.overlaps(legs) && floor.y < y && floor.getEffect().equals("solid")) {
+            if (surface.overlaps(legs) && surface.y < y && surface.getEffect().equals("solid")) {
+                if (jumped == 0)
+                    jumped = 50;
+            }
+            legs.y++;
+        }
+        for (Box box : boxes) {
+            legs.y--;
+            if (legs.overlaps(box) && y - box.y >= box.width - 1) {
                 if (jumped == 0)
                     jumped = 50;
             }
@@ -190,7 +192,7 @@ public abstract class Character extends Rectangle {
         }
     }
 
-    public void jumpRender(List<Surface> surfaces) {
+    public void jumpRender(List<Surface> surfaces, List<Box> boxes) {
         if (jumped > 0) {
             if (!gravitated) {
                 jumped = 0;
@@ -208,6 +210,12 @@ public abstract class Character extends Rectangle {
 
             for (int step = 0; step < localSpeed * delta * 1.1; step++) {
                 legs.y++;
+                for (Box box : boxes) {
+                    if (legs.overlaps(box) && box.y > y) {
+                        jumped = 0;
+                        break;
+                    }
+                }
                 for (Surface surface : surfaces) {
                     if (legs.overlaps(surface) && surface.getEffect().equals("solid")) {
                         legs.y--;

@@ -137,6 +137,7 @@ public class MainMenuScreen implements Screen {
                 LevelLoader.load(level);
                 game.setScreen(new LevelsScreen(game));
             } catch (Exception exception) {
+                exception.printStackTrace();
                 exceptionMessage = "level not found";
             }
         }

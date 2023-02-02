@@ -77,9 +77,9 @@ public class LevelEditor implements Screen {
         surfaceList.forEach(surface -> surface.draw(game.batch));
         coinList.forEach(coin -> coin.textures.draw(game.batch, coin.x, coin.y, 5));
 
-        enemyList.forEach(enemy -> game.batch.draw(enemy.texture, enemy.x, enemy.y));
+        enemyList.forEach(enemy -> enemy.sprite.draw(game.batch, enemy.x, enemy.y, 20));
 
-        game.batch.draw(ilya.texture, ilya.x, ilya.y);
+        ilya.sprite.draw(game.batch, ilya.x, ilya.y, 20);
 
         game.universalFont.draw(game.batch, camera.position.x + "  " + camera.position.y, camera.position.x - 2000, camera.position.y + 1900);
         game.universalFont.draw(game.batch, currentTask, camera.position.x - 2000, camera.position.y + 1700);

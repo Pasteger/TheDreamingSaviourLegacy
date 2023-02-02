@@ -14,6 +14,7 @@ public class AnimatedObject extends Rectangle {
     public AnimatedObject(List<Texture> textures) {
         this.textures = textures;
     }
+    public AnimatedObject() {}
 
     public void draw(SpriteBatch batch, float x, float y, int speed) {
         if (currentFrame > textures.size() - 1) {

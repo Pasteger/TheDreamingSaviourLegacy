@@ -17,11 +17,11 @@ public class Coin extends Rectangle {
         height = 120;
         width = 120;
         switch (value) {
-            case 1 -> textures.setTextures(COIN_1);
-            case 10 -> textures.setTextures(COIN_10);
-            case 100 -> textures.setTextures(COIN_100);
-            case 1000 -> textures.setTextures(COIN_1000);
-            case 5000 -> textures.setTextures(COIN_5000);
+            case 1 -> textures.setTextures(COINS.get("1"));
+            case 10 -> textures.setTextures(COINS.get("10"));
+            case 100 -> textures.setTextures(COINS.get("100"));
+            case 1000 -> textures.setTextures(COINS.get("1000"));
+            case 5000 -> textures.setTextures(COINS.get("5000"));
         }
     }
 }

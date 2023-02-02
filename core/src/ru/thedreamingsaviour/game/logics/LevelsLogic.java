@@ -4,13 +4,13 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.audio.Music;
 import ru.thedreamingsaviour.game.MyGdxGame;
-import ru.thedreamingsaviour.game.gameobject.Box;
+import ru.thedreamingsaviour.game.gameobject.character.Box;
 import ru.thedreamingsaviour.game.gameobject.Bullet;
 import ru.thedreamingsaviour.game.gameobject.Coin;
 import ru.thedreamingsaviour.game.gameobject.Surface;
 import ru.thedreamingsaviour.game.gameobject.character.Enemy;
 import ru.thedreamingsaviour.game.gameobject.character.Ilya;
-import ru.thedreamingsaviour.game.gameobject.character.Character;
+import ru.thedreamingsaviour.game.gameobject.character.Entity;
 import ru.thedreamingsaviour.game.resourceloader.LevelLoader;
 import ru.thedreamingsaviour.game.screen.MainMenuScreen;
 import ru.thedreamingsaviour.game.screen.DeathScreen;
@@ -21,8 +21,6 @@ import java.util.Iterator;
 import java.util.List;
 
 import static ru.thedreamingsaviour.game.resourceloader.MusicLoader.getFactoryMusic;
-import static ru.thedreamingsaviour.game.resourceloader.TextureLoader.STEEL_BOX;
-import static ru.thedreamingsaviour.game.resourceloader.TextureLoader.WOODEN_BOX;
 
 public class LevelsLogic {
     private final MyGdxGame game;
@@ -48,10 +46,15 @@ public class LevelsLogic {
         enemyList = LevelLoader.getEnemyList();
         coinList = LevelLoader.getCoinList();
         boxList = new ArrayList<>();//LevelLoader.getBoxList();
-        Box box = new Box(3000, 3500, 300, 300, WOODEN_BOX, 5);
-        Box box2 = new Box(3000, 4000, 300, 300, WOODEN_BOX, 5);
-        boxList.add(box);
-        boxList.add(box2);
+        boxList.add(new Box(3000, 3500, 300, 300, "WOODEN", 5));
+        boxList.add(new Box(3000, 4000, 300, 300, "STEEL", 10));
+        boxList.add(new Box(-1487, 6357, 300, 300, "WOODEN", 5));
+        boxList.add(new Box(-1082, 6764, 300, 300, "WOODEN", 5));
+        boxList.add(new Box(-1791, 7461, 300, 300, "WOODEN", 5));
+        boxList.add(new Box(-1670, 9289, 300, 300, "WOODEN", 5));
+        boxList.add(new Box(-3491, 9338, 300, 300, "WOODEN", 5));
+        boxList.add(new Box(-2510, 10345, 300, 300, "WOODEN", 5));
+        boxList.add(new Box(-2605, 10678, 300, 300, "WOODEN", 5));
         ilya = new Ilya();
         music = getFactoryMusic();
         music.setLooping(true);
@@ -62,14 +65,14 @@ public class LevelsLogic {
     public void render() {
         surfaceList.forEach(surface -> surface.draw(game.batch));
 
-        game.batch.draw(ilya.texture, ilya.x, ilya.y);
+        ilya.sprite.draw(game.batch, ilya.x, ilya.y, 20);
         surfaceLogic();
         enemyLive();
         coinLogic();
         boxLogic();
         bulletLogic();
 
-        boxList.forEach(box -> box.textures.draw(game.batch, box.x, box.y, 5));
+        boxList.forEach(box -> box.sprite.draw(game.batch, box.x, box.y, 5));
         coinList.forEach(coin -> coin.textures.draw(game.batch, coin.x, coin.y, 5));
 
         ilya.move(surfaceList, enemyList, boxList);
@@ -118,41 +121,41 @@ public class LevelsLogic {
     }
 
     private void surfaceLogic() {
-        List<Character> characterList = new ArrayList<>();
-        characterList.add(ilya);
-        characterList.addAll(enemyList);
+        List<Entity> entityList = new ArrayList<>();
+        entityList.add(ilya);
+        entityList.addAll(enemyList);
+        entityList.addAll(boxList);
 
-        for (Character character : characterList) {
-            character.jumpRender(surfaceList);
+        for (Entity entity : entityList) {
+            entity.jumpRender(surfaceList, boxList);
         }
 
         for (Surface surface : surfaceList) {
-            for (Character character : characterList) {
-                if (surface.overlaps(character)) {
+            for (Entity entity : entityList) {
+                if (surface.overlaps(entity)) {
                     if (surface.getEffect().equals("gravity")) {
-                        character.gravitated = true;
-                        character.fall(surfaceList);
+                        entity.gravitated = true;
+                        entity.fall(surfaceList, entityList);
                     }
                     if (surface.getEffect().equals("death")) {
-                        character.HP = 0;
+                        entity.HP = 0;
                         return;
                     }
                     if (surface.getEffect().equals("none")) {
-                        character.gravitated = false;
-                        if (character.timeFall != 0 && System.currentTimeMillis() - character.deltaTime > 1000)
-                            character.timeFall = 0;
+                        entity.gravitated = false;
+                        if (entity.timeFall != 0 && System.currentTimeMillis() - entity.deltaTime > 1000)
+                            entity.timeFall = 0;
                     }
                 }
             }
         }
     }
 
-
     private void enemyLive() {
         if (!enemyList.isEmpty()) {
             for (Enemy enemy : enemyList) {
-                game.batch.draw(enemy.texture, enemy.x, enemy.y);
-                enemy.moveToPlayer(ilya, surfaceList, enemyList);
+                enemy.sprite.draw(game.batch, enemy.x, enemy.y, 20);
+                enemy.moveToPlayer(ilya, surfaceList, enemyList, boxList);
                 enemy.sightCalibration();
                 enemy.attack(ilya);
 
