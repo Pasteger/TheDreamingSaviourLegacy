@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Rectangle;
 import ru.thedreamingsaviour.game.gameobject.Coin;
 import ru.thedreamingsaviour.game.gameobject.Surface;
+import ru.thedreamingsaviour.game.gameobject.character.Box;
 import ru.thedreamingsaviour.game.gameobject.character.Enemy;
 import ru.thedreamingsaviour.game.gameobject.character.Ilya;
 import ru.thedreamingsaviour.game.gameobject.character.ShortAttackEnemy;
@@ -33,6 +34,7 @@ public class LevelEditor implements Screen {
     private final List<Enemy> enemyList;
     private List<Surface> surfaceList;
     private final List<Coin> coinList;
+    private final List<Box> boxList;
     private boolean dragged;
     private String currentTask;
     private int deltaX;
@@ -43,6 +45,8 @@ public class LevelEditor implements Screen {
     private String currentSurfaceEffect;
     private final Surface demoSurface;
     private int currentCoinValue = 1;
+    private byte currentBoxHP = 1;
+    private String currentBoxMaterial = "WOODEN";
 
     public LevelEditor(final MyGdxGame game) {
         this.game = game;
@@ -51,7 +55,7 @@ public class LevelEditor implements Screen {
         effectTextWindow = new TextWindow();
         currentTask = "";
         currentSurfaceColor = "0.5;0.5;0.5;1";
-        currentSurfaceEffect = "color";
+        currentSurfaceEffect = "none";
         demoSurface = new Surface(0, 0, 100, 100, currentSurfaceEffect, currentSurfaceColor);
         Gdx.gl.glClearColor(0.5f, 0.5f, 0.5f, 1);
         camera = game.camera;
@@ -62,6 +66,7 @@ public class LevelEditor implements Screen {
         enemyList = LevelLoader.getEnemyList();
         surfaceList = LevelLoader.getSurfaceList();
         coinList = LevelLoader.getCoinList();
+        boxList = LevelLoader.getBoxList();
 
         Gdx.input.setInputProcessor(new EditorInputProcessor());
     }
@@ -76,6 +81,7 @@ public class LevelEditor implements Screen {
         game.batch.begin();
         surfaceList.forEach(surface -> surface.draw(game.batch));
         coinList.forEach(coin -> coin.textures.draw(game.batch, coin.x, coin.y, 5));
+        boxList.forEach(box -> box.sprite.draw(game.batch, box.x, box.y, 10));
 
         enemyList.forEach(enemy -> enemy.sprite.draw(game.batch, enemy.x, enemy.y, 20));
 
@@ -86,7 +92,17 @@ public class LevelEditor implements Screen {
         demoSurface.setX(camera.position.x - 2000);
         demoSurface.setY(camera.position.y + 1400);
         demoSurface.draw(game.batch);
-        game.universalFont.draw(game.batch, "Coin: " + currentCoinValue, camera.position.x - 2000, camera.position.y + 1200);
+        String currentValue;
+        if (currentTask.equals("addCoin") || currentTask.equals("deleteCoin")){
+            currentValue = "Coin: " + currentCoinValue;
+        }
+        else if (currentTask.equals("addBox") || currentTask.equals("removeBox")){
+            currentValue = "Box: " + currentBoxHP + " | " + currentBoxMaterial;
+        }
+        else {
+            currentValue = "Effect: " + currentSurfaceEffect;
+        }
+        game.universalFont.draw(game.batch, currentValue, camera.position.x - 2000, camera.position.y + 1200);
 
         saveTextWindow.render(game);
         colorTextWindow.render(game);
@@ -150,6 +166,13 @@ public class LevelEditor implements Screen {
             currentTask = !currentTask.equals("edit") ? "edit" : "";
         }
 
+        if (Gdx.input.isKeyJustPressed(Input.Keys.K)) {
+            currentTask = !currentTask.equals("addBox") ? "addBox" : "";
+        }
+        if (Gdx.input.isKeyJustPressed(Input.Keys.L)) {
+            currentTask = !currentTask.equals("removeBox") ? "removeBox" : "";
+        }
+
         if (Gdx.input.isKeyJustPressed(Input.Keys.P)) {
             surfaceList = sortSurfaceList(surfaceList);
         }
@@ -192,7 +215,36 @@ public class LevelEditor implements Screen {
                     break;
                 }
             }
-            surfaceList = sortSurfaceList(surfaceList);
+        }
+
+        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_0)) {
+            currentBoxHP++;
+            if (currentBoxHP > 30) {
+                currentBoxHP = 1;
+            }
+        }
+        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_9)) {
+            switch (currentBoxMaterial) {
+                case "WOODEN" -> currentBoxMaterial = "STEEL";
+                case "STEEL" -> currentBoxMaterial = "WOODEN";
+            }
+        }
+        if (currentTask.equals("removeBox") && Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
+            float y = getSynchronizedY();
+            float x = getSynchronizedX();
+            for (Box box : boxList) {
+                if (box.getX() >= x - box.getWidth() && box.getX() <= x + 1 &&
+                        box.getY() >= y - box.getHeight() && box.getY() <= y + 1) {
+                    boxList.remove(box);
+                    break;
+                }
+            }
+        }
+
+        if (currentTask.equals("addBox") && Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
+            Box box = new Box(getSynchronizedX(), getSynchronizedY(),
+                    200, 200, currentBoxMaterial, currentBoxHP);
+            boxList.add(box);
         }
 
         if (currentTask.equals("addDrawingSurface") && Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
@@ -283,7 +335,7 @@ public class LevelEditor implements Screen {
 
                 String[] save = text.split(" ");
 
-                LevelSaver.save(surfaceList, shortAttackEnemyList, coinList, save[1], save[0]);
+                LevelSaver.save(surfaceList, shortAttackEnemyList, coinList, boxList, save[1], save[0]);
 
                 currentTask = "saved!";
             } catch (Exception exception) {

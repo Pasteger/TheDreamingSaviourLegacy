@@ -1,5 +1,6 @@
 {
   "coinList": [],
+  "boxList": [],
   "shortAttackEnemyList": [
     {
       "x": 3000.0,
@@ -988,6 +989,5 @@
       "height": 200.0
     }
   ],
-  "nextLevel": "level0",
-  "type": "shooter"
+  "nextLevel": "level0"
 }

@@ -4,6 +4,7 @@ import com.badlogic.gdx.math.Rectangle;
 import org.json.simple.JSONObject;
 import ru.thedreamingsaviour.game.gameobject.Coin;
 import ru.thedreamingsaviour.game.gameobject.Surface;
+import ru.thedreamingsaviour.game.gameobject.character.Box;
 import ru.thedreamingsaviour.game.gameobject.character.ShortAttackEnemy;
 
 import java.io.File;
@@ -13,10 +14,11 @@ import java.util.List;
 
 public class LevelSaver {
     public static void save(List<Surface> surfaceList, List<ShortAttackEnemy> shortAttackEnemyList,
-                            List<Coin> coinList,
+                            List<Coin> coinList, List<Box> boxList,
                             String nextLevel, String levelName) {
         JSONObject level = new JSONObject();
         level.put("coinList", saveCoinList(coinList));
+        level.put("boxList", saveBoxList(boxList));
         level.put("surfaceList", saveSurfaceList(surfaceList));
         level.put("shortAttackEnemyList", saveShortAttackEnemyList(shortAttackEnemyList));
         level.put("nextLevel", nextLevel);
@@ -33,6 +35,19 @@ public class LevelSaver {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private static List<JSONObject> saveBoxList(List<Box> boxes) {
+        List<JSONObject> jsonObjectList = new ArrayList<>();
+        for (Box box : boxes) {
+            JSONObject json = new JSONObject();
+            json.put("x", box.getX());
+            json.put("y", box.getY());
+            json.put("material", box.getMaterial());
+            json.put("hp", box.HP);
+            jsonObjectList.add(json);
+        }
+        return jsonObjectList;
     }
 
     private static List<JSONObject> saveSurfaceList(List<Surface> surfaces) {

@@ -30,6 +30,7 @@
     }
   ],
   "coinList": [],
+  "boxList": [],
   "surfaceList": [
     {
       "effect": "none",

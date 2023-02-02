@@ -12,15 +12,17 @@ public class Box extends Entity {
     public boolean eastBlocked;
     public boolean westBlocked;
     private long blockTime;
+    private final String material;
 
-    public Box(float x, float y, int width, int height, String texturesKey, int hp) {
+    public Box(float x, float y, int width, int height, String material, byte hp) {
         type = "Box";
         this.x = x;
         this.y = y;
         this.width = width;
         this.height = height;
-        sprite.setTextures(BOX.get(texturesKey));
-        HP = (byte) hp;
+        this.material = material;
+        sprite.setTextures(BOX.get(material));
+        HP = hp;
 
         legs.x = x;
         legs.y = y;
@@ -78,5 +80,9 @@ public class Box extends Entity {
             case "WEST", "LEFT" -> westBlocked = true;
         }
         blockTime = System.currentTimeMillis();
+    }
+
+    public String getMaterial() {
+        return material;
     }
 }

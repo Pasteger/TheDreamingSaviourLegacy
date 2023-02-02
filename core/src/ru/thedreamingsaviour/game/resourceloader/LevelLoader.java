@@ -3,6 +3,7 @@ package ru.thedreamingsaviour.game.resourceloader;
 import org.json.simple.JSONObject;
 import ru.thedreamingsaviour.game.gameobject.Coin;
 import ru.thedreamingsaviour.game.gameobject.Surface;
+import ru.thedreamingsaviour.game.gameobject.character.Box;
 import ru.thedreamingsaviour.game.gameobject.character.Enemy;
 import ru.thedreamingsaviour.game.gameobject.character.ShortAttackEnemy;
 
@@ -16,17 +17,38 @@ public class LevelLoader {
     private static List<Enemy> enemyList;
     private static List<Surface> surfaceList;
     private static List<Coin> coinList;
+    private static List<Box> boxList;
     private static String nextLevel;
 
     public static void load(String levelName) throws Exception {
         level = JSONReader.getLevel(levelName);
         surfaceList = convertingToSurface();
         coinList = convertingToCoin();
+        boxList = convertingToBox();
         nextLevel = (String) level.get("nextLevel");
 
         List<ShortAttackEnemy> shortAttackEnemyList = convertingToShortAttackEnemy();
         enemyList = new ArrayList<>();
         enemyList.addAll(shortAttackEnemyList);
+    }
+
+    private static List<Box> convertingToBox() {
+        List<Box> boxes = new ArrayList<>();
+        try {
+            @SuppressWarnings("unchecked")
+            List<JSONObject> JSONFloorsList = (List<JSONObject>) level.get("boxList");
+            for (JSONObject thisObject : JSONFloorsList) {
+                float y = Float.parseFloat(String.valueOf(thisObject.get("y")));
+                float x = Float.parseFloat(String.valueOf(thisObject.get("x")));
+                String material = String.valueOf(thisObject.get("material"));
+                byte hp = Byte.parseByte(String.valueOf(thisObject.get("hp")));
+                boxes.add(new Box(x, y, 300, 300, material, hp));
+            }
+        }
+        catch (Exception exception){
+            exception.printStackTrace();
+        }
+        return boxes;
     }
 
     private static List<ShortAttackEnemy> convertingToShortAttackEnemy() {
@@ -100,5 +122,9 @@ public class LevelLoader {
 
     public static List<Coin> getCoinList() {
         return coinList;
+    }
+
+    public static List<Box> getBoxList() {
+        return boxList;
     }
 }

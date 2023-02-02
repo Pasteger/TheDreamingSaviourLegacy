@@ -37,7 +37,7 @@ public class ShortAttackEnemy extends Enemy {
 
     @Override
     public void attack(Ilya ilya) {
-        if (this.overlaps(ilya)) {
+        if (legs.overlaps(ilya)) {
             recharge--;
             if (recharge <= 0) {
                 recharge = (byte) ((byte) 5 + random.nextInt(20));

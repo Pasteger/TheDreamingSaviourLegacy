@@ -19,6 +19,7 @@ import ru.thedreamingsaviour.game.screen.LevelsScreen;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Random;
 
 import static ru.thedreamingsaviour.game.resourceloader.MusicLoader.getFactoryMusic;
 
@@ -46,16 +47,8 @@ public class LevelsLogic {
         surfaceList = LevelLoader.getSurfaceList();
         enemyList = LevelLoader.getEnemyList();
         coinList = LevelLoader.getCoinList();
-        boxList = new ArrayList<>();//LevelLoader.getBoxList();
-        boxList.add(new Box(3000, 3500, 300, 300, "WOODEN", 5));
-        boxList.add(new Box(3000, 4000, 300, 300, "STEEL", 10));
-        boxList.add(new Box(-1487, 6357, 300, 300, "WOODEN", 5));
-        boxList.add(new Box(-1082, 6764, 300, 300, "WOODEN", 5));
-        boxList.add(new Box(-1791, 7461, 300, 300, "WOODEN", 5));
-        boxList.add(new Box(-1670, 9289, 300, 300, "WOODEN", 5));
-        boxList.add(new Box(-3491, 9338, 300, 300, "WOODEN", 5));
-        boxList.add(new Box(-2510, 10345, 300, 300, "WOODEN", 5));
-        boxList.add(new Box(-2605, 10678, 300, 300, "WOODEN", 5));
+        boxList = LevelLoader.getBoxList();
+
         entityList = new ArrayList<>();
         ilya = new Ilya();
         music = getFactoryMusic();
@@ -69,6 +62,7 @@ public class LevelsLogic {
         entityList.add(ilya);
         entityList.addAll(enemyList);
         entityList.addAll(boxList);
+
         surfaceList.forEach(surface -> surface.draw(game.batch));
 
         ilya.sprite.draw(game.batch, ilya.x, ilya.y, 20);
@@ -110,6 +104,17 @@ public class LevelsLogic {
     private void boxLogic() {
         for (Box box : boxList) {
             if (box.HP < 1) {
+                int randomValue = new Random().nextInt(100);
+                if (randomValue == 1) {
+                    coinList.add(new Coin(box.x, box.y, 1000));
+                } else if (randomValue < 5) {
+                    coinList.add(new Coin(box.x, box.y, 100));
+                } else if (randomValue < 10) {
+                    coinList.add(new Coin(box.x, box.y, 10));
+                } else if (randomValue < 20) {
+                    coinList.add(new Coin(box.x, box.y, 1));
+                }
+
                 boxList.remove(box);
                 return;
             }
@@ -161,9 +166,9 @@ public class LevelsLogic {
         if (!enemyList.isEmpty()) {
             for (Enemy enemy : enemyList) {
                 enemy.sprite.draw(game.batch, enemy.x, enemy.y, 20);
-                enemy.moveToPlayer(ilya, surfaceList, entityList);
                 enemy.sightCalibration();
                 enemy.attack(ilya);
+                enemy.moveToPlayer(ilya, surfaceList, entityList);
 
                 if (enemy.HP <= 0) {
                     enemyList.remove(enemy);
