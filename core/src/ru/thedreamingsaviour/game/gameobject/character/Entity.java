@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 import static ru.thedreamingsaviour.game.resourceloader.TextureLoader.BULLET_ILYA;
+import static ru.thedreamingsaviour.game.resourceloader.TextureLoader.BULLET_SHOT_ATTACK_ENEMY;
 
 public abstract class Entity extends Rectangle {
     public String type;
@@ -138,7 +139,7 @@ public abstract class Entity extends Rectangle {
         bullet.type = bulletType;
         switch (bulletType) {
             case "GOOD" -> bullet.textures.setTextures(BULLET_ILYA);
-            case "BAD" -> bullet.textures.setTextures(BULLET_ILYA);
+            case "BAD" -> bullet.textures.setTextures(BULLET_SHOT_ATTACK_ENEMY);
         }
         LevelsLogic.BULLET_LIST.add(bullet);
     }

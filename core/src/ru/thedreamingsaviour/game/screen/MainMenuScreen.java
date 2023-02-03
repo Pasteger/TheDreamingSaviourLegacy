@@ -95,7 +95,7 @@ public class MainMenuScreen implements Screen {
         exitButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                throw new Error();
+                Gdx.app.exit();
             }
         });
         Gdx.gl.glClearColor(0, 0, 0.2f, 1);
@@ -122,7 +122,7 @@ public class MainMenuScreen implements Screen {
                 editorTextWindow.call(1500, 1100, 1000, 400, "level");
             }
             if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
-                throw new Error();
+                Gdx.app.exit();
             }
         }
         start();

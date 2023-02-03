@@ -15,6 +15,7 @@ public class TextureLoader {
     public static final Map<String, List<Texture>> SHORT_ATTACK_ENEMY = new HashMap<>();
     public static final Map<String, List<Texture>> BOX = new HashMap<>();
     public static final List<Texture> BULLET_ILYA = new ArrayList<>();
+    public static final List<Texture> BULLET_SHOT_ATTACK_ENEMY = new ArrayList<>();
     public static final Map<String, List<Texture>> COINS = new HashMap<>();
     public static final List<Texture> DEATH_BACKGROUND = new ArrayList<>();
 
@@ -24,6 +25,7 @@ public class TextureLoader {
 
         readAnimationTextures(DEATH_BACKGROUND, "sprites/death_background/");
         readAnimationTextures(BULLET_ILYA, "sprites/bullet/bullet_ilya/");
+        readAnimationTextures(BULLET_SHOT_ATTACK_ENEMY, "sprites/bullet/shot_attack_enemy/");
 
         fillAnimatedObjectMap(BOX, "sprites/box/", "WOODEN");
         fillAnimatedObjectMap(BOX, "sprites/box/", "STEEL");
@@ -33,6 +35,11 @@ public class TextureLoader {
         fillAnimatedObjectMap(COINS, "sprites/coin/", "100");
         fillAnimatedObjectMap(COINS, "sprites/coin/", "1000");
         fillAnimatedObjectMap(COINS, "sprites/coin/", "5000");
+        fillAnimatedObjectMap(COINS, "sprites/coin/", "1_up");
+        fillAnimatedObjectMap(COINS, "sprites/coin/", "10_up");
+        fillAnimatedObjectMap(COINS, "sprites/coin/", "100_up");
+        fillAnimatedObjectMap(COINS, "sprites/coin/", "1000_up");
+        fillAnimatedObjectMap(COINS, "sprites/coin/", "5000_up");
 
         fillAnimatedObjectMapForCharacter(ILYA, "sprites/ilya/");
         fillAnimatedObjectMapForCharacter(SHORT_ATTACK_ENEMY, "sprites/short_attack_enemy/");

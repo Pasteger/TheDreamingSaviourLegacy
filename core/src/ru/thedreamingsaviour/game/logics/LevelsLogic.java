@@ -22,7 +22,6 @@ import java.util.List;
 import java.util.Random;
 
 import static ru.thedreamingsaviour.game.resourceloader.MusicLoader.getFactoryMusic;
-import static ru.thedreamingsaviour.game.resourceloader.TextureLoader.BOX;
 
 public class LevelsLogic {
     private final MyGdxGame game;
@@ -74,7 +73,7 @@ public class LevelsLogic {
         bulletLogic();
 
         boxList.forEach(box -> box.sprite.draw(game.batch, box.x, box.y, 5));
-        coinList.forEach(coin -> coin.textures.draw(game.batch, coin.x, coin.y, 5));
+        coinList.forEach(coin -> coin.textures.draw(game.batch, coin.x, coin.y, coin.gravitated ? 5 : 15));
 
         ilya.move(surfaceList, entityList);
         game.camera.position.x = ilya.x;
@@ -105,15 +104,15 @@ public class LevelsLogic {
     private void boxLogic() {
         for (Box box : boxList) {
             if (box.HP < 1) {
-                int randomValue = new Random().nextInt(100);
+                int randomValue = new Random().nextInt(21);
                 if (randomValue == 1) {
-                    coinList.add(new Coin(box.x, box.y, 1000));
+                    coinList.add(new Coin(box.x + (box.width / 2 - 60), box.y + (box.height / 2 - 60), 1000));
                 } else if (randomValue < 5) {
-                    coinList.add(new Coin(box.x, box.y, 100));
+                    coinList.add(new Coin(box.x + (box.width / 2 - 60), box.y + (box.height / 2 - 60), 100));
                 } else if (randomValue < 10) {
-                    coinList.add(new Coin(box.x, box.y, 10));
+                    coinList.add(new Coin(box.x + (box.width / 2 - 60), box.y + (box.height / 2 - 60), 10));
                 } else if (randomValue < 20) {
-                    coinList.add(new Coin(box.x, box.y, 1));
+                    coinList.add(new Coin(box.x + (box.width / 2 - 60), box.y + (box.height / 2 - 60), 1));
                 }
 
                 boxList.remove(box);
@@ -124,6 +123,10 @@ public class LevelsLogic {
 
     private void coinLogic() {
         for (Coin coin : coinList) {
+            if (coin.saveGravitated != coin.gravitated) {
+                coin.saveGravitated = coin.gravitated;
+                coin.updateTextures();
+            }
             if (ilya.overlaps(coin)) {
                 score += coin.value;
                 coinList.remove(coin);
@@ -160,6 +163,16 @@ public class LevelsLogic {
                     }
                 }
             }
+            for (Coin coin : coinList) {
+                if (surface.overlaps(coin)) {
+                    if (surface.getEffect().equals("gravity")) {
+                        coin.gravitated = true;
+                    }
+                    if (surface.getEffect().equals("none")) {
+                        coin.gravitated = false;
+                    }
+                }
+            }
         }
     }
 
@@ -173,7 +186,14 @@ public class LevelsLogic {
 
                 if (enemy.HP <= 0) {
                     enemyList.remove(enemy);
-                    if (ilya.HP < 4) ilya.HP++;
+                    if (ilya.HP < 4) {
+                        ilya.HP++;
+                    } else {
+                        switch (enemy.type) {
+                            case "ShortAttackEnemy" -> score += 50;
+                            case "ShotAttackEnemy" -> score += 100;
+                        }
+                    }
                     break;
                 }
             }
