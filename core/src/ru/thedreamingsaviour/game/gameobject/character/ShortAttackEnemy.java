@@ -11,6 +11,7 @@ import static ru.thedreamingsaviour.game.resourceloader.TextureLoader.SHORT_ATTA
 
 public class ShortAttackEnemy extends Enemy {
     private byte recharge;
+    private Cell targetCell;
 
     public ShortAttackEnemy() {
         type = "ShortAttackEnemy";
@@ -37,7 +38,7 @@ public class ShortAttackEnemy extends Enemy {
 
     @Override
     public void attack(Ilya ilya) {
-        if (legs.overlaps(ilya)) {
+        if (Math.abs(x - ilya.x) < width + speed && Math.abs(y - ilya.y) <= height + speed) {
             recharge--;
             if (recharge <= 0) {
                 recharge = (byte) ((byte) 5 + random.nextInt(20));
@@ -47,20 +48,22 @@ public class ShortAttackEnemy extends Enemy {
     }
 
     @Override
-    public void moveToPlayer(Ilya ilya, List<Surface> surfaceList, List<Entity> entities) {
+    public void moveToPlayer(Ilya ilya, List<Surface> surfaceList, List<Entity> entities, int countRenders) {
         fieldOfView.x = x - fieldOfView.width / 2;
         fieldOfView.y = y - fieldOfView.height / 2;
         if (fieldOfView.overlaps(ilya)) {
-            Cell cell = findWay(ilya, surfaceList);
-            if (cell.x > x && !this.overlaps(ilya)) {
+            if (targetCell == null || countRenders % 10 == 0) {
+                targetCell = findWay(ilya, surfaceList);
+            }
+            if (targetCell.x > x && !this.overlaps(ilya)) {
                 direction = gravitated ? "RIGHT" : "EAST";
                 move(surfaceList, entities);
             }
-            if (cell.x < x && !this.overlaps(ilya)) {
+            if (targetCell.x < x && !this.overlaps(ilya)) {
                 direction = gravitated ? "LEFT" : "WEST";
                 move(surfaceList, entities);
             }
-            if (cell.y > y && !this.overlaps(ilya)) {
+            if (targetCell.y > y && !this.overlaps(ilya)) {
                 if (gravitated) {
                     jump(surfaceList, entities);
                 } else {
@@ -68,7 +71,7 @@ public class ShortAttackEnemy extends Enemy {
                     move(surfaceList, entities);
                 }
             }
-            if (cell.y < y && !this.overlaps(ilya) && !gravitated) {
+            if (targetCell.y < y && !this.overlaps(ilya) && !gravitated) {
                 direction = "SOUTH";
                 move(surfaceList, entities);
             }
@@ -79,7 +82,9 @@ public class ShortAttackEnemy extends Enemy {
     private Cell findWay(Ilya ilya, List<Surface> surfaceList) {
         Cell enemyCell = new Cell();
         for (Cell cell : cellsOfView) {
-            if (cell.overlaps(ilya) && cell.x > ilya.x && cell.y > ilya.y) {
+            if (cell.overlaps(ilya) &&
+                    cell.x > ilya.x && cell.y > ilya.y &&
+                    cell.x - ilya.x <= cell.width && cell.y - ilya.y <= cell.height) {
                 cell.property = "target";
             }
             if (cell.overlaps(this)) {
@@ -162,8 +167,8 @@ public class ShortAttackEnemy extends Enemy {
                 Cell cell = new Cell();
                 cell.x = fieldOfView.x + (width / 2 * i);
                 cell.y = fieldOfView.y + (height / 2 * j);
-                cell.width = width;
-                cell.height = height;
+                cell.width = width / 2;
+                cell.height = height / 2;
                 cellsOfView.add(cell);
             }
         }

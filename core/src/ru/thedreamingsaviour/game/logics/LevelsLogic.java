@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.Random;
 
 import static ru.thedreamingsaviour.game.resourceloader.MusicLoader.getFactoryMusic;
+import static ru.thedreamingsaviour.game.resourceloader.TextureLoader.BOX;
 
 public class LevelsLogic {
     private final MyGdxGame game;
@@ -96,7 +97,7 @@ public class LevelsLogic {
         if (finishFPSTime - startFPSTime >= 1000) {
             startFPSTime = finishFPSTime;
             fps = countRenders;
-            //System.out.println(fps);
+            System.out.println(fps);
             countRenders = 0;
         }
     }
@@ -168,7 +169,7 @@ public class LevelsLogic {
                 enemy.sprite.draw(game.batch, enemy.x, enemy.y, 20);
                 enemy.sightCalibration();
                 enemy.attack(ilya);
-                enemy.moveToPlayer(ilya, surfaceList, entityList);
+                enemy.moveToPlayer(ilya, surfaceList, entityList, countRenders);
 
                 if (enemy.HP <= 0) {
                     enemyList.remove(enemy);
