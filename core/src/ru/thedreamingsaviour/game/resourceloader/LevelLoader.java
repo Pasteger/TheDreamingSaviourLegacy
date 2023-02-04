@@ -1,7 +1,9 @@
 package ru.thedreamingsaviour.game.resourceloader;
 
+import com.badlogic.gdx.graphics.Texture;
 import org.json.simple.JSONObject;
 import ru.thedreamingsaviour.game.gameobject.Coin;
+import ru.thedreamingsaviour.game.gameobject.DecorObject;
 import ru.thedreamingsaviour.game.gameobject.Surface;
 import ru.thedreamingsaviour.game.gameobject.character.Box;
 import ru.thedreamingsaviour.game.gameobject.character.Enemy;
@@ -10,6 +12,7 @@ import ru.thedreamingsaviour.game.gameobject.character.ShortAttackEnemy;
 import java.util.ArrayList;
 import java.util.List;
 
+import static ru.thedreamingsaviour.game.resourceloader.TextureLoader.DECOR;
 import static ru.thedreamingsaviour.game.utility.SurfaceListSorter.sortSurfaceList;
 
 public class LevelLoader {
@@ -18,6 +21,7 @@ public class LevelLoader {
     private static List<Surface> surfaceList;
     private static List<Coin> coinList;
     private static List<Box> boxList;
+    private static List<DecorObject> decorList;
     private static String nextLevel;
 
     public static void load(String levelName) throws Exception {
@@ -25,11 +29,33 @@ public class LevelLoader {
         surfaceList = convertingToSurface();
         coinList = convertingToCoin();
         boxList = convertingToBox();
+        decorList = convertingToDecorObject();
         nextLevel = (String) level.get("nextLevel");
 
         List<ShortAttackEnemy> shortAttackEnemyList = convertingToShortAttackEnemy();
         enemyList = new ArrayList<>();
         enemyList.addAll(shortAttackEnemyList);
+    }
+
+    private static List<DecorObject> convertingToDecorObject() {
+        List<DecorObject> decorObjects = new ArrayList<>();
+        try {
+            @SuppressWarnings("unchecked")
+            List<JSONObject> JSONFloorsList = (List<JSONObject>) level.get("decorList");
+            for (JSONObject thisObject : JSONFloorsList) {
+                List<Texture> textures = DECOR.get(String.valueOf(thisObject.get("sprites")));
+                int y = Integer.parseInt(String.valueOf(thisObject.get("y")));
+                int x = Integer.parseInt(String.valueOf(thisObject.get("x")));
+                int width = Integer.parseInt(String.valueOf(thisObject.get("width")));
+                int height = Integer.parseInt(String.valueOf(thisObject.get("height")));
+                int speed = Integer.parseInt(String.valueOf(thisObject.get("speed")));
+                decorObjects.add(new DecorObject(textures, x, y, width, height, speed));
+            }
+        }
+        catch (Exception exception){
+            exception.printStackTrace();
+        }
+        return decorObjects;
     }
 
     private static List<Box> convertingToBox() {
@@ -126,5 +152,9 @@ public class LevelLoader {
 
     public static List<Box> getBoxList() {
         return boxList;
+    }
+
+    public static List<DecorObject> getDecorList() {
+        return decorList;
     }
 }

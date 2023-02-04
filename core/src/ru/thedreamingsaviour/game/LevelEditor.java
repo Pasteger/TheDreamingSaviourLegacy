@@ -11,7 +11,7 @@ import ru.thedreamingsaviour.game.gameobject.Coin;
 import ru.thedreamingsaviour.game.gameobject.Surface;
 import ru.thedreamingsaviour.game.gameobject.character.Box;
 import ru.thedreamingsaviour.game.gameobject.character.Enemy;
-import ru.thedreamingsaviour.game.gameobject.character.Ilya;
+import ru.thedreamingsaviour.game.gameobject.character.Player;
 import ru.thedreamingsaviour.game.gameobject.character.ShortAttackEnemy;
 import ru.thedreamingsaviour.game.guiobject.TextWindow;
 import ru.thedreamingsaviour.game.resourceloader.LevelSaver;
@@ -30,7 +30,7 @@ public class LevelEditor implements Screen {
     private final TextWindow saveTextWindow;
     private final TextWindow colorTextWindow;
     private final TextWindow effectTextWindow;
-    private final Ilya ilya;
+    private final Player player;
     private final List<Enemy> enemyList;
     private List<Surface> surfaceList;
     private final List<Coin> coinList;
@@ -61,7 +61,7 @@ public class LevelEditor implements Screen {
         camera = game.camera;
         camera.setToOrtho(false, 4000, 4000);
 
-        ilya = new Ilya();
+        player = new Player();
 
         enemyList = LevelLoader.getEnemyList();
         surfaceList = LevelLoader.getSurfaceList();
@@ -80,12 +80,12 @@ public class LevelEditor implements Screen {
 
         game.batch.begin();
         surfaceList.forEach(surface -> surface.draw(game.batch));
-        coinList.forEach(coin -> coin.textures.draw(game.batch, coin.x, coin.y, 5));
-        boxList.forEach(box -> box.sprite.draw(game.batch, box.x, box.y, 10));
+        coinList.forEach(coin -> coin.textures.draw(game.batch, coin.x, coin.y, coin.width, coin.height, 5));
+        boxList.forEach(box -> box.sprite.draw(game.batch, box.x, box.y, box.width, box.height, 10));
 
-        enemyList.forEach(enemy -> enemy.sprite.draw(game.batch, enemy.x, enemy.y, 20));
+        enemyList.forEach(enemy -> enemy.sprite.draw(game.batch, enemy.x, enemy.y, enemy.width, enemy.height, 20));
 
-        ilya.sprite.draw(game.batch, ilya.x, ilya.y, 20);
+        player.sprite.draw(game.batch, player.x, player.y, player.width, player.height, 20);
 
         game.universalFont.draw(game.batch, camera.position.x + "  " + camera.position.y, camera.position.x - 2000, camera.position.y + 1900);
         game.universalFont.draw(game.batch, currentTask, camera.position.x - 2000, camera.position.y + 1700);

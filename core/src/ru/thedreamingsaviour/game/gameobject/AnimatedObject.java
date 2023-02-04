@@ -1,13 +1,17 @@
 package ru.thedreamingsaviour.game.gameobject;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
-import java.awt.*;
+import java.util.ArrayList;
 import java.util.List;
 
-public class AnimatedObject extends Rectangle {
-    private List<Texture> textures;
+import static ru.thedreamingsaviour.game.resourceloader.TextureLoader.getNullTexture;
+
+public class AnimatedObject {
+    private List<Texture> textures = new ArrayList<>();
+    private final Sprite sprite = new Sprite(getNullTexture());
     private int currentFrame;
     private int speed;
 
@@ -16,11 +20,13 @@ public class AnimatedObject extends Rectangle {
     }
     public AnimatedObject() {}
 
-    public void draw(SpriteBatch batch, float x, float y, int speed) {
+    public void draw(SpriteBatch batch, float x, float y, float width, float height, int speed){
         if (currentFrame > textures.size() - 1) {
             currentFrame = 0;
         }
-        batch.draw(textures.get(currentFrame), x, y);
+        sprite.setTexture(textures.get(currentFrame));
+        sprite.setBounds(x, y, width, height);
+        sprite.draw(batch);
         if (this.speed == speed) {
             currentFrame++;
             this.speed = 0;

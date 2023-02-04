@@ -6,13 +6,13 @@ import ru.thedreamingsaviour.game.gameobject.Surface;
 
 import java.util.List;
 
-import static ru.thedreamingsaviour.game.resourceloader.TextureLoader.ILYA;
+import static ru.thedreamingsaviour.game.resourceloader.TextureLoader.PLAYER;
 
-public class Ilya extends Entity {
-    public Ilya() {
+public class Player extends Entity {
+    public Player() {
         super();
-        type = "Ilya";
-        sprites = ILYA;
+        type = "Player";
+        sprites = PLAYER;
         sprite.setTextures(sprites.get("NORTH"));
         HP = 4;
         setX(3000);

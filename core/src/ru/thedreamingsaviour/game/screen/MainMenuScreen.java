@@ -133,9 +133,9 @@ public class MainMenuScreen implements Screen {
         String level = textWindow.getOutputText();
         if (!(level.equals("") || level.equals("new"))) {
             try {
-                music.stop();
                 LevelLoader.load(level);
                 game.setScreen(new LevelsScreen(game));
+                music.stop();
             } catch (Exception exception) {
                 exception.printStackTrace();
                 exceptionMessage = "level not found";
@@ -147,9 +147,9 @@ public class MainMenuScreen implements Screen {
         String level = editorTextWindow.getOutputText();
         if (!level.equals("")) {
             try {
-                music.stop();
                 LevelLoader.load(level);
                 game.setScreen(new LevelEditor(game));
+                music.stop();
             } catch (Exception exception) {
                 exception.printStackTrace();
                 exceptionMessage = "level not found";

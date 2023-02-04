@@ -11,10 +11,10 @@ public abstract class Enemy extends Entity {
     public Rectangle fieldOfView = new Rectangle();
     public final List<Cell> cellsOfView = new ArrayList<>();
 
-    public void moveToPlayer(Ilya ilya, List<Surface> surfaceList, List<Entity> entities, int countRenders) {
+    public void moveToPlayer(Player player, List<Surface> surfaceList, List<Entity> entities, int countRenders) {
     }
 
-    public void attack(Ilya ilya) {
+    public void attack(Player player) {
     }
 
     public void sightCalibration() {

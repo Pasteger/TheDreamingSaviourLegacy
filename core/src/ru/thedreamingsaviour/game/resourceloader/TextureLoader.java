@@ -11,12 +11,13 @@ public class TextureLoader {
             {"NORTH", "SOUTH", "WEST", "EAST", "LEFT", "RIGHT"};
     private static Texture nullTexture;
     private static Texture mainMenuBackground;
-    public static final Map<String, List<Texture>> ILYA = new HashMap<>();
+    public static final Map<String, List<Texture>> PLAYER = new HashMap<>();
     public static final Map<String, List<Texture>> SHORT_ATTACK_ENEMY = new HashMap<>();
     public static final Map<String, List<Texture>> BOX = new HashMap<>();
+    public static final Map<String, List<Texture>> COINS = new HashMap<>();
+    public static final Map<String, List<Texture>> DECOR = new HashMap<>();
     public static final List<Texture> BULLET_ILYA = new ArrayList<>();
     public static final List<Texture> BULLET_SHOT_ATTACK_ENEMY = new ArrayList<>();
-    public static final Map<String, List<Texture>> COINS = new HashMap<>();
     public static final List<Texture> DEATH_BACKGROUND = new ArrayList<>();
 
     public static void load() {
@@ -41,7 +42,9 @@ public class TextureLoader {
         fillAnimatedObjectMap(COINS, "sprites/coin/", "1000_up");
         fillAnimatedObjectMap(COINS, "sprites/coin/", "5000_up");
 
-        fillAnimatedObjectMapForCharacter(ILYA, "sprites/ilya/");
+        fillAnimatedObjectMap(DECOR, "sprites/decor/", "STEAM_HAMMER");
+
+        fillAnimatedObjectMapForCharacter(PLAYER, "sprites/ilya/");
         fillAnimatedObjectMapForCharacter(SHORT_ATTACK_ENEMY, "sprites/short_attack_enemy/");
     }
 

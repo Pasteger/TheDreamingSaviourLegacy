@@ -2,22 +2,21 @@ package ru.thedreamingsaviour.game.gameobject;
 
 import com.badlogic.gdx.math.Rectangle;
 
-import java.util.ArrayList;
-
 import static ru.thedreamingsaviour.game.resourceloader.TextureLoader.*;
 
 public class Coin extends Rectangle {
     public boolean saveGravitated;
     public boolean gravitated;
     public final int value;
-    public final AnimatedObject textures = new AnimatedObject(new ArrayList<>());
+    public final AnimatedObject textures;
 
     public Coin(float x, float y, int value) {
+        height = 120;
+        width = 120;
+        textures = new AnimatedObject();
         this.x = x;
         this.y = y;
         this.value = value;
-        height = 120;
-        width = 120;
         updateTextures();
     }
 

@@ -4,12 +4,10 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.audio.Music;
 import ru.thedreamingsaviour.game.MyGdxGame;
+import ru.thedreamingsaviour.game.gameobject.*;
 import ru.thedreamingsaviour.game.gameobject.character.Box;
-import ru.thedreamingsaviour.game.gameobject.Bullet;
-import ru.thedreamingsaviour.game.gameobject.Coin;
-import ru.thedreamingsaviour.game.gameobject.Surface;
 import ru.thedreamingsaviour.game.gameobject.character.Enemy;
-import ru.thedreamingsaviour.game.gameobject.character.Ilya;
+import ru.thedreamingsaviour.game.gameobject.character.Player;
 import ru.thedreamingsaviour.game.gameobject.character.Entity;
 import ru.thedreamingsaviour.game.resourceloader.LevelLoader;
 import ru.thedreamingsaviour.game.screen.MainMenuScreen;
@@ -26,12 +24,13 @@ import static ru.thedreamingsaviour.game.resourceloader.MusicLoader.getFactoryMu
 public class LevelsLogic {
     private final MyGdxGame game;
     public static final List<Bullet> BULLET_LIST = new ArrayList<>();
-    private final Ilya ilya;
+    private final Player player;
     private final List<Enemy> enemyList;
     private final List<Surface> surfaceList;
     private final List<Coin> coinList;
     private final List<Box> boxList;
     private final List<Entity> entityList;
+    private final List<DecorObject> decorList;
     private final Music music;
     private long score;
 
@@ -48,9 +47,10 @@ public class LevelsLogic {
         enemyList = LevelLoader.getEnemyList();
         coinList = LevelLoader.getCoinList();
         boxList = LevelLoader.getBoxList();
+        decorList = LevelLoader.getDecorList();
 
         entityList = new ArrayList<>();
-        ilya = new Ilya();
+        player = new Player();
         music = getFactoryMusic();
         music.setLooping(true);
         music.play();
@@ -59,29 +59,35 @@ public class LevelsLogic {
 
     public void render() {
         entityList.clear();
-        entityList.add(ilya);
+        entityList.add(player);
         entityList.addAll(enemyList);
         entityList.addAll(boxList);
 
-        surfaceList.forEach(surface -> surface.draw(game.batch));
+        surfaceList.stream().filter(surface ->
+                !(surface.getEffect().equals("solid") || surface.getEffect().equals("draw_over"))).forEach(surface -> surface.draw(game.batch));
 
-        ilya.sprite.draw(game.batch, ilya.x, ilya.y, 20);
+        decorList.forEach(decorObject -> decorObject.draw(game.batch));
+
+        surfaceList.stream().filter(surface ->
+                (surface.getEffect().equals("solid") || surface.getEffect().equals("draw_over"))).forEach(surface -> surface.draw(game.batch));
+
+        player.sprite.draw(game.batch, player.x, player.y, player.width, player.height, 20);
         surfaceLogic();
         enemyLive();
         coinLogic();
         boxLogic();
         bulletLogic();
 
-        boxList.forEach(box -> box.sprite.draw(game.batch, box.x, box.y, 5));
-        coinList.forEach(coin -> coin.textures.draw(game.batch, coin.x, coin.y, coin.gravitated ? 5 : 15));
+        boxList.forEach(box -> box.sprite.draw(game.batch, box.x, box.y, box.width, box.height, 5));
+        coinList.forEach(coin -> coin.textures.draw(game.batch, coin.x, coin.y, coin.width, coin.height, coin.gravitated ? 5 : 15));
 
-        ilya.move(surfaceList, entityList);
-        game.camera.position.x = ilya.x;
-        game.camera.position.y = ilya.y;
+        player.move(surfaceList, entityList);
+        game.camera.position.x = player.x;
+        game.camera.position.y = player.y;
 
 
-        game.universalFont.draw(game.batch, "HP: " + ilya.HP, ilya.x - 1900, ilya.y + 1900);
-        game.universalFont.draw(game.batch, "score: " + score, ilya.x - 1900, ilya.y + 1700);
+        game.universalFont.draw(game.batch, "HP: " + player.HP, player.x - 1900, player.y + 1900);
+        game.universalFont.draw(game.batch, "score: " + score, player.x - 1900, player.y + 1700);
 
         ilyaDeath();
 
@@ -104,7 +110,7 @@ public class LevelsLogic {
     private void boxLogic() {
         for (Box box : boxList) {
             if (box.HP < 1) {
-                int randomValue = new Random().nextInt(21);
+                int randomValue = new Random().nextInt(100);
                 if (randomValue == 1) {
                     coinList.add(new Coin(box.x + (box.width / 2 - 60), box.y + (box.height / 2 - 60), 1000));
                 } else if (randomValue < 5) {
@@ -127,7 +133,7 @@ public class LevelsLogic {
                 coin.saveGravitated = coin.gravitated;
                 coin.updateTextures();
             }
-            if (ilya.overlaps(coin)) {
+            if (player.overlaps(coin)) {
                 score += coin.value;
                 coinList.remove(coin);
                 return;
@@ -137,7 +143,7 @@ public class LevelsLogic {
 
     private void surfaceLogic() {
         List<Entity> entityList = new ArrayList<>();
-        entityList.add(ilya);
+        entityList.add(player);
         entityList.addAll(enemyList);
         entityList.addAll(boxList);
 
@@ -179,15 +185,15 @@ public class LevelsLogic {
     private void enemyLive() {
         if (!enemyList.isEmpty()) {
             for (Enemy enemy : enemyList) {
-                enemy.sprite.draw(game.batch, enemy.x, enemy.y, 20);
+                enemy.sprite.draw(game.batch, enemy.x, enemy.y, enemy.width, enemy.height, 20);
                 enemy.sightCalibration();
-                enemy.attack(ilya);
-                enemy.moveToPlayer(ilya, surfaceList, entityList, countRenders);
+                enemy.attack(player);
+                enemy.moveToPlayer(player, surfaceList, entityList, countRenders);
 
                 if (enemy.HP <= 0) {
                     enemyList.remove(enemy);
-                    if (ilya.HP < 4) {
-                        ilya.HP++;
+                    if (player.HP < 4) {
+                        player.HP++;
                     } else {
                         switch (enemy.type) {
                             case "ShortAttackEnemy" -> score += 50;
@@ -215,7 +221,7 @@ public class LevelsLogic {
             while (bulletIterator.hasNext()) {
                 Bullet bullet = bulletIterator.next();
                 bullet.move();
-                bullet.textures.draw(game.batch, bullet.x, bullet.y, 2);
+                bullet.textures.draw(game.batch, bullet.x, bullet.y, bullet.width, bullet.height, 2);
                 for (Surface surface : surfaceList) {
                     if (bullet.overlaps(surface) && surface.getEffect().equals("solid")) {
                         bulletIterator.remove();
@@ -236,13 +242,13 @@ public class LevelsLogic {
                         return;
                     }
                 }
-                if (bullet.overlaps(ilya) && (bullet.type.equals("BAD") || bullet.type.equals("MASTERS"))) {
+                if (bullet.overlaps(player) && (bullet.type.equals("BAD") || bullet.type.equals("MASTERS"))) {
                     bulletIterator.remove();
                     if (bullet.type.equals("MASTERS")) {
-                        ilya.HP = 0;
+                        player.HP = 0;
                         return;
                     }
-                    ilya.HP--;
+                    player.HP--;
                     return;
                 }
             }
@@ -250,7 +256,7 @@ public class LevelsLogic {
     }
 
     private void ilyaDeath() {
-        if (ilya.HP < 1) {
+        if (player.HP < 1) {
             music.stop();
             BULLET_LIST.clear();
             game.setScreen(new DeathScreen(game));

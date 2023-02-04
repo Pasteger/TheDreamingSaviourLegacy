@@ -39,7 +39,7 @@ public class DeathScreen implements Screen {
         game.batch.setProjectionMatrix(camera.combined);
 
         game.batch.begin();
-        background.draw(game.batch, 0, 0, 10);
+        background.draw(game.batch, 0, 0, 800, 480, 10);
         game.batch.end();
         long finishCurrentTime = System.currentTimeMillis();
         float timeMs = finishCurrentTime - startCurrentTime;
