@@ -1,6 +1,5 @@
 package ru.thedreamingsaviour.game.resourceloader;
 
-import com.badlogic.gdx.graphics.Texture;
 import org.json.simple.JSONObject;
 import ru.thedreamingsaviour.game.gameobject.Coin;
 import ru.thedreamingsaviour.game.gameobject.DecorObject;
@@ -12,7 +11,6 @@ import ru.thedreamingsaviour.game.gameobject.character.ShortAttackEnemy;
 import java.util.ArrayList;
 import java.util.List;
 
-import static ru.thedreamingsaviour.game.resourceloader.TextureLoader.DECOR;
 import static ru.thedreamingsaviour.game.utility.SurfaceListSorter.sortSurfaceList;
 
 public class LevelLoader {
@@ -41,15 +39,15 @@ public class LevelLoader {
         List<DecorObject> decorObjects = new ArrayList<>();
         try {
             @SuppressWarnings("unchecked")
-            List<JSONObject> JSONFloorsList = (List<JSONObject>) level.get("decorList");
-            for (JSONObject thisObject : JSONFloorsList) {
-                List<Texture> textures = DECOR.get(String.valueOf(thisObject.get("sprites")));
-                int y = Integer.parseInt(String.valueOf(thisObject.get("y")));
-                int x = Integer.parseInt(String.valueOf(thisObject.get("x")));
-                int width = Integer.parseInt(String.valueOf(thisObject.get("width")));
-                int height = Integer.parseInt(String.valueOf(thisObject.get("height")));
+            List<JSONObject> JSONList = (List<JSONObject>) level.get("decorList");
+            for (JSONObject thisObject : JSONList) {
+                String texture = String.valueOf(thisObject.get("texture"));
+                float y = Float.parseFloat(String.valueOf(thisObject.get("y")));
+                float x = Float.parseFloat(String.valueOf(thisObject.get("x")));
+                float width = Float.parseFloat(String.valueOf(thisObject.get("width")));
+                float height = Float.parseFloat(String.valueOf(thisObject.get("height")));
                 int speed = Integer.parseInt(String.valueOf(thisObject.get("speed")));
-                decorObjects.add(new DecorObject(textures, x, y, width, height, speed));
+                decorObjects.add(new DecorObject(texture, x, y, width, height, speed));
             }
         }
         catch (Exception exception){

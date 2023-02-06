@@ -3,6 +3,7 @@ package ru.thedreamingsaviour.game.resourceloader;
 import com.badlogic.gdx.math.Rectangle;
 import org.json.simple.JSONObject;
 import ru.thedreamingsaviour.game.gameobject.Coin;
+import ru.thedreamingsaviour.game.gameobject.DecorObject;
 import ru.thedreamingsaviour.game.gameobject.Surface;
 import ru.thedreamingsaviour.game.gameobject.character.Box;
 import ru.thedreamingsaviour.game.gameobject.character.ShortAttackEnemy;
@@ -14,11 +15,12 @@ import java.util.List;
 
 public class LevelSaver {
     public static void save(List<Surface> surfaceList, List<ShortAttackEnemy> shortAttackEnemyList,
-                            List<Coin> coinList, List<Box> boxList,
+                            List<Coin> coinList, List<Box> boxList, List<DecorObject> decorList,
                             String nextLevel, String levelName) {
         JSONObject level = new JSONObject();
         level.put("coinList", saveCoinList(coinList));
         level.put("boxList", saveBoxList(boxList));
+        level.put("decorList", saveDecorList(decorList));
         level.put("surfaceList", saveSurfaceList(surfaceList));
         level.put("shortAttackEnemyList", saveShortAttackEnemyList(shortAttackEnemyList));
         level.put("nextLevel", nextLevel);
@@ -45,6 +47,21 @@ public class LevelSaver {
             json.put("y", box.getY());
             json.put("material", box.getMaterial());
             json.put("hp", box.HP);
+            jsonObjectList.add(json);
+        }
+        return jsonObjectList;
+    }
+
+    private static List<JSONObject> saveDecorList(List<DecorObject> decorObjectList) {
+        List<JSONObject> jsonObjectList = new ArrayList<>();
+        for (DecorObject decor : decorObjectList) {
+            JSONObject json = new JSONObject();
+            json.put("x", decor.getX());
+            json.put("y", decor.getY());
+            json.put("width", decor.getWidth());
+            json.put("height", decor.getHeight());
+            json.put("texture", decor.getTexture());
+            json.put("speed", decor.getSpeed());
             jsonObjectList.add(json);
         }
         return jsonObjectList;

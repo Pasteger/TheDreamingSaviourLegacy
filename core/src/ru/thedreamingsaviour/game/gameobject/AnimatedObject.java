@@ -38,4 +38,10 @@ public class AnimatedObject {
     public void setTextures(List<Texture> textures) {
         this.textures = textures;
     }
+    public List<Texture> getTextures() {
+        return textures;
+    }
+    public void setSpriteColor(float r, float g, float b, float a){
+        sprite.setColor(r, g ,b, a);
+    }
 }

@@ -21,7 +21,7 @@ public class Box extends Entity {
         this.width = width;
         this.height = height;
         this.material = material;
-        sprite.setTextures(BOX.get(material));
+        animatedObject.setTextures(BOX.get(material));
         HP = hp;
 
         legs.x = x;

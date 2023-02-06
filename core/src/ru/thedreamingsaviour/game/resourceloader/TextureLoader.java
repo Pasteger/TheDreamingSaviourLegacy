@@ -30,6 +30,7 @@ public class TextureLoader {
 
         fillAnimatedObjectMap(BOX, "sprites/box/", "WOODEN");
         fillAnimatedObjectMap(BOX, "sprites/box/", "STEEL");
+        fillAnimatedObjectMap(BOX, "sprites/box/", "BARREL");
 
         fillAnimatedObjectMap(COINS, "sprites/coin/", "1");
         fillAnimatedObjectMap(COINS, "sprites/coin/", "10");
@@ -43,6 +44,9 @@ public class TextureLoader {
         fillAnimatedObjectMap(COINS, "sprites/coin/", "5000_up");
 
         fillAnimatedObjectMap(DECOR, "sprites/decor/", "STEAM_HAMMER");
+        fillAnimatedObjectMap(DECOR, "sprites/decor/", "CISTERN");
+        fillAnimatedObjectMap(DECOR, "sprites/decor/", "PIPE");
+        fillAnimatedObjectMap(DECOR, "sprites/decor/", "PORTAL");
 
         fillAnimatedObjectMapForCharacter(PLAYER, "sprites/ilya/");
         fillAnimatedObjectMapForCharacter(SHORT_ATTACK_ENEMY, "sprites/short_attack_enemy/");

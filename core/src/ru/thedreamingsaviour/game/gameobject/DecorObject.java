@@ -1,19 +1,17 @@
 package ru.thedreamingsaviour.game.gameobject;
 
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Rectangle;
 
-import java.util.List;
+import static ru.thedreamingsaviour.game.resourceloader.TextureLoader.DECOR;
 
-public class DecorObject {
-    public int x;
-    public int y;
-    public int width;
-    public int height;
+public class DecorObject extends Rectangle {
     private final int speed;
     private final AnimatedObject animatedObject;
-    public DecorObject(List<Texture> textures, int x, int y, int width, int height, int speed) {
-        animatedObject = new AnimatedObject(textures);
+    private final String texture;
+    public DecorObject(String texture, float x, float y, float width, float height, int speed) {
+        this.texture = texture;
+        animatedObject = new AnimatedObject(DECOR.get(texture));
         this.x = x;
         this.y = y;
         this.width = width;
@@ -22,5 +20,22 @@ public class DecorObject {
     }
     public void draw(SpriteBatch batch){
         animatedObject.draw(batch, x, y, width, height, speed);
+    }
+
+    public void editExtension(int width, int height){
+        this.width = width;
+        this.height = height;
+    }
+    public void editMove(float x, float y){
+        this.x = x;
+        this.y = y;
+    }
+
+    public String getTexture() {
+        return texture;
+    }
+
+    public int getSpeed() {
+        return speed;
     }
 }

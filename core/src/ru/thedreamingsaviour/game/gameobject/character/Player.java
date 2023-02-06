@@ -13,7 +13,7 @@ public class Player extends Entity {
         super();
         type = "Player";
         sprites = PLAYER;
-        sprite.setTextures(sprites.get("NORTH"));
+        animatedObject.setTextures(sprites.get("NORTH"));
         HP = 4;
         setX(3000);
         setY(3000);

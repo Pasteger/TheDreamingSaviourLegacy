@@ -18,7 +18,7 @@ public abstract class Entity extends Rectangle {
     Map<String, List<Texture>> sprites;
     public byte HP;
     public String direction = "NORTH";
-    public AnimatedObject sprite = new AnimatedObject();
+    public AnimatedObject animatedObject = new AnimatedObject();
     Rectangle legs = new Rectangle();
     int saveSpeed;
     int speed;
@@ -30,7 +30,7 @@ public abstract class Entity extends Rectangle {
     public void move(List<Surface> surfaces, List<Entity> entities) {
         speed = saveSpeed;
 
-        sprite.setTextures(sprites.get(direction));
+        animatedObject.setTextures(sprites.get(direction));
 
 
         switch (direction) {
