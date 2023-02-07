@@ -7,6 +7,7 @@ import java.util.ArrayList;
 public class Bullet extends Rectangle {
     public String type;
     public String direction;
+    public int damage;
     public AnimatedObject textures = new AnimatedObject(new ArrayList<>());
 
     public void move() {

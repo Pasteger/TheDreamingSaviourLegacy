@@ -38,8 +38,8 @@ public class TextWindow {
         }
         background.draw(game.batch);
         window.draw(game.batch);
-        game.universalFont.draw(game.batch, promptText, window.x + 25, window.y + window.height / 2 + 160);
-        game.universalFont.draw(game.batch, text.toString(), window.x + 25, window.y + window.height / 2);
+        game.universalFont.draw(game.batch, promptText, window.x + 25, window.y + window.height / 2 + 180);
+        game.universalFont.draw(game.batch, text.toString(), window.x + 25, window.y + window.height / 2 - 10);
     }
 
     public void recall() {

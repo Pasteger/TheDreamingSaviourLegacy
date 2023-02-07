@@ -23,4 +23,7 @@ public class JSONReader {
     public static JSONObject getLevel(String level) throws Exception {
         return readJson(new File("levels/" + level + ".json"));
     }
+    public static JSONObject getSaves() throws Exception {
+        return readJson(new File("saves.json"));
+    }
 }

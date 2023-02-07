@@ -1,0 +1,23 @@
+{
+	"Pasteger": {
+		"level": "demoLevel",
+		"balance": 0,
+		"HP": 4,
+		"damage": 1,
+		"speed": 20
+	},
+	"Player1": {
+		"level": "level1",
+		"balance": 0,
+		"HP": 4,
+		"damage": 1,
+		"speed": 20
+	},
+	"Player2": {
+		"level": "level5",
+		"balance": 15000,
+		"HP": 40,
+		"damage": 10,
+		"speed": 30
+	}
+}

@@ -11,7 +11,8 @@ public class TextureLoader {
             {"NORTH", "SOUTH", "WEST", "EAST", "LEFT", "RIGHT"};
     private static Texture nullTexture;
     private static Texture mainMenuBackground;
-    public static final Map<String, List<Texture>> PLAYER = new HashMap<>();
+    private static Texture hubBackground;
+    public static final Map<String, List<Texture>> PLAYER_TEXTURES = new HashMap<>();
     public static final Map<String, List<Texture>> SHORT_ATTACK_ENEMY = new HashMap<>();
     public static final Map<String, List<Texture>> BOX = new HashMap<>();
     public static final Map<String, List<Texture>> COINS = new HashMap<>();
@@ -23,6 +24,7 @@ public class TextureLoader {
     public static void load() {
         nullTexture = new Texture("sprites/nullTexture.png");
         mainMenuBackground = new Texture("sprites/main_menu_background.jpg");
+        hubBackground = new Texture("sprites/hub_background.jpeg");
 
         readAnimationTextures(DEATH_BACKGROUND, "sprites/death_background/");
         readAnimationTextures(BULLET_ILYA, "sprites/bullet/bullet_ilya/");
@@ -48,7 +50,7 @@ public class TextureLoader {
         fillAnimatedObjectMap(DECOR, "sprites/decor/", "PIPE");
         fillAnimatedObjectMap(DECOR, "sprites/decor/", "PORTAL");
 
-        fillAnimatedObjectMapForCharacter(PLAYER, "sprites/ilya/");
+        fillAnimatedObjectMapForCharacter(PLAYER_TEXTURES, "sprites/ilya/");
         fillAnimatedObjectMapForCharacter(SHORT_ATTACK_ENEMY, "sprites/short_attack_enemy/");
     }
 
@@ -76,6 +78,10 @@ public class TextureLoader {
 
     public static Texture getMainMenuBackground() {
         return mainMenuBackground;
+    }
+
+    public static Texture getHubBackground() {
+        return hubBackground;
     }
 
     public static Texture getNullTexture() {

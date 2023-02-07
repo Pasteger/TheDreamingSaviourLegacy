@@ -5,8 +5,8 @@ import org.json.simple.JSONObject;
 import ru.thedreamingsaviour.game.gameobject.Coin;
 import ru.thedreamingsaviour.game.gameobject.DecorObject;
 import ru.thedreamingsaviour.game.gameobject.Surface;
-import ru.thedreamingsaviour.game.gameobject.character.Box;
-import ru.thedreamingsaviour.game.gameobject.character.ShortAttackEnemy;
+import ru.thedreamingsaviour.game.gameobject.entity.Box;
+import ru.thedreamingsaviour.game.gameobject.entity.ShortAttackEnemy;
 
 import java.io.File;
 import java.io.IOException;
@@ -24,6 +24,8 @@ public class LevelSaver {
         level.put("surfaceList", saveSurfaceList(surfaceList));
         level.put("shortAttackEnemyList", saveShortAttackEnemyList(shortAttackEnemyList));
         level.put("nextLevel", nextLevel);
+        level.put("startX", 3000);
+        level.put("startY", 3000);
         File levelFile = new File("levels/" + levelName + ".json");
         if (!levelFile.exists()){
             try {

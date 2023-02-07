@@ -5,14 +5,14 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.audio.Music;
 import ru.thedreamingsaviour.game.MyGdxGame;
 import ru.thedreamingsaviour.game.gameobject.*;
-import ru.thedreamingsaviour.game.gameobject.character.Box;
-import ru.thedreamingsaviour.game.gameobject.character.Enemy;
-import ru.thedreamingsaviour.game.gameobject.character.Player;
-import ru.thedreamingsaviour.game.gameobject.character.Entity;
+import ru.thedreamingsaviour.game.gameobject.entity.Box;
+import ru.thedreamingsaviour.game.gameobject.entity.Enemy;
+import ru.thedreamingsaviour.game.gameobject.entity.Player;
+import ru.thedreamingsaviour.game.gameobject.entity.Entity;
 import ru.thedreamingsaviour.game.resourceloader.LevelLoader;
-import ru.thedreamingsaviour.game.screen.MainMenuScreen;
 import ru.thedreamingsaviour.game.screen.DeathScreen;
 import ru.thedreamingsaviour.game.screen.LevelsScreen;
+import ru.thedreamingsaviour.game.screen.MainMenuScreen;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Random;
 
 import static ru.thedreamingsaviour.game.resourceloader.MusicLoader.getFactoryMusic;
+import static ru.thedreamingsaviour.game.resourceloader.SaveLoader.PLAYER;
 
 public class LevelsLogic {
     private final MyGdxGame game;
@@ -50,7 +51,9 @@ public class LevelsLogic {
         decorList = LevelLoader.getDecorList();
 
         entityList = new ArrayList<>();
-        player = new Player();
+        player = PLAYER;
+        player.setX(LevelLoader.getStartX());
+        player.setY(LevelLoader.getStartY());
         music = getFactoryMusic();
         music.setLooping(true);
         music.play();
@@ -92,8 +95,8 @@ public class LevelsLogic {
         ilyaDeath();
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
-            music.stop();
             game.setScreen(new MainMenuScreen(game));
+            music.stop();
         }
 
         //Необходимое для отладки
@@ -206,9 +209,11 @@ public class LevelsLogic {
         } else {
             BULLET_LIST.clear();
             music.stop();
+            player.balance += score;
             try {
+                PLAYER.currentLevel = LevelLoader.getNextLevel();
                 LevelLoader.load(LevelLoader.getNextLevel());
-                game.setScreen(new LevelsScreen(game));
+                game.setScreen(new LevelsScreen(game, "level"));
             } catch (Exception exception) {
                 exception.printStackTrace();
             }
@@ -230,15 +235,15 @@ public class LevelsLogic {
                 }
                 for (Enemy enemy : enemyList) {
                     if (bullet.overlaps(enemy) && bullet.type.equals("GOOD")) {
+                        enemy.HP -= bullet.damage;
                         bulletIterator.remove();
-                        enemy.HP--;
                         return;
                     }
                 }
                 for (Box box : boxList) {
                     if (bullet.overlaps(box)) {
+                        box.HP -= bullet.damage;
                         bulletIterator.remove();
-                        box.HP--;
                         return;
                     }
                 }

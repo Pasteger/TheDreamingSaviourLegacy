@@ -4,5 +4,7 @@
   "coinList": [],
   "boxList": [],
   "decorList": [],
-  "nextLevel": ""
+  "nextLevel": "",
+  "startX": 3000,
+  "startY": 3000
 }

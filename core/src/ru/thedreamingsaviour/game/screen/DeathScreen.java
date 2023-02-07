@@ -8,8 +8,10 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import ru.thedreamingsaviour.game.MyGdxGame;
 import ru.thedreamingsaviour.game.gameobject.AnimatedObject;
+import ru.thedreamingsaviour.game.resourceloader.LevelLoader;
 
 import static ru.thedreamingsaviour.game.resourceloader.MusicLoader.getDeathMusic;
+import static ru.thedreamingsaviour.game.resourceloader.SaveLoader.PLAYER;
 import static ru.thedreamingsaviour.game.resourceloader.TextureLoader.DEATH_BACKGROUND;
 
 public class DeathScreen implements Screen {
@@ -45,8 +47,12 @@ public class DeathScreen implements Screen {
         float timeMs = finishCurrentTime - startCurrentTime;
         if (timeMs > 1000) {
             if (Gdx.input.isKeyJustPressed(Input.Keys.ANY_KEY) || Gdx.input.justTouched() || timeMs > 152000) {
-                music.stop();
-                game.setScreen(new MainMenuScreen(game));
+                try {
+                    game.setScreen(new LevelsScreen(game, "HUB"));
+                    music.stop();
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
             }
         }
     }

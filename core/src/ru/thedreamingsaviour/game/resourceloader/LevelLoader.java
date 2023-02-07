@@ -4,9 +4,9 @@ import org.json.simple.JSONObject;
 import ru.thedreamingsaviour.game.gameobject.Coin;
 import ru.thedreamingsaviour.game.gameobject.DecorObject;
 import ru.thedreamingsaviour.game.gameobject.Surface;
-import ru.thedreamingsaviour.game.gameobject.character.Box;
-import ru.thedreamingsaviour.game.gameobject.character.Enemy;
-import ru.thedreamingsaviour.game.gameobject.character.ShortAttackEnemy;
+import ru.thedreamingsaviour.game.gameobject.entity.Box;
+import ru.thedreamingsaviour.game.gameobject.entity.Enemy;
+import ru.thedreamingsaviour.game.gameobject.entity.ShortAttackEnemy;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +20,8 @@ public class LevelLoader {
     private static List<Coin> coinList;
     private static List<Box> boxList;
     private static List<DecorObject> decorList;
+    private static float startX;
+    private static float startY;
     private static String nextLevel;
 
     public static void load(String levelName) throws Exception {
@@ -28,6 +30,8 @@ public class LevelLoader {
         coinList = convertingToCoin();
         boxList = convertingToBox();
         decorList = convertingToDecorObject();
+        startX = Float.parseFloat(String.valueOf(level.get("startX")));
+        startY = Float.parseFloat(String.valueOf(level.get("startY")));
         nextLevel = (String) level.get("nextLevel");
 
         List<ShortAttackEnemy> shortAttackEnemyList = convertingToShortAttackEnemy();
@@ -154,5 +158,13 @@ public class LevelLoader {
 
     public static List<DecorObject> getDecorList() {
         return decorList;
+    }
+
+    public static float getStartX() {
+        return startX;
+    }
+
+    public static float getStartY() {
+        return startY;
     }
 }

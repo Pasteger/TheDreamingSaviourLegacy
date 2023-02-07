@@ -18,12 +18,14 @@ import ru.thedreamingsaviour.game.LevelEditor;
 import ru.thedreamingsaviour.game.MyGdxGame;
 import ru.thedreamingsaviour.game.guiobject.TextWindow;
 import ru.thedreamingsaviour.game.resourceloader.LevelLoader;
+import ru.thedreamingsaviour.game.resourceloader.SaveLoader;
 
 import static ru.thedreamingsaviour.game.resourceloader.MusicLoader.getMenuMusic;
+import static ru.thedreamingsaviour.game.resourceloader.SaveLoader.PLAYER;
 import static ru.thedreamingsaviour.game.resourceloader.TextureLoader.*;
 
 public class MainMenuScreen implements Screen {
-    private final TextWindow textWindow = new TextWindow();
+    private final TextWindow startTextWindow = new TextWindow();
     private final TextWindow editorTextWindow = new TextWindow();
     private final MyGdxGame game;
     private final OrthographicCamera camera;
@@ -72,7 +74,7 @@ public class MainMenuScreen implements Screen {
         loadGameButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                textWindow.call(1500, 1100, 1000, 400, "level");
+                startTextWindow.call(1500, 1100, 1000, 400, "player");
             }
         });
 
@@ -112,12 +114,12 @@ public class MainMenuScreen implements Screen {
         game.batch.draw(background, 0, 0);
         headFont.draw(game.batch, "The Dreaming Saviour", 80, 2300);
         game.universalFont.draw(game.batch, exceptionMessage, 80, 210);
-        textWindow.render(game);
+        startTextWindow.render(game);
         editorTextWindow.render(game);
         game.batch.end();
         stage.draw();
 
-        if (!(textWindow.isRendering() || editorTextWindow.isRendering())) {
+        if (!(startTextWindow.isRendering() || editorTextWindow.isRendering())) {
             if (Gdx.input.isKeyJustPressed(Input.Keys.E)) {
                 editorTextWindow.call(1500, 1100, 1000, 400, "level");
             }
@@ -130,15 +132,16 @@ public class MainMenuScreen implements Screen {
     }
 
     private void start() {
-        String level = textWindow.getOutputText();
-        if (!(level.equals("") || level.equals("new"))) {
+        String player = startTextWindow.getOutputText();
+        if (!(player.equals("") || player.equals("new"))) {
             try {
-                LevelLoader.load(level);
-                game.setScreen(new LevelsScreen(game));
+                SaveLoader.load(player);
+                LevelLoader.load(PLAYER.currentLevel);
+                game.setScreen(new LevelsScreen(game, "level"));
                 music.stop();
             } catch (Exception exception) {
                 exception.printStackTrace();
-                exceptionMessage = "level not found";
+                exceptionMessage = "player not found";
             }
         }
     }

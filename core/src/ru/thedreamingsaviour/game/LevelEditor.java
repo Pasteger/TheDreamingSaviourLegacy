@@ -12,7 +12,7 @@ import ru.thedreamingsaviour.game.gameobject.AnimatedObject;
 import ru.thedreamingsaviour.game.gameobject.Coin;
 import ru.thedreamingsaviour.game.gameobject.DecorObject;
 import ru.thedreamingsaviour.game.gameobject.Surface;
-import ru.thedreamingsaviour.game.gameobject.character.*;
+import ru.thedreamingsaviour.game.gameobject.entity.*;
 import ru.thedreamingsaviour.game.guiobject.TextWindow;
 import ru.thedreamingsaviour.game.resourceloader.LevelSaver;
 import ru.thedreamingsaviour.game.screen.MainMenuScreen;
@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import static ru.thedreamingsaviour.game.resourceloader.SaveLoader.PLAYER;
 import static ru.thedreamingsaviour.game.resourceloader.TextureLoader.*;
 import static ru.thedreamingsaviour.game.utility.SurfaceListSorter.sortSurfaceList;
 
@@ -67,7 +68,7 @@ public class LevelEditor implements Screen {
         camera = game.camera;
         camera.setToOrtho(false, 4000, 4000);
 
-        player = new Player();
+        player = PLAYER;
 
         enemyList = LevelLoader.getEnemyList();
         surfaceList = LevelLoader.getSurfaceList();
@@ -154,7 +155,7 @@ public class LevelEditor implements Screen {
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.S)) {
             currentTask = !currentTask.equals("spawnEnemy") ? "spawnEnemy" : "edit";
-            demoAddedObjectSetTextures(currentTask.equals("spawnEnemy") ? SHORT_ATTACK_ENEMY.get("NORTH") : PLAYER.get("NORTH"));
+            demoAddedObjectSetTextures(currentTask.equals("spawnEnemy") ? SHORT_ATTACK_ENEMY.get("NORTH") : PLAYER_TEXTURES.get("NORTH"));
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.D)) {
             currentTask = !currentTask.equals("deleteEnemy") ? "deleteEnemy" : "edit";
@@ -166,7 +167,7 @@ public class LevelEditor implements Screen {
             if ("addWall".equals(currentTask)) {
                 demoAddedObjectSetTextures(currentSurfaceColor);
             } else {
-                demoAddedObjectSetTextures(PLAYER.get("NORTH"));
+                demoAddedObjectSetTextures(PLAYER_TEXTURES.get("NORTH"));
             }
         }
 
@@ -188,7 +189,7 @@ public class LevelEditor implements Screen {
             if ("addFloor".equals(currentTask)) {
                 demoAddedObjectSetTextures(currentSurfaceColor);
             } else {
-                demoAddedObjectSetTextures(PLAYER.get("NORTH"));
+                demoAddedObjectSetTextures(PLAYER_TEXTURES.get("NORTH"));
             }
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.G)) {
@@ -198,7 +199,7 @@ public class LevelEditor implements Screen {
             if ("addSky".equals(currentTask)) {
                 demoAddedObjectSetTextures(currentSurfaceColor);
             } else {
-                demoAddedObjectSetTextures(PLAYER.get("NORTH"));
+                demoAddedObjectSetTextures(PLAYER_TEXTURES.get("NORTH"));
             }
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.R)) {
@@ -210,7 +211,7 @@ public class LevelEditor implements Screen {
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.K)) {
             currentTask = !currentTask.equals("addBox") ? "addBox" : "edit";
-            demoAddedObjectSetTextures(currentTask.equals("addBox") ? BOX.get(currentBoxMaterial) : PLAYER.get("NORTH"));
+            demoAddedObjectSetTextures(currentTask.equals("addBox") ? BOX.get(currentBoxMaterial) : PLAYER_TEXTURES.get("NORTH"));
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.L)) {
             currentTask = !currentTask.equals("removeBox") ? "removeBox" : "edit";
@@ -231,7 +232,7 @@ public class LevelEditor implements Screen {
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_1)) {
             currentTask = !currentTask.equals("addCoin") ? "addCoin" : "edit";
-            demoAddedObjectSetTextures(currentTask.equals("addCoin") ? COINS.get(String.valueOf(currentCoinValue)) : PLAYER.get("NORTH"));
+            demoAddedObjectSetTextures(currentTask.equals("addCoin") ? COINS.get(String.valueOf(currentCoinValue)) : PLAYER_TEXTURES.get("NORTH"));
         }
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_3)) {
@@ -245,7 +246,7 @@ public class LevelEditor implements Screen {
                 case 1000 -> currentCoinValue = 5000;
                 case 5000 -> currentCoinValue = 1;
             }
-            demoAddedObjectSetTextures(currentTask.equals("addCoin") ? COINS.get(String.valueOf(currentCoinValue)) : PLAYER.get("NORTH"));
+            demoAddedObjectSetTextures(currentTask.equals("addCoin") ? COINS.get(String.valueOf(currentCoinValue)) : PLAYER_TEXTURES.get("NORTH"));
         }
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_0)) {
@@ -260,12 +261,12 @@ public class LevelEditor implements Screen {
                 case "STEEL" -> currentBoxMaterial = "BARREL";
                 case "BARREL" -> currentBoxMaterial = "WOODEN";
             }
-            demoAddedObjectSetTextures(currentTask.equals("addBox") ? BOX.get(currentBoxMaterial) : PLAYER.get("NORTH"));
+            demoAddedObjectSetTextures(currentTask.equals("addBox") ? BOX.get(currentBoxMaterial) : PLAYER_TEXTURES.get("NORTH"));
         }
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.Y)) {
             currentTask = !currentTask.equals("addDecor") ? "addDecor" : "edit";
-            demoAddedObjectSetTextures(currentTask.equals("addDecor") ? DECOR.get(currentDecorTexture) : PLAYER.get("NORTH"));
+            demoAddedObjectSetTextures(currentTask.equals("addDecor") ? DECOR.get(currentDecorTexture) : PLAYER_TEXTURES.get("NORTH"));
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.U)) {
             currentTask = !currentTask.equals("deleteDecor") ? "deleteDecor" : "edit";
@@ -277,7 +278,7 @@ public class LevelEditor implements Screen {
                 case "PIPE" -> currentDecorTexture = "PORTAL";
                 case "PORTAL" -> currentDecorTexture = "STEAM_HAMMER";
             }
-            demoAddedObjectSetTextures(currentTask.equals("addDecor") ? DECOR.get(currentDecorTexture) : PLAYER.get("NORTH"));
+            demoAddedObjectSetTextures(currentTask.equals("addDecor") ? DECOR.get(currentDecorTexture) : PLAYER_TEXTURES.get("NORTH"));
         }
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_8)) {

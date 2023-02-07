@@ -7449,5 +7449,8 @@
       "height": 200.0
     }
   ],
-  "nextLevel": "level2"
+  "decorList": [],
+  "nextLevel": "level2",
+  "startX": 3000,
+  "startY": 3000
 }

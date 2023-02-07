@@ -989,5 +989,17 @@
       "height": 200.0
     }
   ],
+  "decorList": [
+    {
+      "texture": "PORTAL",
+      "x": 2737.498,
+      "width": 785.0,
+      "y": 2692.0647,
+      "speed": 3,
+      "height": 833.0
+    }
+  ],
+  "startX": 3000,
+  "startY": 3000,
   "nextLevel": "level0"
 }

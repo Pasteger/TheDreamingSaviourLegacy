@@ -1,5 +1,6 @@
 package ru.thedreamingsaviour.game.screen;
 
+import ru.thedreamingsaviour.game.logics.Hub;
 import ru.thedreamingsaviour.game.logics.LevelsLogic;
 
 import com.badlogic.gdx.graphics.GL20;
@@ -9,13 +10,20 @@ import com.badlogic.gdx.Gdx;
 
 public class LevelsScreen implements Screen {
     private final MyGdxGame game;
-    private final LevelsLogic levelsLogic;
+    private LevelsLogic levelsLogic;
+    private Hub hub;
+    private final String level;
 
-    public LevelsScreen(final MyGdxGame game) {
+    public LevelsScreen(final MyGdxGame game, String level) {
         this.game = game;
         Gdx.gl.glClearColor(0.5f, 0.5f, 0.5f, 1);
 
-        levelsLogic = new LevelsLogic(this.game);
+        this.level = level;
+        if (level.equals("HUB")) {
+            hub = new Hub(this.game);
+        } else {
+            levelsLogic = new LevelsLogic(this.game);
+        }
     }
 
     @Override
@@ -27,7 +35,12 @@ public class LevelsScreen implements Screen {
 
         game.batch.begin();
 
-        levelsLogic.render();
+        if (level.equals("HUB")) {
+            hub.render();
+        }
+        else {
+            levelsLogic.render();
+        }
 
         game.batch.end();
     }
