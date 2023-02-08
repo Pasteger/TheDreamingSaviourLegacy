@@ -27,19 +27,18 @@ public class LoadScreen implements Screen {
             try {
                 message = "Loading textures";
                 error = "Error from textures";
-                System.out.println(message);
                 TextureLoader.load();
                 message = "Loading sounds";
                 error = "Error from sounds";
-                System.out.println(message);
                 SoundLoader.load();
                 message = "Loading music";
                 error = "Error from music";
-                System.out.println(message);
                 MusicLoader.load();
+                message = "Loading dialogues";
+                error = "Error from dialogues";
+                DialogueLoader.load();
                 message = "Loading success";
                 success = true;
-                System.out.println(message);
             } catch (Exception exception) {
                 exception.printStackTrace();
                 message = error + "\n" + Arrays.toString(exception.getStackTrace());

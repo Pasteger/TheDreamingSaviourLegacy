@@ -208,6 +208,7 @@ public class LevelsLogic {
             }
         } else {
             BULLET_LIST.clear();
+            player.timeFall = 0;
             music.stop();
             player.balance += score;
             try {
@@ -264,6 +265,7 @@ public class LevelsLogic {
         if (player.HP < 1) {
             music.stop();
             BULLET_LIST.clear();
+            player.timeFall = 0;
             game.setScreen(new DeathScreen(game));
         }
     }

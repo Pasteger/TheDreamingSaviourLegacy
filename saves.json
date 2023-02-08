@@ -1,6 +1,7 @@
 {
 	"Pasteger": {
 		"level": "demoLevel",
+		"hubLevel": 0,
 		"balance": 0,
 		"HP": 4,
 		"damage": 1,
@@ -8,6 +9,7 @@
 	},
 	"Player1": {
 		"level": "level1",
+		"hubLevel": 0,
 		"balance": 0,
 		"HP": 4,
 		"damage": 1,
@@ -15,6 +17,7 @@
 	},
 	"Player2": {
 		"level": "level5",
+		"hubLevel": 0,
 		"balance": 15000,
 		"HP": 40,
 		"damage": 10,

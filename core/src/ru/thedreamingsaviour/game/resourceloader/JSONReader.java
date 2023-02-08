@@ -2,14 +2,14 @@ package ru.thedreamingsaviour.game.resourceloader;
 
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
+
+import java.io.*;
+import java.nio.charset.StandardCharsets;
+import java.util.List;
 
 public class JSONReader {
     protected static JSONObject readJson(File file) throws Exception {
-        FileReader reader = new FileReader(file);
+        FileReader reader = new FileReader(file, StandardCharsets.UTF_8);
         JSONParser jsonParser = new JSONParser();
         return (JSONObject) jsonParser.parse(reader);
     }
@@ -25,5 +25,9 @@ public class JSONReader {
     }
     public static JSONObject getSaves() throws Exception {
         return readJson(new File("saves.json"));
+    }
+    public static List<JSONObject> getDialogues(String fileName) throws Exception {
+        JSONObject jsonObject = readJson(new File("hub/" + fileName + ".json"));
+        return (List<JSONObject>) jsonObject.get("list");
     }
 }

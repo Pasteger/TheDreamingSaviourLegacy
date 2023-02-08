@@ -9,6 +9,7 @@ import java.util.List;
 import static ru.thedreamingsaviour.game.resourceloader.TextureLoader.PLAYER_TEXTURES;
 
 public class Player extends Entity {
+    public int hubLevel;
     public int balance;
     public String currentLevel;
     public Player() {

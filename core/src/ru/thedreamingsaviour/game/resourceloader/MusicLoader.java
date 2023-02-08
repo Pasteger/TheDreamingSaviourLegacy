@@ -2,7 +2,6 @@ package ru.thedreamingsaviour.game.resourceloader;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
-import com.badlogic.gdx.graphics.Texture;
 
 import java.io.File;
 import java.util.*;
@@ -20,6 +19,7 @@ public class MusicLoader {
         introductionMusic = Gdx.audio.newMusic(Gdx.files.internal("music/overture.mp3"));
 
         fillMusicMap(HUB_MUSIC, "music/hub_music/", "ACT_1");
+        fillMusicMap(HUB_MUSIC, "music/hub_music/", "ACT_2");
     }
 
     private static void fillMusicMap(Map<String, List<Music>> map, String path, String key) {

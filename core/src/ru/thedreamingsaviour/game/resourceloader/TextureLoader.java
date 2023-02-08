@@ -12,6 +12,7 @@ public class TextureLoader {
     private static Texture nullTexture;
     private static Texture mainMenuBackground;
     private static Texture hubBackground;
+    private static Texture traderTexture;
     public static final Map<String, List<Texture>> PLAYER_TEXTURES = new HashMap<>();
     public static final Map<String, List<Texture>> SHORT_ATTACK_ENEMY = new HashMap<>();
     public static final Map<String, List<Texture>> BOX = new HashMap<>();
@@ -25,6 +26,7 @@ public class TextureLoader {
         nullTexture = new Texture("sprites/nullTexture.png");
         mainMenuBackground = new Texture("sprites/main_menu_background.jpg");
         hubBackground = new Texture("sprites/hub_background.jpeg");
+        traderTexture = new Texture("sprites/trader/trader.png");
 
         readAnimationTextures(DEATH_BACKGROUND, "sprites/death_background/");
         readAnimationTextures(BULLET_ILYA, "sprites/bullet/bullet_ilya/");
@@ -86,5 +88,9 @@ public class TextureLoader {
 
     public static Texture getNullTexture() {
         return nullTexture;
+    }
+
+    public static Texture getTraderTexture() {
+        return traderTexture;
     }
 }

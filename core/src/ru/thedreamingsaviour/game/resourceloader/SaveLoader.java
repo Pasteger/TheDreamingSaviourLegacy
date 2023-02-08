@@ -15,5 +15,6 @@ public class SaveLoader {
         PLAYER.saveSpeed = Integer.parseInt(String.valueOf(save.get("speed")));
         PLAYER.balance = Integer.parseInt(String.valueOf(save.get("balance")));
         PLAYER.currentLevel = String.valueOf(save.get("level"));
+        PLAYER.hubLevel = Integer.parseInt(String.valueOf(save.get("hubLevel")));
     }
 }
