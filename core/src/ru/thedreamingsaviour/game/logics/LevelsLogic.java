@@ -32,6 +32,7 @@ public class LevelsLogic {
     private final List<Box> boxList;
     private final List<Entity> entityList;
     private final List<DecorObject> decorList;
+    private final Exit exit;
     private final Music music;
     private long score;
 
@@ -49,6 +50,7 @@ public class LevelsLogic {
         coinList = LevelLoader.getCoinList();
         boxList = LevelLoader.getBoxList();
         decorList = LevelLoader.getDecorList();
+        exit = LevelLoader.getExit();
 
         entityList = new ArrayList<>();
         player = PLAYER;
@@ -81,6 +83,10 @@ public class LevelsLogic {
         boxLogic();
         bulletLogic();
 
+        if (exit != null) {
+            exit.draw(game.batch);
+        }
+
         boxList.forEach(box -> box.animatedObject.draw(game.batch, box.x, box.y, box.width, box.height, 5));
         coinList.forEach(coin -> coin.textures.draw(game.batch, coin.x, coin.y, coin.width, coin.height, coin.gravitated ? 5 : 15));
 
@@ -93,6 +99,7 @@ public class LevelsLogic {
         game.universalFont.draw(game.batch, "score: " + score, player.x - 1900, player.y + 1700);
 
         ilyaDeath();
+        exitLevel();
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
             game.setScreen(new MainMenuScreen(game));
@@ -107,6 +114,24 @@ public class LevelsLogic {
             fps = countRenders;
             System.out.println(fps);
             countRenders = 0;
+        }
+    }
+
+    private void exitLevel() {
+        if (exit != null) {
+            if (player.overlaps(exit)) {
+                BULLET_LIST.clear();
+                player.timeFall = 0;
+                music.stop();
+                player.balance += score;
+                try {
+                    PLAYER.currentLevel = LevelLoader.getNextLevel();
+                    LevelLoader.load(LevelLoader.getNextLevel());
+                    game.setScreen(new LevelsScreen(game, "level"));
+                } catch (Exception exception) {
+                    exception.printStackTrace();
+                }
+            }
         }
     }
 
@@ -206,7 +231,7 @@ public class LevelsLogic {
                     break;
                 }
             }
-        } else {
+        } else if (exit == null) {
             BULLET_LIST.clear();
             player.timeFall = 0;
             music.stop();

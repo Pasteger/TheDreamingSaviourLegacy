@@ -7388,5 +7388,6 @@
   ],
   "startX": 3000,
   "startY": 3000,
+  "exit": {},
   "nextLevel": "level5"
 }

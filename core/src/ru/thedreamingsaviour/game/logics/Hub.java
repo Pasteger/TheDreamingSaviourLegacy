@@ -37,7 +37,6 @@ public class Hub {
     private int currentPhase;
     private int speechPhase;
 
-
     public Hub(final MyGdxGame game) {
         this.game = game;
         game.camera.setToOrtho(false, 4000, 4000);

@@ -8,10 +8,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Rectangle;
-import ru.thedreamingsaviour.game.gameobject.AnimatedObject;
-import ru.thedreamingsaviour.game.gameobject.Coin;
-import ru.thedreamingsaviour.game.gameobject.DecorObject;
-import ru.thedreamingsaviour.game.gameobject.Surface;
+import ru.thedreamingsaviour.game.gameobject.*;
 import ru.thedreamingsaviour.game.gameobject.entity.*;
 import ru.thedreamingsaviour.game.guiobject.TextWindow;
 import ru.thedreamingsaviour.game.resourceloader.LevelSaver;
@@ -39,6 +36,7 @@ public class LevelEditor implements Screen {
     private final List<Coin> coinList;
     private final List<Box> boxList;
     private final List<DecorObject> decorList;
+    private Exit exit;
 
     private boolean dragged;
     private String currentTask;
@@ -75,6 +73,7 @@ public class LevelEditor implements Screen {
         coinList = LevelLoader.getCoinList();
         boxList = LevelLoader.getBoxList();
         decorList = LevelLoader.getDecorList();
+        exit = LevelLoader.getExit();
 
         demoAddedObject.setTextures(player.animatedObject.getTextures());
 
@@ -96,6 +95,11 @@ public class LevelEditor implements Screen {
 
         surfaceList.stream().filter(surface ->
                 (surface.getEffect().equals("solid") || surface.getEffect().equals("draw_over"))).forEach(surface -> surface.draw(game.batch));
+
+
+        if (exit != null) {
+            exit.draw(game.batch);
+        }
 
         coinList.forEach(coin -> coin.textures.draw(game.batch, coin.x, coin.y, coin.width, coin.height, 5));
         boxList.forEach(box -> box.animatedObject.draw(game.batch, box.x, box.y, box.width, box.height, 10));
@@ -217,6 +221,13 @@ public class LevelEditor implements Screen {
             currentTask = !currentTask.equals("removeBox") ? "removeBox" : "edit";
         }
 
+        if (Gdx.input.isKeyJustPressed(Input.Keys.MINUS)) {
+            currentTask = !currentTask.equals("addExit") ? "addExit" : "edit";
+        }
+        if (Gdx.input.isKeyJustPressed(Input.Keys.EQUALS)) {
+            currentTask = !currentTask.equals("removeExit") ? "removeExit" : "edit";
+        }
+
         if (Gdx.input.isKeyJustPressed(Input.Keys.P)) {
             surfaceList = sortSurfaceList(surfaceList);
         }
@@ -302,6 +313,13 @@ public class LevelEditor implements Screen {
     }
 
     private void handleTask() {
+        if (currentTask.equals("addExit") && Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
+            exit = new Exit("PORTAL",getSynchronizedX() - 60, getSynchronizedY() - 60, 300, 300, currentAnimatedSpeed);
+            currentDecorObject = exit;
+        }
+        if (currentTask.equals("removeExit") && Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
+            exit = null;
+        }
         if (currentTask.equals("addCoin") && Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
             Coin coin = new Coin(getSynchronizedX() - 60, getSynchronizedY() - 60, currentCoinValue);
             coinList.add(coin);
@@ -363,17 +381,20 @@ public class LevelEditor implements Screen {
         }
 
         if (currentTask.equals("edit") && Gdx.input.isButtonJustPressed(Input.Buttons.LEFT) &&
-                (currentSurface == null && currentEntity == null)) {
+                (currentSurface == null && currentEntity == null && currentDecorObject == null)) {
             setCurrentObject();
         }
         if (currentTask.equals("edit") && Gdx.input.isKeyJustPressed(Input.Keys.ENTER) &&
-                (currentSurface != null || currentEntity != null)) {
+                (currentSurface != null || currentEntity != null || currentDecorObject != null)) {
             if (currentSurface != null) {
                 currentSurface.setStandardColor();
                 currentSurface = null;
             }
             if (currentEntity != null) {
                 currentEntity = null;
+            }
+            if (currentDecorObject != null) {
+                currentDecorObject = null;
             }
             currentTask = "";
         }
@@ -450,7 +471,8 @@ public class LevelEditor implements Screen {
 
                 String[] save = text.split(" ");
 
-                LevelSaver.save(surfaceList, shortAttackEnemyList, coinList, boxList, decorList, save[1], save[0]);
+                LevelSaver.save(surfaceList, shortAttackEnemyList, coinList, boxList, decorList,
+                        exit, player.x, player.y, save[1], save[0]);
 
                 currentTask = "saved!";
             } catch (Exception exception) {

@@ -22,5 +22,13 @@
 		"HP": 40,
 		"damage": 10,
 		"speed": 30
+	},
+	"Exit": {
+		"level": "exit",
+		"hubLevel": 0,
+		"balance": 0,
+		"HP": 4,
+		"damage": 1,
+		"speed": 20
 	}
 }

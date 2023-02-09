@@ -4,6 +4,7 @@ import com.badlogic.gdx.math.Rectangle;
 import org.json.simple.JSONObject;
 import ru.thedreamingsaviour.game.gameobject.Coin;
 import ru.thedreamingsaviour.game.gameobject.DecorObject;
+import ru.thedreamingsaviour.game.gameobject.Exit;
 import ru.thedreamingsaviour.game.gameobject.Surface;
 import ru.thedreamingsaviour.game.gameobject.entity.Box;
 import ru.thedreamingsaviour.game.gameobject.entity.ShortAttackEnemy;
@@ -16,6 +17,7 @@ import java.util.List;
 public class LevelSaver {
     public static void save(List<Surface> surfaceList, List<ShortAttackEnemy> shortAttackEnemyList,
                             List<Coin> coinList, List<Box> boxList, List<DecorObject> decorList,
+                            Exit exit, float startX, float startY,
                             String nextLevel, String levelName) {
         JSONObject level = new JSONObject();
         level.put("coinList", saveCoinList(coinList));
@@ -24,10 +26,11 @@ public class LevelSaver {
         level.put("surfaceList", saveSurfaceList(surfaceList));
         level.put("shortAttackEnemyList", saveShortAttackEnemyList(shortAttackEnemyList));
         level.put("nextLevel", nextLevel);
-        level.put("startX", 3000);
-        level.put("startY", 3000);
+        level.put("exit", saveExit(exit));
+        level.put("startX", startX);
+        level.put("startY", startY);
         File levelFile = new File("levels/" + levelName + ".json");
-        if (!levelFile.exists()){
+        if (!levelFile.exists()) {
             try {
                 levelFile.createNewFile();
             } catch (IOException e) {
@@ -39,6 +42,19 @@ public class LevelSaver {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private static JSONObject saveExit(Exit exit) {
+        JSONObject json = new JSONObject();
+        try {
+            json.put("x", exit.getX());
+            json.put("y", exit.getY());
+            json.put("width", exit.getWidth());
+            json.put("height", exit.getHeight());
+            json.put("texture", exit.getTexture());
+            json.put("speed", exit.getSpeed());
+        } catch (Exception ignored) {}
+        return json;
     }
 
     private static List<JSONObject> saveBoxList(List<Box> boxes) {

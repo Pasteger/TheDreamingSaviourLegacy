@@ -3,6 +3,7 @@ package ru.thedreamingsaviour.game.resourceloader;
 import org.json.simple.JSONObject;
 import ru.thedreamingsaviour.game.gameobject.Coin;
 import ru.thedreamingsaviour.game.gameobject.DecorObject;
+import ru.thedreamingsaviour.game.gameobject.Exit;
 import ru.thedreamingsaviour.game.gameobject.Surface;
 import ru.thedreamingsaviour.game.gameobject.entity.Box;
 import ru.thedreamingsaviour.game.gameobject.entity.Enemy;
@@ -22,6 +23,7 @@ public class LevelLoader {
     private static List<DecorObject> decorList;
     private static float startX;
     private static float startY;
+    private static Exit exit;
     private static String nextLevel;
 
     public static void load(String levelName) throws Exception {
@@ -30,6 +32,7 @@ public class LevelLoader {
         coinList = convertingToCoin();
         boxList = convertingToBox();
         decorList = convertingToDecorObject();
+        exit = readExit();
         startX = Float.parseFloat(String.valueOf(level.get("startX")));
         startY = Float.parseFloat(String.valueOf(level.get("startY")));
         nextLevel = (String) level.get("nextLevel");
@@ -37,6 +40,24 @@ public class LevelLoader {
         List<ShortAttackEnemy> shortAttackEnemyList = convertingToShortAttackEnemy();
         enemyList = new ArrayList<>();
         enemyList.addAll(shortAttackEnemyList);
+    }
+
+    private static Exit readExit() {
+        Exit thisExit = null;
+        try {
+            JSONObject thisObject = (JSONObject) level.get("exit");
+            String texture = String.valueOf(thisObject.get("texture"));
+            float y = Float.parseFloat(String.valueOf(thisObject.get("y")));
+            float x = Float.parseFloat(String.valueOf(thisObject.get("x")));
+            float width = Float.parseFloat(String.valueOf(thisObject.get("width")));
+            float height = Float.parseFloat(String.valueOf(thisObject.get("height")));
+            int speed = Integer.parseInt(String.valueOf(thisObject.get("speed")));
+
+            thisExit = new Exit(texture, x, y, width, height, speed);
+        }
+        catch (Exception ignored) {
+        }
+        return thisExit;
     }
 
     private static List<DecorObject> convertingToDecorObject() {
@@ -166,5 +187,9 @@ public class LevelLoader {
 
     public static float getStartY() {
         return startY;
+    }
+
+    public static Exit getExit() {
+        return exit;
     }
 }
