@@ -37,6 +37,7 @@ public class AnimatedObject {
 
     public void setTextures(List<Texture> textures) {
         this.textures = textures;
+        speed = 0;
     }
     public List<Texture> getTextures() {
         return textures;

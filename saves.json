@@ -30,5 +30,21 @@
 		"HP": 4,
 		"damage": 1,
 		"speed": 20
+	},
+	"---": {
+		"level": "---",
+		"hubLevel": 0,
+		"balance": 0,
+		"HP": 4,
+		"damage": 1,
+		"speed": 20
+	},
+	"0909": {
+		"level": "0909",
+		"hubLevel": 0,
+		"balance": 0,
+		"HP": 4,
+		"damage": 1,
+		"speed": 20
 	}
 }

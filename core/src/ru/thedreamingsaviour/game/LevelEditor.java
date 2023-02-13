@@ -14,6 +14,7 @@ import ru.thedreamingsaviour.game.guiobject.TextWindow;
 import ru.thedreamingsaviour.game.resourceloader.LevelSaver;
 import ru.thedreamingsaviour.game.screen.MainMenuScreen;
 import ru.thedreamingsaviour.game.resourceloader.LevelLoader;
+import ru.thedreamingsaviour.game.utility.SwitchHandler;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -36,6 +37,7 @@ public class LevelEditor implements Screen {
     private final List<Coin> coinList;
     private final List<Box> boxList;
     private final List<DecorObject> decorList;
+    private final List<SwitchHandler> switchHandlerList;
     private Exit exit;
 
     private boolean dragged;
@@ -53,6 +55,9 @@ public class LevelEditor implements Screen {
     private byte currentAnimatedSpeed = 10;
     private String currentBoxMaterial = "WOODEN";
     private String currentDecorTexture = "STEAM_HAMMER";
+    private long currentSurfaceId = 0;
+    private int currentSwitchHandlerIndex;
+    private Switch currentSwitch;
 
     public LevelEditor(final MyGdxGame game) {
         this.game = game;
@@ -73,6 +78,7 @@ public class LevelEditor implements Screen {
         coinList = LevelLoader.getCoinList();
         boxList = LevelLoader.getBoxList();
         decorList = LevelLoader.getDecorList();
+        switchHandlerList = LevelLoader.getSwitchHandlerList();
         exit = LevelLoader.getExit();
 
         demoAddedObject.setTextures(player.animatedObject.getTextures());
@@ -96,6 +102,7 @@ public class LevelEditor implements Screen {
         surfaceList.stream().filter(surface ->
                 (surface.getEffect().equals("solid") || surface.getEffect().equals("draw_over"))).forEach(surface -> surface.draw(game.batch));
 
+        switchHandlerList.forEach(switchHandler -> switchHandler.handle(game.batch));
 
         if (exit != null) {
             exit.draw(game.batch);
@@ -112,12 +119,20 @@ public class LevelEditor implements Screen {
         game.universalFont.draw(game.batch, currentTask, camera.position.x - 2000, camera.position.y + 1700);
         demoAddedObject.draw(game.batch, camera.position.x - 2000, camera.position.y + 1250, 250, 250, currentAnimatedSpeed);
 
-        String currentValue = switch (currentTask) {
-            case "addCoin", "deleteCoin" -> "Coin: " + currentCoinValue;
-            case "addBox", "removeBox" -> "Box: " + currentBoxHP + " | " + currentBoxMaterial;
-            case "addDecor", "deleteDecor" -> "Speed: " + currentAnimatedSpeed;
-            default -> "Effect: " + currentSurfaceEffect;
-        };
+        String currentValue = "";
+        switch (currentTask) {
+            case "addCoin", "deleteCoin" -> currentValue = "Coin: " + currentCoinValue;
+            case "addBox", "removeBox" -> currentValue = "Box: " + currentBoxHP + " | " + currentBoxMaterial;
+            case "addDecor", "deleteDecor" -> currentValue = "Speed: " + currentAnimatedSpeed;
+            case "SwitchHandler" -> {
+                if (!switchHandlerList.isEmpty()) {
+                    currentValue = "ID: " + currentSwitchHandlerIndex + " switches: " +
+                            switchHandlerList.get(currentSwitchHandlerIndex).getSwitches().size() + " sID: " +
+                            switchHandlerList.get(currentSwitchHandlerIndex).getSurfacesId();
+                }
+            }
+            default -> currentValue = "Effect: " + currentSurfaceEffect + " id:" + currentSurfaceId;
+        }
         game.universalFont.draw(game.batch, currentValue, camera.position.x - 2000, camera.position.y + 1200);
 
         saveTextWindow.render(game);
@@ -221,6 +236,32 @@ public class LevelEditor implements Screen {
             currentTask = !currentTask.equals("removeBox") ? "removeBox" : "edit";
         }
 
+        if (Gdx.input.isKeyJustPressed(Input.Keys.M)) {
+            currentTask = !currentTask.equals("SwitchHandler") ? "SwitchHandler" : "";
+        }
+        if (currentTask.equals("SwitchHandler") && Gdx.input.isKeyJustPressed(Input.Keys.NUMPAD_1)) {
+            if (currentSwitchHandlerIndex > 0) {
+                currentSwitchHandlerIndex--;
+            }
+        }
+        if (currentTask.equals("SwitchHandler") && Gdx.input.isKeyJustPressed(Input.Keys.NUMPAD_3)) {
+            if (!switchHandlerList.isEmpty()) {
+                switchHandlerList.get(currentSwitchHandlerIndex).getSwitches().add(
+                        new Switch("lever", getSynchronizedX(), getSynchronizedY(),
+                                200, 200, 10, false));
+            }
+        }
+        if (currentTask.equals("SwitchHandler") && Gdx.input.isKeyJustPressed(Input.Keys.NUMPAD_2)) {
+            if (currentSwitchHandlerIndex < switchHandlerList.size() - 1) {
+                currentSwitchHandlerIndex++;
+            }
+        }
+        if (currentTask.equals("SwitchHandler") && Gdx.input.isKeyJustPressed(Input.Keys.N)) {
+            SwitchHandler switchHandler = new SwitchHandler(currentSurfaceId);
+            switchHandlerList.add(switchHandler);
+            currentSwitchHandlerIndex = switchHandlerList.indexOf(switchHandler);
+        }
+
         if (Gdx.input.isKeyJustPressed(Input.Keys.MINUS)) {
             currentTask = !currentTask.equals("addExit") ? "addExit" : "edit";
         }
@@ -301,6 +342,15 @@ public class LevelEditor implements Screen {
             }
         }
 
+        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_5)) {
+            currentSurfaceId++;
+        }
+        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_4)) {
+            if (currentSurfaceId > 0) {
+                currentSurfaceId--;
+            }
+        }
+
 
         if (Gdx.input.isKeyPressed(Input.Keys.CONTROL_LEFT) && Gdx.input.isKeyJustPressed(Input.Keys.S)) {
             currentTask = "save...";
@@ -314,7 +364,7 @@ public class LevelEditor implements Screen {
 
     private void handleTask() {
         if (currentTask.equals("addExit") && Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
-            exit = new Exit("PORTAL",getSynchronizedX() - 60, getSynchronizedY() - 60, 300, 300, currentAnimatedSpeed);
+            exit = new Exit("PORTAL", getSynchronizedX() - 60, getSynchronizedY() - 60, 300, 300, currentAnimatedSpeed);
             currentDecorObject = exit;
         }
         if (currentTask.equals("removeExit") && Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
@@ -376,16 +426,16 @@ public class LevelEditor implements Screen {
                 || currentTask.equals("addDrawingSurface"))
                 && Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
             Surface surface = new Surface(getSynchronizedX() - 100, getSynchronizedY() - 100,
-                    200, 200, currentSurfaceEffect, currentSurfaceColor);
+                    200, 200, currentSurfaceEffect, currentSurfaceColor, currentSurfaceId);
             surfaceList.add(surface);
         }
 
         if (currentTask.equals("edit") && Gdx.input.isButtonJustPressed(Input.Buttons.LEFT) &&
-                (currentSurface == null && currentEntity == null && currentDecorObject == null)) {
+                (currentSurface == null && currentEntity == null && currentDecorObject == null && currentSwitch == null)) {
             setCurrentObject();
         }
         if (currentTask.equals("edit") && Gdx.input.isKeyJustPressed(Input.Keys.ENTER) &&
-                (currentSurface != null || currentEntity != null || currentDecorObject != null)) {
+                (currentSurface != null || currentEntity != null || currentDecorObject != null || currentSwitch != null)) {
             if (currentSurface != null) {
                 currentSurface.setStandardColor();
                 currentSurface = null;
@@ -395,6 +445,9 @@ public class LevelEditor implements Screen {
             }
             if (currentDecorObject != null) {
                 currentDecorObject = null;
+            }
+            if (currentSwitch != null) {
+                currentSwitch = null;
             }
             currentTask = "";
         }
@@ -450,6 +503,14 @@ public class LevelEditor implements Screen {
                 return;
             }
         }
+        if (!switchHandlerList.isEmpty()) {
+            for (Switch swch : switchHandlerList.get(currentSwitchHandlerIndex).getSwitches()) {
+                if (findObjectFromCord(swch, x, y)) {
+                    currentSwitch = swch;
+                    return;
+                }
+            }
+        }
         for (int i = surfaceList.size() - 1; i >= 0; i--) {
             if (findObjectFromCord(surfaceList.get(i), x, y)) {
                 currentSurface = surfaceList.get(i);
@@ -471,7 +532,7 @@ public class LevelEditor implements Screen {
 
                 String[] save = text.split(" ");
 
-                LevelSaver.save(surfaceList, shortAttackEnemyList, coinList, boxList, decorList,
+                LevelSaver.save(surfaceList, shortAttackEnemyList, coinList, boxList, decorList, switchHandlerList,
                         exit, player.x, player.y, save[1], save[0]);
 
                 currentTask = "saved!";
@@ -536,7 +597,9 @@ public class LevelEditor implements Screen {
         private boolean moveCurrentSurface;
         private boolean moveEntity;
         private boolean moveDecor;
-        private boolean extensionCurrentDecor;
+        private boolean extensionDecor;
+        private boolean moveSwitch;
+        private boolean extensionSwitch;
 
         @Override
         public boolean keyDown(int keycode) {
@@ -583,7 +646,7 @@ public class LevelEditor implements Screen {
                 moveEntity = true;
             }
 
-            if (button == Input.Buttons.LEFT && currentDecorObject != null && !extensionCurrentDecor &&
+            if (button == Input.Buttons.LEFT && currentDecorObject != null && !extensionDecor &&
                     getSynchronizedX() >= currentDecorObject.x &&
                     getSynchronizedX() <= currentDecorObject.x + currentDecorObject.width / 2 &&
                     getSynchronizedY() >= currentDecorObject.y &&
@@ -595,7 +658,21 @@ public class LevelEditor implements Screen {
                     getSynchronizedX() <= currentDecorObject.x + currentDecorObject.width &&
                     getSynchronizedY() >= currentDecorObject.y + currentDecorObject.height - currentDecorObject.height / 2 &&
                     getSynchronizedY() <= currentDecorObject.y + currentDecorObject.height) {
-                extensionCurrentDecor = true;
+                extensionDecor = true;
+            }
+            if (button == Input.Buttons.LEFT && currentSwitch != null && !extensionSwitch &&
+                    getSynchronizedX() >= currentSwitch.x &&
+                    getSynchronizedX() <= currentSwitch.x + currentSwitch.width / 2 &&
+                    getSynchronizedY() >= currentSwitch.y &&
+                    getSynchronizedY() <= currentSwitch.y + currentSwitch.height / 2) {
+                moveSwitch = true;
+            }
+            if (button == Input.Buttons.LEFT && currentSwitch != null && !moveSwitch &&
+                    getSynchronizedX() >= currentSwitch.x + currentSwitch.width - currentSwitch.width / 2 &&
+                    getSynchronizedX() <= currentSwitch.x + currentSwitch.width &&
+                    getSynchronizedY() >= currentSwitch.y + currentSwitch.height - currentSwitch.height / 2 &&
+                    getSynchronizedY() <= currentSwitch.y + currentSwitch.height) {
+                extensionSwitch = true;
             }
             return false;
         }
@@ -606,8 +683,10 @@ public class LevelEditor implements Screen {
             extensionCurrentSurface = false;
             moveCurrentSurface = false;
             moveEntity = false;
-            extensionCurrentDecor = false;
+            extensionDecor = false;
             moveDecor = false;
+            extensionSwitch = false;
+            moveSwitch = false;
             return false;
         }
 
@@ -631,13 +710,22 @@ public class LevelEditor implements Screen {
                 currentEntity.y = getSynchronizedY() - currentEntity.height / 2;
             }
 
-            if (extensionCurrentDecor) {
+            if (extensionDecor) {
                 int width = (int) getSynchronizedX() - (int) currentDecorObject.getX();
                 int height = (int) getSynchronizedY() - (int) currentDecorObject.getY();
                 currentDecorObject.editExtension(width, height);
             }
             if (moveDecor) {
                 currentDecorObject.editMove(getSynchronizedX(), getSynchronizedY());
+            }
+
+            if (extensionSwitch) {
+                int width = (int) getSynchronizedX() - (int) currentSwitch.getX();
+                int height = (int) getSynchronizedY() - (int) currentSwitch.getY();
+                currentSwitch.editExtension(width, height);
+            }
+            if (moveSwitch) {
+                currentSwitch.editMove(getSynchronizedX(), getSynchronizedY());
             }
             return false;
         }

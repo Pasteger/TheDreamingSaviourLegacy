@@ -1,13 +1,11 @@
 package ru.thedreamingsaviour.game.resourceloader;
 
 import org.json.simple.JSONObject;
-import ru.thedreamingsaviour.game.gameobject.Coin;
-import ru.thedreamingsaviour.game.gameobject.DecorObject;
-import ru.thedreamingsaviour.game.gameobject.Exit;
-import ru.thedreamingsaviour.game.gameobject.Surface;
+import ru.thedreamingsaviour.game.gameobject.*;
 import ru.thedreamingsaviour.game.gameobject.entity.Box;
 import ru.thedreamingsaviour.game.gameobject.entity.Enemy;
 import ru.thedreamingsaviour.game.gameobject.entity.ShortAttackEnemy;
+import ru.thedreamingsaviour.game.utility.SwitchHandler;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,6 +19,7 @@ public class LevelLoader {
     private static List<Coin> coinList;
     private static List<Box> boxList;
     private static List<DecorObject> decorList;
+    private static List<SwitchHandler> switchHandlerList;
     private static float startX;
     private static float startY;
     private static Exit exit;
@@ -32,6 +31,7 @@ public class LevelLoader {
         coinList = convertingToCoin();
         boxList = convertingToBox();
         decorList = convertingToDecorObject();
+        switchHandlerList = convertingToSwitchHandler();
         exit = readExit();
         startX = Float.parseFloat(String.valueOf(level.get("startX")));
         startY = Float.parseFloat(String.valueOf(level.get("startY")));
@@ -40,6 +40,37 @@ public class LevelLoader {
         List<ShortAttackEnemy> shortAttackEnemyList = convertingToShortAttackEnemy();
         enemyList = new ArrayList<>();
         enemyList.addAll(shortAttackEnemyList);
+    }
+
+    private static List<SwitchHandler> convertingToSwitchHandler() {
+        List<SwitchHandler> switchHandlers = new ArrayList<>();
+        try {
+            @SuppressWarnings("unchecked")
+            List<JSONObject> JSONSwitchHandlerList = (List<JSONObject>) level.get("switchHandlerList");
+            for (JSONObject jsonSwitchHandler : JSONSwitchHandlerList) {
+                List<Switch> switches = new ArrayList<>();
+                List<JSONObject> JSONSwitchList = (List<JSONObject>) jsonSwitchHandler.get("switchList");
+
+                for (JSONObject jsonSwitch : JSONSwitchList) {
+                    String texture = String.valueOf(jsonSwitch.get("texture"));
+                    float y = Float.parseFloat(String.valueOf(jsonSwitch.get("y")));
+                    float x = Float.parseFloat(String.valueOf(jsonSwitch.get("x")));
+                    float width = Float.parseFloat(String.valueOf(jsonSwitch.get("width")));
+                    float height = Float.parseFloat(String.valueOf(jsonSwitch.get("height")));
+                    int speed = Integer.parseInt(String.valueOf(jsonSwitch.get("speed")));
+                    boolean active = Boolean.parseBoolean(String.valueOf(jsonSwitch.get("active")));
+
+                    switches.add(new Switch(texture, x, y, width, height, speed, active));
+                }
+                long surfacesId = Integer.parseInt(String.valueOf(jsonSwitchHandler.get("surfacesId")));
+
+                switchHandlers.add(new SwitchHandler(switches, surfaceList, surfacesId));
+            }
+        }
+        catch (Exception exception){
+            exception.printStackTrace();
+        }
+        return switchHandlers;
     }
 
     private static Exit readExit() {
@@ -132,7 +163,8 @@ public class LevelLoader {
                 float height = Float.parseFloat(String.valueOf(thisObject.get("height")));
                 String effect = String.valueOf(thisObject.get("effect"));
                 String textureName = String.valueOf(thisObject.get("standardColor"));
-                surfaceList.add(new Surface(x, y, width, height, effect, textureName));
+                long id = Long.parseLong(String.valueOf(thisObject.get("id")));
+                surfaceList.add(new Surface(x, y, width, height, effect, textureName, id));
             }
         }
         catch (Exception exception){
@@ -191,5 +223,9 @@ public class LevelLoader {
 
     public static Exit getExit() {
         return exit;
+    }
+
+    public static List<SwitchHandler> getSwitchHandlerList() {
+        return switchHandlerList;
     }
 }

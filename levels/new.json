@@ -4,6 +4,7 @@
   "coinList": [],
   "boxList": [],
   "decorList": [],
+  "switchHandlerList": [],
   "nextLevel": "",
   "exit": {},
   "startX": 3000,

@@ -13,6 +13,7 @@ import ru.thedreamingsaviour.game.resourceloader.LevelLoader;
 import ru.thedreamingsaviour.game.screen.DeathScreen;
 import ru.thedreamingsaviour.game.screen.LevelsScreen;
 import ru.thedreamingsaviour.game.screen.MainMenuScreen;
+import ru.thedreamingsaviour.game.utility.SwitchHandler;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -32,6 +33,7 @@ public class LevelsLogic {
     private final List<Box> boxList;
     private final List<Entity> entityList;
     private final List<DecorObject> decorList;
+    private final List<SwitchHandler> switchHandlerList;
     private final Exit exit;
     private final Music music;
     private long score;
@@ -50,6 +52,7 @@ public class LevelsLogic {
         coinList = LevelLoader.getCoinList();
         boxList = LevelLoader.getBoxList();
         decorList = LevelLoader.getDecorList();
+        switchHandlerList = LevelLoader.getSwitchHandlerList();
         exit = LevelLoader.getExit();
 
         entityList = new ArrayList<>();
@@ -75,6 +78,8 @@ public class LevelsLogic {
 
         surfaceList.stream().filter(surface ->
                 (surface.getEffect().equals("solid") || surface.getEffect().equals("draw_over"))).forEach(surface -> surface.draw(game.batch));
+
+        switchHandlerList.forEach(switchHandler -> switchHandler.handle(game.batch));
 
         player.animatedObject.draw(game.batch, player.x, player.y, player.width, player.height, 20);
         surfaceLogic();
@@ -112,7 +117,7 @@ public class LevelsLogic {
         if (finishFPSTime - startFPSTime >= 1000) {
             startFPSTime = finishFPSTime;
             fps = countRenders;
-            System.out.println(fps);
+            //System.out.println(fps);
             countRenders = 0;
         }
     }
@@ -207,6 +212,18 @@ public class LevelsLogic {
                     }
                 }
             }
+            for (SwitchHandler switchHandler : switchHandlerList) {
+                for (Switch swch : switchHandler.getSwitches()) {
+                    if (surface.overlaps(swch)) {
+                        if (surface.getEffect().equals("gravity")) {
+                            swch.gravitated = true;
+                        }
+                        if (surface.getEffect().equals("none")) {
+                            swch.gravitated = false;
+                        }
+                    }
+                }
+            }
         }
     }
 
@@ -281,6 +298,14 @@ public class LevelsLogic {
                     }
                     player.HP--;
                     return;
+                }
+                for (SwitchHandler switchHandler : switchHandlerList) {
+                    for (Switch swch : switchHandler.getSwitches()) {
+                        if (bullet.overlaps(swch)) {
+                            swch.toggle();
+                            bulletIterator.remove();
+                        }
+                    }
                 }
             }
         }

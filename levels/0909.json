@@ -1,0 +1,148 @@
+{
+  "exit": {
+    "texture": "PORTAL",
+    "x": -1068.3943,
+    "width": 300.0,
+    "y": 156.26392,
+    "speed": 10,
+    "height": 300.0
+  },
+  "boxList": [],
+  "shortAttackEnemyList": [],
+  "surfaceList": [
+    {
+      "effect": "none",
+      "x": 1530.8015,
+      "width": 3330.0,
+      "y": 1176.9309,
+      "standardColor": "1;0.8902;0.6941;1",
+      "id": 0,
+      "height": 3087.0
+    },
+    {
+      "effect": "none",
+      "x": -1487.1942,
+      "width": 3384.0,
+      "y": -719.5032,
+      "standardColor": "1;0.8902;0.6941;1",
+      "id": 0,
+      "height": 2739.0
+    },
+    {
+      "effect": "solid",
+      "x": 786.10596,
+      "width": 935.0,
+      "y": 2004.2627,
+      "standardColor": "0;0;0;1",
+      "id": 0,
+      "height": 2280.0
+    },
+    {
+      "effect": "solid",
+      "x": 1826.8037,
+      "width": 3080.0,
+      "y": 487.3286,
+      "standardColor": "0;0;0;1",
+      "id": 0,
+      "height": 1026.0
+    },
+    {
+      "effect": "solid",
+      "x": 4866.6987,
+      "width": 2550.0,
+      "y": 476.23267,
+      "standardColor": "0;0;0;1",
+      "id": 0,
+      "height": 1040.0
+    },
+    {
+      "effect": "gravity",
+      "x": 4857.108,
+      "width": 2552.0,
+      "y": 1514.5349,
+      "standardColor": "0.30;0.56;0.87;1",
+      "id": 1,
+      "height": 2743.0
+    },
+    {
+      "effect": "solid",
+      "x": 6234.6074,
+      "width": 1010.0,
+      "y": 3050.9692,
+      "standardColor": "0;0;0;1",
+      "id": 0,
+      "height": 107.0
+    },
+    {
+      "effect": "solid",
+      "x": 1772.2043,
+      "width": 320.0,
+      "y": 1621.7991,
+      "standardColor": "0;0;0;1",
+      "id": 2,
+      "height": 393.0
+    },
+    {
+      "effect": "solid",
+      "x": 5014.6016,
+      "width": 300.0,
+      "y": 2095.802,
+      "standardColor": "0;0;0;1",
+      "id": 0,
+      "height": 2714.0
+    }
+  ],
+  "coinList": [],
+  "nextLevel": "0909",
+  "startY": 3000.0,
+  "startX": 3000.0,
+  "decorList": [],
+  "switchHandlerList": [
+    {
+      "switchList": [
+        {
+          "texture": "lever",
+          "x": 2294.2007,
+          "width": 200.0,
+          "y": 3591.3325,
+          "active": false,
+          "speed": 10,
+          "height": 200.0
+        },
+        {
+          "texture": "lever",
+          "x": 4000.0,
+          "width": 200.0,
+          "y": 2000.0,
+          "active": false,
+          "speed": 10,
+          "height": 200.0
+        },
+        {
+          "texture": "lever",
+          "x": 2280.8018,
+          "width": 200.0,
+          "y": 1863.5974,
+          "active": false,
+          "speed": 10,
+          "height": 200.0
+        }
+      ],
+      "surfacesId": 1
+    },
+    {
+      "switchList": [
+        {
+          "texture": "lever",
+          "x": 6730.207,
+          "width": 200.0,
+          "y": 3179.6675,
+          "active": false,
+          "speed": 10,
+          "height": 200.0
+        }
+      ],
+      "surfacesId": 2
+    }
+  ]
+}

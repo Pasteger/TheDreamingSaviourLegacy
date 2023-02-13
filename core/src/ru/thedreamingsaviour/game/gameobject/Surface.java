@@ -8,11 +8,12 @@ import com.badlogic.gdx.math.Rectangle;
 import static ru.thedreamingsaviour.game.resourceloader.TextureLoader.*;
 
 public class Surface extends Rectangle {
+    public final long id;
     private String standardColor;
     private Color currentColor;
     public Sprite sprite;
     private String effect;
-    public Surface(float x, float y, float width, float height, String effect, String standardColor){
+    public Surface(float x, float y, float width, float height, String effect, String standardColor, long id){
         sprite = new Sprite();
         sprite.setTexture(getNullTexture());
         this.x = x;
@@ -22,7 +23,9 @@ public class Surface extends Rectangle {
         this.effect = effect;
         this.standardColor = standardColor;
         setStandardColor();
+        this.id = id;
     }
+
     public void draw(SpriteBatch batch){
         sprite.setBounds(x, y, width, height);
         sprite.setColor(currentColor);

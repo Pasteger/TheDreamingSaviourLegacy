@@ -18,6 +18,7 @@ public class TextureLoader {
     public static final Map<String, List<Texture>> BOX = new HashMap<>();
     public static final Map<String, List<Texture>> COINS = new HashMap<>();
     public static final Map<String, List<Texture>> DECOR = new HashMap<>();
+    public static final Map<String, Map<String, List<Texture>>> SWITCH = new HashMap<>();
     public static final List<Texture> BULLET_ILYA = new ArrayList<>();
     public static final List<Texture> BULLET_SHOT_ATTACK_ENEMY = new ArrayList<>();
     public static final List<Texture> DEATH_BACKGROUND = new ArrayList<>();
@@ -31,6 +32,18 @@ public class TextureLoader {
         readAnimationTextures(DEATH_BACKGROUND, "sprites/death_background/");
         readAnimationTextures(BULLET_ILYA, "sprites/bullet/bullet_ilya/");
         readAnimationTextures(BULLET_SHOT_ATTACK_ENEMY, "sprites/bullet/shot_attack_enemy/");
+
+        SWITCH.put("lever", new HashMap<>());
+        fillAnimatedObjectMap(SWITCH.get("lever"), "sprites/switch/lever/", "able");
+        fillAnimatedObjectMap(SWITCH.get("lever"), "sprites/switch/lever/", "able_up");
+        fillAnimatedObjectMap(SWITCH.get("lever"), "sprites/switch/lever/", "disable");
+        fillAnimatedObjectMap(SWITCH.get("lever"), "sprites/switch/lever/", "disable_up");
+        SWITCH.put("button", new HashMap<>());
+        fillAnimatedObjectMap(SWITCH.get("button"), "sprites/switch/button/", "able");
+        fillAnimatedObjectMap(SWITCH.get("button"), "sprites/switch/button/", "able_up");
+        fillAnimatedObjectMap(SWITCH.get("button"), "sprites/switch/button/", "disable");
+        fillAnimatedObjectMap(SWITCH.get("button"), "sprites/switch/button/", "disable_up");
+
 
         fillAnimatedObjectMap(BOX, "sprites/box/", "WOODEN");
         fillAnimatedObjectMap(BOX, "sprites/box/", "STEEL");

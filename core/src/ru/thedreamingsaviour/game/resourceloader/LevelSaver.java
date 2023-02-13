@@ -2,12 +2,10 @@ package ru.thedreamingsaviour.game.resourceloader;
 
 import com.badlogic.gdx.math.Rectangle;
 import org.json.simple.JSONObject;
-import ru.thedreamingsaviour.game.gameobject.Coin;
-import ru.thedreamingsaviour.game.gameobject.DecorObject;
-import ru.thedreamingsaviour.game.gameobject.Exit;
-import ru.thedreamingsaviour.game.gameobject.Surface;
+import ru.thedreamingsaviour.game.gameobject.*;
 import ru.thedreamingsaviour.game.gameobject.entity.Box;
 import ru.thedreamingsaviour.game.gameobject.entity.ShortAttackEnemy;
+import ru.thedreamingsaviour.game.utility.SwitchHandler;
 
 import java.io.File;
 import java.io.IOException;
@@ -17,7 +15,7 @@ import java.util.List;
 public class LevelSaver {
     public static void save(List<Surface> surfaceList, List<ShortAttackEnemy> shortAttackEnemyList,
                             List<Coin> coinList, List<Box> boxList, List<DecorObject> decorList,
-                            Exit exit, float startX, float startY,
+                            List<SwitchHandler> switchHandlerList, Exit exit, float startX, float startY,
                             String nextLevel, String levelName) {
         JSONObject level = new JSONObject();
         level.put("coinList", saveCoinList(coinList));
@@ -25,6 +23,7 @@ public class LevelSaver {
         level.put("decorList", saveDecorList(decorList));
         level.put("surfaceList", saveSurfaceList(surfaceList));
         level.put("shortAttackEnemyList", saveShortAttackEnemyList(shortAttackEnemyList));
+        level.put("switchHandlerList", saveSwitchHandlerList(switchHandlerList));
         level.put("nextLevel", nextLevel);
         level.put("exit", saveExit(exit));
         level.put("startX", startX);
@@ -44,6 +43,34 @@ public class LevelSaver {
         }
     }
 
+    private static List<JSONObject> saveSwitchHandlerList(List<SwitchHandler> switchHandlers) {
+        List<JSONObject> jsonSwitchHandlerList = new ArrayList<>();
+
+        for (SwitchHandler switchHandler : switchHandlers) {
+            List<JSONObject> jsonSwitchList = new ArrayList<>();
+            JSONObject jsonSwitchHandler = new JSONObject();
+
+            for (Switch swch : switchHandler.getSwitches()) {
+                JSONObject jsonSwitch = new JSONObject();
+                jsonSwitch.put("x", swch.getX());
+                jsonSwitch.put("y", swch.getY());
+                jsonSwitch.put("width", swch.getWidth());
+                jsonSwitch.put("height", swch.getHeight());
+                jsonSwitch.put("texture", swch.getTexture());
+                jsonSwitch.put("speed", swch.getSpeed());
+                jsonSwitch.put("active", swch.isActive());
+
+                jsonSwitchList.add(jsonSwitch);
+            }
+
+            jsonSwitchHandler.put("switchList", jsonSwitchList);
+            jsonSwitchHandler.put("surfacesId", switchHandler.getSurfacesId());
+
+            jsonSwitchHandlerList.add(jsonSwitchHandler);
+        }
+        return jsonSwitchHandlerList;
+    }
+
     private static JSONObject saveExit(Exit exit) {
         JSONObject json = new JSONObject();
         try {
@@ -53,7 +80,8 @@ public class LevelSaver {
             json.put("height", exit.getHeight());
             json.put("texture", exit.getTexture());
             json.put("speed", exit.getSpeed());
-        } catch (Exception ignored) {}
+        } catch (Exception ignored) {
+        }
         return json;
     }
 
@@ -95,6 +123,7 @@ public class LevelSaver {
             json.put("height", surface.getHeight());
             json.put("effect", surface.getEffect());
             json.put("standardColor", surface.getStandardColor());
+            json.put("id", surface.id);
             jsonObjectList.add(json);
         }
         return jsonObjectList;
