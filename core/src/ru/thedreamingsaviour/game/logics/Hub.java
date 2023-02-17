@@ -9,8 +9,8 @@ import ru.thedreamingsaviour.game.MyGdxGame;
 import ru.thedreamingsaviour.game.gameobject.entity.Player;
 import ru.thedreamingsaviour.game.resourceloader.DialogueLoader;
 import ru.thedreamingsaviour.game.resourceloader.LevelLoader;
-import ru.thedreamingsaviour.game.resourceloader.database.entity.Dialogue;
-import ru.thedreamingsaviour.game.resourceloader.database.entity.Phrase;
+import ru.thedreamingsaviour.game.entity.Dialogue;
+import ru.thedreamingsaviour.game.entity.Phrase;
 import ru.thedreamingsaviour.game.screen.LevelsScreen;
 import ru.thedreamingsaviour.game.screen.MainMenuScreen;
 

@@ -1,28 +1,30 @@
 package ru.thedreamingsaviour.game.gameobject.entity;
 
 import static com.badlogic.gdx.math.MathUtils.random;
-import static ru.thedreamingsaviour.game.resourceloader.TextureLoader.SHORT_ATTACK_ENEMY;
+import static ru.thedreamingsaviour.game.resourceloader.TextureLoader.SHOT_ATTACK_ENEMY;
 
-public class ShortAttackEnemy extends Enemy {
-    public ShortAttackEnemy() {
+public class ShotAttackEnemy extends Enemy{
+    public ShotAttackEnemy() {
         type = "ShortAttackEnemy";
-        sprites = SHORT_ATTACK_ENEMY;
+        sprites = SHOT_ATTACK_ENEMY;
         animatedObject.setTextures(sprites.get("NORTH"));
         width = 300;
         height = 300;
-        HP = 3;
-        damage = 1;
+        HP = 2;
         recharge = 0;
-        fieldOfView.width = 4000;
-        fieldOfView.height = 4000;
+        damage = 1;
+        fieldOfView.width = 5000;
+        fieldOfView.height = 5000;
         fieldOfView.x = x - fieldOfView.width / 2;
         fieldOfView.y = y - fieldOfView.height / 2;
 
         generateCells();
 
-        saveSpeed = 10;
+        saveSpeed = 2;
         speed = saveSpeed;
-        type = "ShortAttackEnemy";
+        type = "ShotAttackEnemy";
+        bulletType = "BAD";
+        bulletAim = "moveTo";
 
         legs.width = width;
         legs.height = height;
@@ -30,11 +32,11 @@ public class ShortAttackEnemy extends Enemy {
 
     @Override
     public void attack(Player player) {
-        if (Math.abs(x - player.x) < width + speed && Math.abs(y - player.y) <= height + speed) {
+        if (fieldOfView.overlaps(player)) {
             recharge--;
             if (recharge <= 0) {
                 recharge = (byte) ((byte) 20 + random.nextInt(60));
-                player.HP -= damage;
+                shot(player);
             }
         }
     }

@@ -5,6 +5,7 @@ import org.json.simple.JSONObject;
 import ru.thedreamingsaviour.game.gameobject.*;
 import ru.thedreamingsaviour.game.gameobject.entity.Box;
 import ru.thedreamingsaviour.game.gameobject.entity.ShortAttackEnemy;
+import ru.thedreamingsaviour.game.gameobject.entity.ShotAttackEnemy;
 import ru.thedreamingsaviour.game.utility.SwitchHandler;
 
 import java.io.File;
@@ -14,6 +15,7 @@ import java.util.List;
 
 public class LevelSaver {
     public static void save(List<Surface> surfaceList, List<ShortAttackEnemy> shortAttackEnemyList,
+                            List<ShotAttackEnemy> shotAttackEnemyList,
                             List<Coin> coinList, List<Box> boxList, List<DecorObject> decorList,
                             List<SwitchHandler> switchHandlerList, Exit exit, float startX, float startY,
                             String nextLevel, String levelName) {
@@ -23,6 +25,7 @@ public class LevelSaver {
         level.put("decorList", saveDecorList(decorList));
         level.put("surfaceList", saveSurfaceList(surfaceList));
         level.put("shortAttackEnemyList", saveShortAttackEnemyList(shortAttackEnemyList));
+        level.put("shotAttackEnemyList", saveShotAttackEnemyList(shotAttackEnemyList));
         level.put("switchHandlerList", saveSwitchHandlerList(switchHandlerList));
         level.put("nextLevel", nextLevel);
         level.put("exit", saveExit(exit));
@@ -142,6 +145,11 @@ public class LevelSaver {
     }
 
     private static List<JSONObject> saveShortAttackEnemyList(List<ShortAttackEnemy> enemies) {
+        List<Rectangle> rectangles = new ArrayList<>(enemies);
+        return saveObjectWithoutSize(rectangles);
+    }
+
+    private static List<JSONObject> saveShotAttackEnemyList(List<ShotAttackEnemy> enemies) {
         List<Rectangle> rectangles = new ArrayList<>(enemies);
         return saveObjectWithoutSize(rectangles);
     }

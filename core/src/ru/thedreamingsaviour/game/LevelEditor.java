@@ -46,6 +46,7 @@ public class LevelEditor implements Screen {
     private int deltaY;
     private Surface currentSurface;
     private Rectangle currentEntity;
+    private String currentEnemyType;
     private DecorObject currentDecorObject;
     private String currentSurfaceColor;
     private String currentSurfaceEffect;
@@ -67,6 +68,7 @@ public class LevelEditor implements Screen {
         currentTask = "";
         currentSurfaceColor = "0.5;0.5;0.5;1";
         currentSurfaceEffect = "none";
+        currentEnemyType = "ShortAttackEnemy";
         Gdx.gl.glClearColor(0.5f, 0.5f, 0.5f, 1);
         camera = game.camera;
         camera.setToOrtho(false, 4000, 4000);
@@ -174,7 +176,7 @@ public class LevelEditor implements Screen {
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.S)) {
             currentTask = !currentTask.equals("spawnEnemy") ? "spawnEnemy" : "edit";
-            demoAddedObjectSetTextures(currentTask.equals("spawnEnemy") ? SHORT_ATTACK_ENEMY.get("NORTH") : PLAYER_TEXTURES.get("NORTH"));
+            demoAddedObjectSetTextures(currentTask.equals("spawnEnemy") ? getCurrentEnemyTexture() : PLAYER_TEXTURES.get("NORTH"));
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.D)) {
             currentTask = !currentTask.equals("deleteEnemy") ? "deleteEnemy" : "edit";
@@ -451,9 +453,21 @@ public class LevelEditor implements Screen {
             }
             currentTask = "";
         }
+        if (currentTask.equals("spawnEnemy") && Gdx.input.isKeyJustPressed(Input.Keys.NUMPAD_9)) {
+            switch (currentEnemyType) {
+                case "ShortAttackEnemy" -> currentEnemyType = "ShotAttackEnemy";
+                case "ShotAttackEnemy" -> currentEnemyType = "ShortAttackEnemy";
+            }
+            demoAddedObjectSetTextures(getCurrentEnemyTexture());
+        }
 
         if (currentTask.equals("spawnEnemy") && Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
             Enemy slave = new ShortAttackEnemy();
+            switch (currentEnemyType) {
+                case "ShortAttackEnemy" -> slave = new ShortAttackEnemy();
+                case "ShotAttackEnemy" -> slave = new ShotAttackEnemy();
+            }
+
             slave.setX(getSynchronizedX());
             slave.setY(getSynchronizedY());
             enemyList.add(slave);
@@ -526,13 +540,17 @@ public class LevelEditor implements Screen {
         if (!(text.equals("") || text.equals("new"))) {
             try {
                 List<ShortAttackEnemy> shortAttackEnemyList = new ArrayList<>();
+                List<ShotAttackEnemy> shotAttackEnemyList = new ArrayList<>();
                 enemyList.stream().filter(
                         enemy -> enemy.type.equals("ShortAttackEnemy")).forEach(
                         enemy -> shortAttackEnemyList.add((ShortAttackEnemy) enemy));
+                enemyList.stream().filter(
+                        enemy -> enemy.type.equals("ShotAttackEnemy")).forEach(
+                        enemy -> shotAttackEnemyList.add((ShotAttackEnemy) enemy));
 
                 String[] save = text.split(" ");
 
-                LevelSaver.save(surfaceList, shortAttackEnemyList, coinList, boxList, decorList, switchHandlerList,
+                LevelSaver.save(surfaceList, shortAttackEnemyList, shotAttackEnemyList, coinList, boxList, decorList, switchHandlerList,
                         exit, player.x, player.y, save[1], save[0]);
 
                 currentTask = "saved!";
@@ -588,6 +606,15 @@ public class LevelEditor implements Screen {
     private boolean findObjectFromCord(Rectangle object, float x, float y) {
         return (object.getX() >= x - object.getWidth() && object.getX() <= x + 1 &&
                 object.getY() >= y - object.getHeight() && object.getY() <= y + 1);
+    }
+
+    private List<Texture> getCurrentEnemyTexture(){
+        List<Texture> textures = new ArrayList<>();
+        switch (currentEnemyType) {
+            case "ShortAttackEnemy" -> textures = SHORT_ATTACK_ENEMY.get("NORTH");
+            case "ShotAttackEnemy" -> textures = SHOT_ATTACK_ENEMY.get("NORTH");
+        }
+        return textures;
     }
 
     class EditorInputProcessor implements InputProcessor {

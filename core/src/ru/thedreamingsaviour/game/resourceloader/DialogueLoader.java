@@ -1,8 +1,8 @@
 package ru.thedreamingsaviour.game.resourceloader;
 
 import org.json.simple.JSONObject;
-import ru.thedreamingsaviour.game.resourceloader.database.entity.Dialogue;
-import ru.thedreamingsaviour.game.resourceloader.database.entity.Phrase;
+import ru.thedreamingsaviour.game.entity.Dialogue;
+import ru.thedreamingsaviour.game.entity.Phrase;
 
 import java.util.ArrayList;
 import java.util.List;

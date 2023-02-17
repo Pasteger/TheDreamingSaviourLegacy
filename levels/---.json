@@ -1,1 +1,90 @@
-{"switchHandlerList": [],"exit":{"texture":"PORTAL","x":-231.19983,"width":300.0,"y":1770.6011,"speed":10,"height":300.0},"boxList":[],"shortAttackEnemyList":[],"surfaceList":[{"effect":"solid","x":625.0,"width":2930.0,"y":1213.3335,"standardColor":"0;0;0;1","id":0,"height":873.0},{"effect":"none","x":2897.1,"width":2248.0,"y":3171.3972,"standardColor":"1;0.8902;0.6941;1","id":0,"height":3415.0},{"effect":"none","x":-1112.4022,"width":2932.0,"y":3112.3564,"standardColor":"1;0.8902;0.6941;1","id":0,"height":3481.0},{"effect":"none","x":850.2969,"width":2490.0,"y":4551.321,"standardColor":"1;0.8902;0.6941;1","id":0,"height":2313.0},{"effect":"none","x":-1033.6033,"width":5670.0,"y":754.96533,"standardColor":"1;0.8902;0.6941;1","id":0,"height":2444.0},{"effect":"gravity","x":1819.1973,"width":1077.0,"y":3198.7202,"standardColor":"0.30;0.56;0.87;1","id":1,"height":1352.0}],"coinList":[{"x":2411.2026,"y":3724.0312,"value":1}],"nextLevel":"---","startY":2134.0312,"startX":2261.2026,"decorList":[]}
+{
+  "exit": {
+    "texture": "PORTAL",
+    "x": -231.19983,
+    "width": 300.0,
+    "y": 1770.6011,
+    "speed": 10,
+    "height": 300.0
+  },
+  "boxList": [],
+  "shortAttackEnemyList": [],
+  "shotAttackEnemyList": [],
+  "surfaceList": [
+    {
+      "effect": "none",
+      "x": 2897.1,
+      "width": 2248.0,
+      "y": 3171.3972,
+      "standardColor": "1;0.8902;0.6941;1",
+      "id": 0,
+      "height": 3415.0
+    },
+    {
+      "effect": "none",
+      "x": -1112.4022,
+      "width": 2932.0,
+      "y": 3112.3564,
+      "standardColor": "1;0.8902;0.6941;1",
+      "id": 0,
+      "height": 3481.0
+    },
+    {
+      "effect": "none",
+      "x": 850.2969,
+      "width": 2490.0,
+      "y": 4551.321,
+      "standardColor": "1;0.8902;0.6941;1",
+      "id": 0,
+      "height": 2313.0
+    },
+    {
+      "effect": "none",
+      "x": -1033.6033,
+      "width": 5670.0,
+      "y": 754.96533,
+      "standardColor": "1;0.8902;0.6941;1",
+      "id": 0,
+      "height": 2444.0
+    },
+    {
+      "effect": "gravity",
+      "x": 1819.1973,
+      "width": 1077.0,
+      "y": 3198.7202,
+      "standardColor": "0.30;0.56;0.87;1",
+      "id": 1,
+      "height": 1352.0
+    },
+    {
+      "effect": "solid",
+      "x": 625.0,
+      "width": 2930.0,
+      "y": 1213.3335,
+      "standardColor": "0;0;0;1",
+      "id": 0,
+      "height": 873.0
+    },
+    {
+      "effect": "none",
+      "x": 3292.2031,
+      "width": 6621.0,
+      "y": -669.6665,
+      "standardColor": "1;0.8902;0.6941;1",
+      "id": 0,
+      "height": 8200.0
+    }
+  ],
+  "coinList": [
+    {
+      "x": 2411.2026,
+      "y": 3724.0312,
+      "value": 1
+    }
+  ],
+  "nextLevel": "---",
+  "startY": 2274.0312,
+  "startX": 2361.2026,
+  "decorList": [],
+  "switchHandlerList": []
+}

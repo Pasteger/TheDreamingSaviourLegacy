@@ -1,4 +1,4 @@
-package ru.thedreamingsaviour.game.resourceloader.database.entity;
+package ru.thedreamingsaviour.game.entity;
 
 public class Phrase {
     private int speed;

@@ -15,6 +15,7 @@ public class TextureLoader {
     private static Texture traderTexture;
     public static final Map<String, List<Texture>> PLAYER_TEXTURES = new HashMap<>();
     public static final Map<String, List<Texture>> SHORT_ATTACK_ENEMY = new HashMap<>();
+    public static final Map<String, List<Texture>> SHOT_ATTACK_ENEMY = new HashMap<>();
     public static final Map<String, List<Texture>> BOX = new HashMap<>();
     public static final Map<String, List<Texture>> COINS = new HashMap<>();
     public static final Map<String, List<Texture>> DECOR = new HashMap<>();
@@ -67,6 +68,7 @@ public class TextureLoader {
 
         fillAnimatedObjectMapForCharacter(PLAYER_TEXTURES, "sprites/ilya/");
         fillAnimatedObjectMapForCharacter(SHORT_ATTACK_ENEMY, "sprites/short_attack_enemy/");
+        fillAnimatedObjectMapForCharacter(SHOT_ATTACK_ENEMY, "sprites/shot_attack_enemy/");
     }
 
     private static void fillAnimatedObjectMap(Map<String, List<Texture>> map, String path, String key) {

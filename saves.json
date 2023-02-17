@@ -1,50 +1,56 @@
 {
-	"Pasteger": {
-		"level": "demoLevel",
-		"hubLevel": 0,
-		"balance": 0,
-		"HP": 4,
-		"damage": 1,
-		"speed": 20
-	},
-	"Player1": {
-		"level": "level1",
-		"hubLevel": 0,
-		"balance": 0,
-		"HP": 4,
-		"damage": 1,
-		"speed": 20
-	},
-	"Player2": {
-		"level": "level5",
-		"hubLevel": 0,
-		"balance": 15000,
-		"HP": 40,
-		"damage": 10,
-		"speed": 30
-	},
-	"Exit": {
-		"level": "exit",
-		"hubLevel": 0,
-		"balance": 0,
-		"HP": 4,
-		"damage": 1,
-		"speed": 20
-	},
-	"---": {
-		"level": "---",
-		"hubLevel": 0,
-		"balance": 0,
-		"HP": 4,
-		"damage": 1,
-		"speed": 20
-	},
-	"0909": {
-		"level": "0909",
-		"hubLevel": 0,
-		"balance": 0,
-		"HP": 4,
-		"damage": 1,
-		"speed": 20
-	}
+  "Pasteger": {
+    "level": "demoLevel",
+    "hubLevel": 0,
+    "balance": 0,
+    "HP": 4,
+    "bulletAim": "direction",
+    "damage": 1,
+    "speed": 20
+  },
+  "Player1": {
+    "level": "level1",
+    "hubLevel": 0,
+    "balance": 0,
+    "bulletAim": "moveTo",
+    "HP": 4,
+    "damage": 1,
+    "speed": 20
+  },
+  "Player2": {
+    "level": "level5",
+    "hubLevel": 0,
+    "bulletAim": "moveTo",
+    "balance": 15000,
+    "HP": 40,
+    "damage": 10,
+    "speed": 30
+  },
+  "Exit": {
+    "level": "exit",
+    "hubLevel": 0,
+    "balance": 0,
+    "HP": 4,
+    "bulletAim": "moveTo",
+    "damage": 1,
+    "speed": 20
+  },
+  "---": {
+    "level": "---",
+    "hubLevel": 0,
+    "balance": 0,
+    "HP": 4000,
+    "bulletAim": "moveTo",
+    "damage": 1,
+    "speed": 20
+  },
+  "0909": {
+    "level": "0909",
+    "hubLevel": 0,
+    "balance": 0,
+    "bulletAim": "moveTo",
+    "HP": 4,
+    "damage": 1,
+    "speed": 20
+  }
 }

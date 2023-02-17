@@ -51,6 +51,18 @@ public class SwitchHandler {
                 surface.setStandardColor("0;0;0;1");
             });
         }
+
+        if (switches.stream().allMatch(Switch::isActive)) {
+            surfaces.stream().filter(surface -> surface.id == 3).forEach(surface -> {
+                surface.setEffect("gravity");
+                surface.setStandardColor("0.30;0.56;0.87;1");
+            });
+        } else {
+            surfaces.stream().filter(surface -> surface.id == 3).forEach(surface -> {
+                surface.setEffect("solid");
+                surface.setStandardColor("0;0;0;1");
+            });
+        }
     }
 
     public List<Switch> getSwitches() {

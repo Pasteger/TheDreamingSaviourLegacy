@@ -5,6 +5,7 @@ import ru.thedreamingsaviour.game.gameobject.*;
 import ru.thedreamingsaviour.game.gameobject.entity.Box;
 import ru.thedreamingsaviour.game.gameobject.entity.Enemy;
 import ru.thedreamingsaviour.game.gameobject.entity.ShortAttackEnemy;
+import ru.thedreamingsaviour.game.gameobject.entity.ShotAttackEnemy;
 import ru.thedreamingsaviour.game.utility.SwitchHandler;
 
 import java.util.ArrayList;
@@ -38,8 +39,10 @@ public class LevelLoader {
         nextLevel = (String) level.get("nextLevel");
 
         List<ShortAttackEnemy> shortAttackEnemyList = convertingToShortAttackEnemy();
+        List<ShotAttackEnemy> shotAttackEnemyList = convertingToShotAttackEnemy();
         enemyList = new ArrayList<>();
         enemyList.addAll(shortAttackEnemyList);
+        enemyList.addAll(shotAttackEnemyList);
     }
 
     private static List<SwitchHandler> convertingToSwitchHandler() {
@@ -149,6 +152,26 @@ public class LevelLoader {
             exception.printStackTrace();
         }
         return shortAttackEnemyList;
+    }
+
+    private static List<ShotAttackEnemy> convertingToShotAttackEnemy() {
+        List<ShotAttackEnemy> shotAttackEnemyList = new ArrayList<>();
+        try {
+            @SuppressWarnings("unchecked")
+            List<JSONObject> JSONShortAttackEnemyList = (List<JSONObject>) level.get("shotAttackEnemyList");
+            for (JSONObject thisObject : JSONShortAttackEnemyList) {
+                float y = Float.parseFloat(String.valueOf(thisObject.get("y")));
+                float x = Float.parseFloat(String.valueOf(thisObject.get("x")));
+                ShotAttackEnemy shotAttackEnemy = new ShotAttackEnemy();
+                shotAttackEnemy.setX(x);
+                shotAttackEnemy.setY(y);
+                shotAttackEnemyList.add(shotAttackEnemy);
+            }
+        }
+        catch (Exception exception){
+            exception.printStackTrace();
+        }
+        return shotAttackEnemyList;
     }
 
     private static List<Surface> convertingToSurface() {

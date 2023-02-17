@@ -5,10 +5,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.audio.Music;
 import ru.thedreamingsaviour.game.MyGdxGame;
 import ru.thedreamingsaviour.game.gameobject.*;
-import ru.thedreamingsaviour.game.gameobject.entity.Box;
-import ru.thedreamingsaviour.game.gameobject.entity.Enemy;
-import ru.thedreamingsaviour.game.gameobject.entity.Player;
-import ru.thedreamingsaviour.game.gameobject.entity.Entity;
+import ru.thedreamingsaviour.game.gameobject.entity.*;
 import ru.thedreamingsaviour.game.resourceloader.LevelLoader;
 import ru.thedreamingsaviour.game.screen.DeathScreen;
 import ru.thedreamingsaviour.game.screen.LevelsScreen;
@@ -63,6 +60,8 @@ public class LevelsLogic {
         music.setLooping(true);
         music.play();
         startFPSTime = System.currentTimeMillis();
+
+        player.heal();
     }
 
     public void render() {
@@ -237,7 +236,7 @@ public class LevelsLogic {
 
                 if (enemy.HP <= 0) {
                     enemyList.remove(enemy);
-                    if (player.HP < 4) {
+                    if (player.HP < player.saveHP) {
                         player.HP++;
                     } else {
                         switch (enemy.type) {
@@ -268,7 +267,8 @@ public class LevelsLogic {
             Iterator<Bullet> bulletIterator = BULLET_LIST.iterator();
             while (bulletIterator.hasNext()) {
                 Bullet bullet = bulletIterator.next();
-                bullet.move();
+                bullet.move(bullet.getTargetAim());
+
                 bullet.textures.draw(game.batch, bullet.x, bullet.y, bullet.width, bullet.height, 2);
                 for (Surface surface : surfaceList) {
                     if (bullet.overlaps(surface) && surface.getEffect().equals("solid")) {
@@ -296,7 +296,7 @@ public class LevelsLogic {
                         player.HP = 0;
                         return;
                     }
-                    player.HP--;
+                    player.HP -= bullet.damage;
                     return;
                 }
                 for (SwitchHandler switchHandler : switchHandlerList) {

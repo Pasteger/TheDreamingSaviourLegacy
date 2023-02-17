@@ -12,6 +12,7 @@ public class SaveLoader {
         PLAYER.saveHP = Integer.parseInt(String.valueOf(save.get("HP")));
         PLAYER.heal();
         PLAYER.damage = Integer.parseInt(String.valueOf(save.get("damage")));
+        PLAYER.setBulletAim(String.valueOf(save.get("bulletAim")));
         PLAYER.saveSpeed = Integer.parseInt(String.valueOf(save.get("speed")));
         PLAYER.balance = Integer.parseInt(String.valueOf(save.get("balance")));
         PLAYER.currentLevel = String.valueOf(save.get("level"));

@@ -10,15 +10,15 @@ import ru.thedreamingsaviour.game.logics.LevelsLogic;
 import java.util.List;
 import java.util.Map;
 
-import static ru.thedreamingsaviour.game.resourceloader.TextureLoader.BULLET_ILYA;
-import static ru.thedreamingsaviour.game.resourceloader.TextureLoader.BULLET_SHOT_ATTACK_ENEMY;
-
 public abstract class Entity extends Rectangle {
     public String type;
     Map<String, List<Texture>> sprites;
     public int saveHP;
     public int HP;
     public int damage;
+    String bulletType = "";
+    String bulletAim = "";
+    String saveBulletAim = "";
     public String direction = "NORTH";
     public AnimatedObject animatedObject = new AnimatedObject();
     Rectangle legs = new Rectangle();
@@ -107,44 +107,60 @@ public abstract class Entity extends Rectangle {
         }
     }
 
-    public void shot(String bulletType) {
-        Bullet bullet = new Bullet();
-        switch (direction) {
-            case "NORTH" -> {
-                bullet.x = x + 244;
-                bullet.y = y + 285;
+
+    public void shot(Rectangle aim) {
+        Bullet bullet = createBullet();
+        bullet.setTargetAim(aim);
+
+        LevelsLogic.BULLET_LIST.add(bullet);
+    }
+
+    private Bullet createBullet(){
+        Bullet bullet = new Bullet(bulletType);
+        if (type.equals("Player")) {
+            switch (direction) {
+                case "NORTH" -> {
+                    bullet.x = x + 244;
+                    bullet.y = y + 285;
+                }
+                case "SOUTH" -> {
+                    bullet.x = x + 28;
+                    bullet.y = y + 15;
+                }
+                case "WEST" -> {
+                    bullet.x = x + 15;
+                    bullet.y = y + 243;
+                }
+                case "EAST" -> {
+                    bullet.x = x + 285;
+                    bullet.y = y + 28;
+                }
+                case "LEFT" -> {
+                    bullet.x = x + 66;
+                    bullet.y = y + 102;
+                }
+                case "RIGHT" -> {
+                    bullet.x = x + 237;
+                    bullet.y = y + 102;
+                }
             }
-            case "SOUTH" -> {
-                bullet.x = x + 28;
-                bullet.y = y + 15;
-            }
-            case "WEST" -> {
-                bullet.x = x + 15;
-                bullet.y = y + 243;
-            }
-            case "EAST" -> {
-                bullet.x = x + 285;
-                bullet.y = y + 28;
-            }
-            case "LEFT" -> {
-                bullet.x = x + 66;
-                bullet.y = y + 102;
-            }
-            case "RIGHT" -> {
-                bullet.x = x + 237;
-                bullet.y = y + 102;
-            }
+        }
+        else {
+            bullet.x = x + width / 2;
+            bullet.y = y + height / 2;
         }
         bullet.height = 30;
         bullet.width = 30;
-        bullet.direction = direction;
-        bullet.type = bulletType;
-        bullet.damage = damage;
-        switch (bulletType) {
-            case "GOOD" -> bullet.textures.setTextures(BULLET_ILYA);
-            case "BAD" -> bullet.textures.setTextures(BULLET_SHOT_ATTACK_ENEMY);
+
+        switch (bulletAim) {
+            case "direction" -> bullet.direction = direction;
+            case "moveTo" -> bullet.direction = "moveTo";
+            case "moveToTarget" -> bullet.direction = "moveToTarget";
         }
-        LevelsLogic.BULLET_LIST.add(bullet);
+
+        bullet.damage = damage;
+
+        return bullet;
     }
 
     public void fall(List<Surface> surfaces, List<Entity> entities) {
@@ -257,5 +273,9 @@ public abstract class Entity extends Rectangle {
 
     public void heal() {
         HP = saveHP;
+    }
+    public void setBulletAim(String bulletAim){
+        this.bulletAim = bulletAim;
+        saveBulletAim = bulletAim;
     }
 }
