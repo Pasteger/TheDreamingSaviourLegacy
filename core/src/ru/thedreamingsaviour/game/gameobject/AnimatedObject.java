@@ -36,8 +36,10 @@ public class AnimatedObject {
     }
 
     public void setTextures(List<Texture> textures) {
+        if (this.textures.size() != textures.size()) {
+            speed = 0;
+        }
         this.textures = textures;
-        speed = 0;
     }
     public List<Texture> getTextures() {
         return textures;

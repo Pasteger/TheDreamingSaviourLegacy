@@ -2,6 +2,7 @@ package ru.thedreamingsaviour.game.gameobject.entity;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import ru.thedreamingsaviour.game.gameobject.Surface;
 
 import java.util.ArrayList;
@@ -19,7 +20,7 @@ public class Player extends Entity {
         type = "Player";
         bulletType = "GOOD";
         sprites = PLAYER_TEXTURES;
-        animatedObject.setTextures(sprites.get("NORTH"));
+        animatedObject.setTextures(sprites.get("STAND/NORTH"));
         setX(3000);
         setY(3000);
         width = 300;
@@ -31,6 +32,7 @@ public class Player extends Entity {
 
     @Override
     public void move(List<Surface> surfaces, List<Entity> entities) {
+        isMoved = false;
         if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
             bulletAim = saveBulletAim;
             List<Entity> enemies = new ArrayList<>();
@@ -65,10 +67,13 @@ public class Player extends Entity {
         }
 
         if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
+            isMoved = true;
             direction = gravitated ? "LEFT" : "WEST";
+
             super.move(surfaces, entities);
         }
         if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
+            isMoved = true;
             direction = gravitated ? "RIGHT" : "EAST";
             super.move(surfaces, entities);
         }
@@ -76,12 +81,18 @@ public class Player extends Entity {
         if (Gdx.input.isKeyJustPressed(Input.Keys.UP) && gravitated) {
             jump(surfaces, entities);
         } else if (Gdx.input.isKeyPressed(Input.Keys.UP) && !gravitated) {
+            isMoved = true;
             direction = "NORTH";
             super.move(surfaces, entities);
         }
         if (Gdx.input.isKeyPressed(Input.Keys.DOWN) && !gravitated) {
+            isMoved = true;
             direction = "SOUTH";
             super.move(surfaces, entities);
+        }
+
+        if(!isMoved && jumped == 0 && timeFall == 0) {
+            animatedObject.setTextures(sprites.get("STAND/" + direction));
         }
     }
 }

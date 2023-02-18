@@ -1,5 +1,6 @@
 package ru.thedreamingsaviour.game.gameobject.entity;
 
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import ru.thedreamingsaviour.game.gameobject.Surface;
 import ru.thedreamingsaviour.game.gameobject.entity.part.Cell;
@@ -14,6 +15,7 @@ public abstract class Enemy extends Entity {
     public final List<Cell> cellsOfView = new ArrayList<>();
 
     public void moveToPlayer(Player player, List<Surface> surfaceList, List<Entity> entities, int countRenders) {
+        isMoved = false;
         fieldOfView.x = x - fieldOfView.width / 2;
         fieldOfView.y = y - fieldOfView.height / 2;
         if (fieldOfView.overlaps(player)) {
@@ -22,10 +24,12 @@ public abstract class Enemy extends Entity {
             }
             if (targetCell.x > x && !this.overlaps(player)) {
                 direction = gravitated ? "RIGHT" : "EAST";
+                isMoved = true;
                 move(surfaceList, entities);
             }
             if (targetCell.x < x && !this.overlaps(player)) {
                 direction = gravitated ? "LEFT" : "WEST";
+                isMoved = true;
                 move(surfaceList, entities);
             }
             if (targetCell.y > y && !this.overlaps(player)) {
@@ -33,13 +37,18 @@ public abstract class Enemy extends Entity {
                     jump(surfaceList, entities);
                 } else {
                     direction = "NORTH";
+                    isMoved = true;
                     move(surfaceList, entities);
                 }
             }
             if (targetCell.y < y && !this.overlaps(player) && !gravitated) {
                 direction = "SOUTH";
+                isMoved = true;
                 move(surfaceList, entities);
             }
+        }
+        if(!isMoved && jumped == 0 && timeFall == 0) {
+            animatedObject.setTextures(sprites.get("STAND/" + direction));
         }
         moveCells();
     }

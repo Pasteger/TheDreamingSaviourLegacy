@@ -1,6 +1,7 @@
 package ru.thedreamingsaviour.game.gameobject.entity;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import ru.thedreamingsaviour.game.gameobject.AnimatedObject;
 import ru.thedreamingsaviour.game.gameobject.Bullet;
@@ -28,13 +29,19 @@ public abstract class Entity extends Rectangle {
     public int jumped;
     public int timeFall;
     public long deltaTime;
+    boolean isMoved;
+
+    public void draw(SpriteBatch batch) {
+        int drawSpeed = 15 - speed / 10 > 0 ? 15 - speed / 10 : 1;
+        animatedObject.draw(batch, x, y, width, height, drawSpeed);
+    }
 
     public void move(List<Surface> surfaces, List<Entity> entities) {
         speed = saveSpeed;
 
-        animatedObject.setTextures(sprites.get(direction));
-
-
+        if (jumped <= 0 && timeFall <= 0) {
+            animatedObject.setTextures(sprites.get("MOVE/" + direction));
+        }
         switch (direction) {
             case "NORTH" -> legs.y += saveSpeed;
             case "SOUTH" -> legs.y -= saveSpeed;
@@ -115,7 +122,7 @@ public abstract class Entity extends Rectangle {
         LevelsLogic.BULLET_LIST.add(bullet);
     }
 
-    private Bullet createBullet(){
+    private Bullet createBullet() {
         Bullet bullet = new Bullet(bulletType);
         if (type.equals("Player")) {
             switch (direction) {
@@ -144,8 +151,7 @@ public abstract class Entity extends Rectangle {
                     bullet.y = y + 102;
                 }
             }
-        }
-        else {
+        } else {
             bullet.x = x + width / 2;
             bullet.y = y + height / 2;
         }
@@ -165,6 +171,7 @@ public abstract class Entity extends Rectangle {
 
     public void fall(List<Surface> surfaces, List<Entity> entities) {
         if (gravitated) {
+            int oldTimeFall = timeFall;
             timeFall++;
             deltaTime = System.currentTimeMillis();
             for (int step = 0; step < timeFall; step++) {
@@ -184,7 +191,17 @@ public abstract class Entity extends Rectangle {
                     }
                 }
             }
-            y = legs.y;
+            if (timeFall != oldTimeFall) {
+                y = legs.y;
+                if (jumped <= 0) {
+                    if (!(direction.equals("RIGHT") || direction.equals("LEFT"))) {
+                        direction = "RIGHT";
+                    }
+                    if (!type.equals("Box")) {
+                        animatedObject.setTextures(sprites.get("FALL/" + direction));
+                    }
+                }
+            }
         }
     }
 
@@ -209,6 +226,10 @@ public abstract class Entity extends Rectangle {
 
     public void jumpRender(List<Surface> surfaces, List<Box> boxes) {
         if (jumped > 0) {
+            if (!(direction.equals("RIGHT") || direction.equals("LEFT"))) {
+                direction = "RIGHT";
+            }
+            animatedObject.setTextures(sprites.get("JUMP/" + direction));
             if (!gravitated) {
                 jumped = 0;
                 return;
@@ -274,7 +295,8 @@ public abstract class Entity extends Rectangle {
     public void heal() {
         HP = saveHP;
     }
-    public void setBulletAim(String bulletAim){
+
+    public void setBulletAim(String bulletAim) {
         this.bulletAim = bulletAim;
         saveBulletAim = bulletAim;
     }

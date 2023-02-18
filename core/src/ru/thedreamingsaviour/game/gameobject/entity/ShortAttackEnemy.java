@@ -7,7 +7,7 @@ public class ShortAttackEnemy extends Enemy {
     public ShortAttackEnemy() {
         type = "ShortAttackEnemy";
         sprites = SHORT_ATTACK_ENEMY;
-        animatedObject.setTextures(sprites.get("NORTH"));
+        animatedObject.setTextures(sprites.get("STAND/NORTH"));
         width = 300;
         height = 300;
         HP = 3;

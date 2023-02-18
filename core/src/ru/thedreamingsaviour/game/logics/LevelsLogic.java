@@ -80,7 +80,7 @@ public class LevelsLogic {
 
         switchHandlerList.forEach(switchHandler -> switchHandler.handle(game.batch));
 
-        player.animatedObject.draw(game.batch, player.x, player.y, player.width, player.height, 20);
+        player.draw(game.batch);
         surfaceLogic();
         enemyLive();
         coinLogic();
@@ -91,7 +91,7 @@ public class LevelsLogic {
             exit.draw(game.batch);
         }
 
-        boxList.forEach(box -> box.animatedObject.draw(game.batch, box.x, box.y, box.width, box.height, 5));
+        boxList.forEach(box -> box.draw(game.batch));
         coinList.forEach(coin -> coin.textures.draw(game.batch, coin.x, coin.y, coin.width, coin.height, coin.gravitated ? 5 : 15));
 
         player.move(surfaceList, entityList);
@@ -196,8 +196,16 @@ public class LevelsLogic {
                     }
                     if (surface.getEffect().equals("none")) {
                         entity.gravitated = false;
-                        if (entity.timeFall != 0 && System.currentTimeMillis() - entity.deltaTime > 1000)
+                        boolean overlapsGravity = false;
+                        for (Surface surface1 : surfaceList) {
+                            if (entity.overlaps(surface1) && surface1.getEffect().equals("gravity")) {
+                                overlapsGravity = true;
+                            }
+                        }
+                        if (entity.timeFall != 0 && !overlapsGravity)
                             entity.timeFall = 0;
+                        if (entity.jumped != 0 && !overlapsGravity)
+                            entity.jumped = 0;
                     }
                 }
             }
@@ -229,7 +237,7 @@ public class LevelsLogic {
     private void enemyLive() {
         if (!enemyList.isEmpty()) {
             for (Enemy enemy : enemyList) {
-                enemy.animatedObject.draw(game.batch, enemy.x, enemy.y, enemy.width, enemy.height, 20);
+                enemy.draw(game.batch);
                 enemy.sightCalibration();
                 enemy.attack(player);
                 enemy.moveToPlayer(player, surfaceList, entityList, countRenders);
