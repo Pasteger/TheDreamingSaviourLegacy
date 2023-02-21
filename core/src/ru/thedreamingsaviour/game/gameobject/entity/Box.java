@@ -1,9 +1,12 @@
 package ru.thedreamingsaviour.game.gameobject.entity;
 
+import com.badlogic.gdx.audio.Sound;
 import ru.thedreamingsaviour.game.gameobject.Surface;
 
 import java.util.List;
+import java.util.Random;
 
+import static ru.thedreamingsaviour.game.resourceloader.SoundLoader.*;
 import static ru.thedreamingsaviour.game.resourceloader.TextureLoader.BOX;
 
 public class Box extends Entity {
@@ -80,6 +83,15 @@ public class Box extends Entity {
             case "WEST", "LEFT" -> westBlocked = true;
         }
         blockTime = System.currentTimeMillis();
+    }
+
+    @Override
+    public void takeDamage(int damage) {
+        List<Sound> sounds = DAMAGE.get("BOX/" + material);
+        Sound damageSound = sounds.get(new Random().nextInt(sounds.size()));
+        damageSound.play(0.8f);
+
+        HP -= damage;
     }
 
     public String getMaterial() {

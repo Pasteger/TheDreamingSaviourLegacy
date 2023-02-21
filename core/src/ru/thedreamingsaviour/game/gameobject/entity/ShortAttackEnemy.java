@@ -34,7 +34,7 @@ public class ShortAttackEnemy extends Enemy {
             recharge--;
             if (recharge <= 0) {
                 recharge = (byte) ((byte) 20 + random.nextInt(60));
-                player.HP -= damage;
+                player.takeDamage(damage);
             }
         }
     }

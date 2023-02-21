@@ -7,6 +7,7 @@ import com.badlogic.gdx.math.Rectangle;
 import java.util.List;
 import java.util.Map;
 
+import static ru.thedreamingsaviour.game.resourceloader.SoundLoader.getSwitchToggle;
 import static ru.thedreamingsaviour.game.resourceloader.TextureLoader.SWITCH;
 
 public class Switch extends Rectangle {
@@ -43,6 +44,7 @@ public class Switch extends Rectangle {
     }
 
     public void toggle() {
+        getSwitchToggle().play(1f);
         active = !active;
     }
 

@@ -29,6 +29,7 @@ public class DeathScreen implements Screen {
         music = getDeathMusic();
         startCurrentTime = System.currentTimeMillis();
         music.setLooping(false);
+        music.setVolume(0.5f);
         music.play();
     }
 
@@ -48,8 +49,8 @@ public class DeathScreen implements Screen {
         if (timeMs > 1000) {
             if (Gdx.input.isKeyJustPressed(Input.Keys.ANY_KEY) || Gdx.input.justTouched() || timeMs > 152000) {
                 try {
-                    game.setScreen(new LevelsScreen(game, "HUB"));
                     music.stop();
+                    game.setScreen(new LevelsScreen(game, "HUB"));
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }

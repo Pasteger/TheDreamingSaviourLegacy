@@ -3,6 +3,7 @@ package ru.thedreamingsaviour.game.logics;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import ru.thedreamingsaviour.game.MyGdxGame;
 import ru.thedreamingsaviour.game.gameobject.*;
 import ru.thedreamingsaviour.game.gameobject.entity.*;
@@ -19,6 +20,7 @@ import java.util.Random;
 
 import static ru.thedreamingsaviour.game.resourceloader.MusicLoader.getFactoryMusic;
 import static ru.thedreamingsaviour.game.resourceloader.SaveLoader.PLAYER;
+import static ru.thedreamingsaviour.game.resourceloader.SoundLoader.*;
 
 public class LevelsLogic {
     private final MyGdxGame game;
@@ -58,6 +60,7 @@ public class LevelsLogic {
         player.setY(LevelLoader.getStartY());
         music = getFactoryMusic();
         music.setLooping(true);
+        music.setVolume(0.5f);
         music.play();
         startFPSTime = System.currentTimeMillis();
 
@@ -153,6 +156,10 @@ public class LevelsLogic {
                     coinList.add(new Coin(box.x + (box.width / 2 - 60), box.y + (box.height / 2 - 60), 1));
                 }
 
+                List<Sound> sounds = DEATH.get("BOX/" + box.getMaterial());
+                Sound deathSound = sounds.get(new Random().nextInt(sounds.size()));
+                deathSound.play(0.35f);
+
                 boxList.remove(box);
                 return;
             }
@@ -166,6 +173,7 @@ public class LevelsLogic {
                 coin.updateTextures();
             }
             if (player.overlaps(coin)) {
+                getPickCoin().play(1);
                 score += coin.value;
                 coinList.remove(coin);
                 return;
@@ -243,9 +251,19 @@ public class LevelsLogic {
                 enemy.moveToPlayer(player, surfaceList, entityList, countRenders);
 
                 if (enemy.HP <= 0) {
+                    StringBuilder key = new StringBuilder();
+                    key.append(enemy.type.charAt(0));
+                    for (int i = 1; i < enemy.type.length(); i++) {
+                        key.append(Character.isUpperCase(enemy.type.charAt(i)) ?
+                                "_" + enemy.type.charAt(i) : Character.toUpperCase(enemy.type.charAt(i)));
+                    }
+
+                    List<Sound> sounds = DEATH.get("ENEMY/" + key);
+                    Sound deathSound = sounds.get(new Random().nextInt(sounds.size()));
+                    deathSound.play(0.8f);
                     enemyList.remove(enemy);
                     if (player.HP < player.saveHP) {
-                        player.HP++;
+                        player.takeHeal(1);
                     } else {
                         switch (enemy.type) {
                             case "ShortAttackEnemy" -> score += 50;
@@ -286,25 +304,21 @@ public class LevelsLogic {
                 }
                 for (Enemy enemy : enemyList) {
                     if (bullet.overlaps(enemy) && bullet.type.equals("GOOD")) {
-                        enemy.HP -= bullet.damage;
+                        enemy.takeDamage(bullet.damage);
                         bulletIterator.remove();
                         return;
                     }
                 }
                 for (Box box : boxList) {
                     if (bullet.overlaps(box)) {
-                        box.HP -= bullet.damage;
+                        box.takeDamage(bullet.damage);
                         bulletIterator.remove();
                         return;
                     }
                 }
-                if (bullet.overlaps(player) && (bullet.type.equals("BAD") || bullet.type.equals("MASTERS"))) {
+                if (bullet.overlaps(player) && bullet.type.equals("BAD")) {
                     bulletIterator.remove();
-                    if (bullet.type.equals("MASTERS")) {
-                        player.HP = 0;
-                        return;
-                    }
-                    player.HP -= bullet.damage;
+                    player.takeDamage(bullet.damage);
                     return;
                 }
                 for (SwitchHandler switchHandler : switchHandlerList) {
@@ -321,6 +335,9 @@ public class LevelsLogic {
 
     private void ilyaDeath() {
         if (player.HP < 1) {
+            List<Sound> sounds = DAMAGE.get("PLAYER");
+            Sound damageSound = sounds.get(new Random().nextInt(sounds.size()));
+            damageSound.play(0.8f);
             music.stop();
             BULLET_LIST.clear();
             player.timeFall = 0;

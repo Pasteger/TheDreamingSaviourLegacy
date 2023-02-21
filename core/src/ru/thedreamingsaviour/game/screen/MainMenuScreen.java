@@ -102,6 +102,7 @@ public class MainMenuScreen implements Screen {
         });
         Gdx.gl.glClearColor(0, 0, 0.2f, 1);
         music.setLooping(true);
+        music.setVolume(0.5f);
         music.play();
     }
 

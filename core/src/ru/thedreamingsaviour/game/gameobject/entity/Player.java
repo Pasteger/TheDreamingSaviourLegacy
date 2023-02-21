@@ -2,7 +2,6 @@ package ru.thedreamingsaviour.game.gameobject.entity;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import ru.thedreamingsaviour.game.gameobject.Surface;
 
 import java.util.ArrayList;
@@ -37,7 +36,7 @@ public class Player extends Entity {
             bulletAim = saveBulletAim;
             List<Entity> enemies = new ArrayList<>();
             entities.stream().filter(entity -> entity.type.contains("Enemy")).forEach(enemies::add);
-            float distance = 999999999;
+            float distance = Float.MAX_VALUE;
             for (Entity enemy : enemies) {
                 float thisDistance = (float) Math.abs(Math.sqrt(
                         Math.abs(x - enemy.x) * Math.abs(x - enemy.x) +

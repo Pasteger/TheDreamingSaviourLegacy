@@ -1,12 +1,14 @@
 package ru.thedreamingsaviour.game.gameobject.entity;
 
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import ru.thedreamingsaviour.game.gameobject.Surface;
 import ru.thedreamingsaviour.game.gameobject.entity.part.Cell;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static ru.thedreamingsaviour.game.resourceloader.SoundLoader.getAgrShortAttackEnemy;
+import static ru.thedreamingsaviour.game.resourceloader.SoundLoader.getAgrShotAttackEnemy;
 
 public abstract class Enemy extends Entity {
     Cell targetCell;
@@ -18,7 +20,17 @@ public abstract class Enemy extends Entity {
         isMoved = false;
         fieldOfView.x = x - fieldOfView.width / 2;
         fieldOfView.y = y - fieldOfView.height / 2;
+        if (System.currentTimeMillis() - timeAgr > 1000) {
+            isAgr = false;
+        }
         if (fieldOfView.overlaps(player)) {
+            if (!isAgr) {
+                switch (type) {
+                    case "ShortAttackEnemy" -> getAgrShortAttackEnemy().play(0.2f);
+                    case "ShotAttackEnemy" -> getAgrShotAttackEnemy().play(0.7f);
+                }
+                isAgr = true;
+            }
             if (targetCell == null || countRenders % 10 == 0) {
                 targetCell = findWay(player, surfaceList);
             }
@@ -46,6 +58,7 @@ public abstract class Enemy extends Entity {
                 isMoved = true;
                 move(surfaceList, entities);
             }
+            timeAgr = System.currentTimeMillis();
         }
         if(!isMoved && jumped == 0 && timeFall == 0) {
             animatedObject.setTextures(sprites.get("STAND/" + direction));

@@ -1,5 +1,6 @@
 package ru.thedreamingsaviour.game.gameobject.entity;
 
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
@@ -10,6 +11,9 @@ import ru.thedreamingsaviour.game.logics.LevelsLogic;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
+
+import static ru.thedreamingsaviour.game.resourceloader.SoundLoader.*;
 
 public abstract class Entity extends Rectangle {
     public String type;
@@ -30,6 +34,8 @@ public abstract class Entity extends Rectangle {
     public int timeFall;
     public long deltaTime;
     boolean isMoved;
+    boolean isAgr;
+    long timeAgr;
 
     public void draw(SpriteBatch batch) {
         int drawSpeed = 15 - speed / 10 > 0 ? 15 - speed / 10 : 1;
@@ -116,6 +122,10 @@ public abstract class Entity extends Rectangle {
 
 
     public void shot(Rectangle aim) {
+        switch (type) {
+            case "Player" -> getShotPlayer().play(0.35f);
+            case "ShotAttackEnemy" -> getShotShotAttackEnemy().play(0.5f);
+        }
         Bullet bullet = createBullet();
         bullet.setTargetAim(aim);
 
@@ -294,6 +304,24 @@ public abstract class Entity extends Rectangle {
 
     public void heal() {
         HP = saveHP;
+    }
+
+    public void takeHeal(int value) {
+        HP += value;
+    }
+
+    public void takeDamage(int damage) {
+        if (type.contains("Player")) {
+            List<Sound> sounds = DAMAGE.get(type.toUpperCase());
+            Sound damageSound = sounds.get(new Random().nextInt(sounds.size()));
+            damageSound.play(0.8f);
+        } else if (type.contains("Enemy")) {
+            List<Sound> sounds = DAMAGE.get("ENEMY");
+            Sound damageSound = sounds.get(new Random().nextInt(sounds.size()));
+            damageSound.play(0.45f);
+        }
+
+        HP -= damage;
     }
 
     public void setBulletAim(String bulletAim) {

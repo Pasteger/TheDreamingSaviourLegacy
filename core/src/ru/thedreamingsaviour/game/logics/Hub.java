@@ -63,6 +63,7 @@ public class Hub {
 
         music.setLooping(true);
         Gdx.input.setInputProcessor(new HubInputProcessor());
+        music.setVolume(0.5f);
         music.play();
 
         Optional<Dialogue> dialogueOptional = dialogues.stream().filter(
