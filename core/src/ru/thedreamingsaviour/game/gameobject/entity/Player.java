@@ -19,7 +19,7 @@ public class Player extends Entity {
         type = "Player";
         bulletType = "GOOD";
         sprites = PLAYER_TEXTURES;
-        animatedObject.setTextures(sprites.get("STAND/NORTH"));
+        animatedObject.setTextures(sprites.get("STAND/TOP"));
         setX(3000);
         setY(3000);
         width = 300;
@@ -91,7 +91,11 @@ public class Player extends Entity {
         }
 
         if(!isMoved && jumped == 0 && timeFall == 0) {
-            animatedObject.setTextures(sprites.get("STAND/" + direction));
+            if (gravitated) {
+                animatedObject.setTextures(sprites.get("STAND/SIDE"));
+            } else {
+                animatedObject.setTextures(sprites.get("STAND/TOP"));
+            }
         }
     }
 }

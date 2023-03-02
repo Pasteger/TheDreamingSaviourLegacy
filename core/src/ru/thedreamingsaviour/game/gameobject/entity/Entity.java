@@ -39,14 +39,66 @@ public abstract class Entity extends Rectangle {
 
     public void draw(SpriteBatch batch) {
         int drawSpeed = 15 - speed / 10 > 0 ? 15 - speed / 10 : 1;
-        animatedObject.draw(batch, x, y, width, height, drawSpeed);
+        float drawX = x;
+        float drawY = y;
+        animatedObject.rotateSprite(0);
+        animatedObject.mirrorSprite(false, false);
+
+        if (gravitated || jumped > 0 || timeFall > 0) {
+            switch (direction) {
+                case "RIGHT" -> {
+                    animatedObject.rotateSprite(0);
+                    animatedObject.mirrorSprite(false, false);
+                    drawX = x;
+                    drawY = y;
+                }
+                case "LEFT" -> {
+                    animatedObject.rotateSprite(0);
+                    animatedObject.mirrorSprite(true, false);
+                    drawX = x;
+                    drawY = y;
+                }
+            }
+        } else {
+            switch (direction) {
+                case "NORTH" -> {
+                    animatedObject.rotateSprite(0);
+                    animatedObject.mirrorSprite(false, false);
+                    drawX = x;
+                    drawY = y;
+                }
+                case "SOUTH" -> {
+                    animatedObject.rotateSprite(0);
+                    animatedObject.mirrorSprite(true, true);
+                    drawX = x;
+                    drawY = y;
+                }
+                case "EAST" -> {
+                    animatedObject.rotateSprite(90);
+                    animatedObject.mirrorSprite(true, true);
+                    drawX = x + width;
+                    drawY = y;
+                }
+                case "WEST" -> {
+                    animatedObject.rotateSprite(90);
+                    animatedObject.mirrorSprite(false, false);
+                    drawX = x + width;
+                    drawY = y;
+                }
+            }
+        }
+        animatedObject.draw(batch, drawX, drawY, width, height, drawSpeed);
     }
 
     public void move(List<Surface> surfaces, List<Entity> entities) {
         speed = saveSpeed;
 
         if (jumped <= 0 && timeFall <= 0) {
-            animatedObject.setTextures(sprites.get("MOVE/" + direction));
+            if (gravitated) {
+                animatedObject.setTextures(sprites.get("MOVE/SIDE"));
+            } else {
+                animatedObject.setTextures(sprites.get("MOVE/TOP"));
+            }
         }
         switch (direction) {
             case "NORTH" -> legs.y += saveSpeed;
@@ -208,7 +260,7 @@ public abstract class Entity extends Rectangle {
                         direction = "RIGHT";
                     }
                     if (!type.equals("Box")) {
-                        animatedObject.setTextures(sprites.get("FALL/" + direction));
+                        animatedObject.setTextures(sprites.get("FALL"));
                     }
                 }
             }
@@ -239,7 +291,7 @@ public abstract class Entity extends Rectangle {
             if (!(direction.equals("RIGHT") || direction.equals("LEFT"))) {
                 direction = "RIGHT";
             }
-            animatedObject.setTextures(sprites.get("JUMP/" + direction));
+            animatedObject.setTextures(sprites.get("JUMP"));
             if (!gravitated) {
                 jumped = 0;
                 return;

@@ -41,6 +41,14 @@ public class AnimatedObject {
         }
         this.textures = textures;
     }
+    public void rotateSprite(float degree) {
+        if (degree != sprite.getRotation()) {
+            sprite.setRotation(degree);
+        }
+    }
+    public void mirrorSprite(boolean x, boolean y){
+        sprite.setFlip(x, y);
+    }
     public List<Texture> getTextures() {
         return textures;
     }

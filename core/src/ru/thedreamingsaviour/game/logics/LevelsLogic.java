@@ -228,13 +228,13 @@ public class LevelsLogic {
                 }
             }
             for (SwitchHandler switchHandler : switchHandlerList) {
-                for (Switch swch : switchHandler.getSwitches()) {
-                    if (surface.overlaps(swch)) {
+                for (Switch switcher : switchHandler.getSwitches()) {
+                    if (surface.overlaps(switcher)) {
                         if (surface.getEffect().equals("gravity")) {
-                            swch.gravitated = true;
+                            switcher.gravitated = true;
                         }
                         if (surface.getEffect().equals("none")) {
-                            swch.gravitated = false;
+                            switcher.gravitated = false;
                         }
                     }
                 }
@@ -322,9 +322,9 @@ public class LevelsLogic {
                     return;
                 }
                 for (SwitchHandler switchHandler : switchHandlerList) {
-                    for (Switch swch : switchHandler.getSwitches()) {
-                        if (bullet.overlaps(swch)) {
-                            swch.toggle();
+                    for (Switch switcher : switchHandler.getSwitches()) {
+                        if (bullet.overlaps(switcher)) {
+                            switcher.toggle();
                             bulletIterator.remove();
                         }
                     }

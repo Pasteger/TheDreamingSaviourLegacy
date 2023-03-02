@@ -174,9 +174,9 @@ public class LevelEditor implements Screen {
         if (Gdx.input.isKeyJustPressed(Input.Keys.H)) {
             currentTask = !currentTask.equals("addDrawingSurface") ? "addDrawingSurface" : "edit";
         }
-        if (Gdx.input.isKeyJustPressed(Input.Keys.S)) {
+        if (Gdx.input.isKeyJustPressed(Input.Keys.S) && !Gdx.input.isKeyPressed(Input.Keys.CONTROL_LEFT)) {
             currentTask = !currentTask.equals("spawnEnemy") ? "spawnEnemy" : "edit";
-            demoAddedObjectSetTextures(currentTask.equals("spawnEnemy") ? getCurrentEnemyTexture() : PLAYER_TEXTURES.get("NORTH"));
+            demoAddedObjectSetTextures(currentTask.equals("spawnEnemy") ? getCurrentEnemyTexture() : PLAYER_TEXTURES.get("STAND/TOP"));
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.D)) {
             currentTask = !currentTask.equals("deleteEnemy") ? "deleteEnemy" : "edit";
@@ -188,7 +188,7 @@ public class LevelEditor implements Screen {
             if ("addWall".equals(currentTask)) {
                 demoAddedObjectSetTextures(currentSurfaceColor);
             } else {
-                demoAddedObjectSetTextures(PLAYER_TEXTURES.get("NORTH"));
+                demoAddedObjectSetTextures(PLAYER_TEXTURES.get("STAND/TOP"));
             }
         }
 
@@ -210,7 +210,7 @@ public class LevelEditor implements Screen {
             if ("addFloor".equals(currentTask)) {
                 demoAddedObjectSetTextures(currentSurfaceColor);
             } else {
-                demoAddedObjectSetTextures(PLAYER_TEXTURES.get("NORTH"));
+                demoAddedObjectSetTextures(PLAYER_TEXTURES.get("STAND/TOP"));
             }
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.G)) {
@@ -220,7 +220,7 @@ public class LevelEditor implements Screen {
             if ("addSky".equals(currentTask)) {
                 demoAddedObjectSetTextures(currentSurfaceColor);
             } else {
-                demoAddedObjectSetTextures(PLAYER_TEXTURES.get("NORTH"));
+                demoAddedObjectSetTextures(PLAYER_TEXTURES.get("STAND/TOP"));
             }
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.R)) {
@@ -232,7 +232,7 @@ public class LevelEditor implements Screen {
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.K)) {
             currentTask = !currentTask.equals("addBox") ? "addBox" : "edit";
-            demoAddedObjectSetTextures(currentTask.equals("addBox") ? BOX.get(currentBoxMaterial) : PLAYER_TEXTURES.get("NORTH"));
+            demoAddedObjectSetTextures(currentTask.equals("addBox") ? BOX.get(currentBoxMaterial) : PLAYER_TEXTURES.get("STAND/TOP"));
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.L)) {
             currentTask = !currentTask.equals("removeBox") ? "removeBox" : "edit";
@@ -286,7 +286,7 @@ public class LevelEditor implements Screen {
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_1)) {
             currentTask = !currentTask.equals("addCoin") ? "addCoin" : "edit";
-            demoAddedObjectSetTextures(currentTask.equals("addCoin") ? COINS.get(String.valueOf(currentCoinValue)) : PLAYER_TEXTURES.get("NORTH"));
+            demoAddedObjectSetTextures(currentTask.equals("addCoin") ? COINS.get(String.valueOf(currentCoinValue)) : PLAYER_TEXTURES.get("STAND/TOP"));
         }
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_3)) {
@@ -300,7 +300,7 @@ public class LevelEditor implements Screen {
                 case 1000 -> currentCoinValue = 5000;
                 case 5000 -> currentCoinValue = 1;
             }
-            demoAddedObjectSetTextures(currentTask.equals("addCoin") ? COINS.get(String.valueOf(currentCoinValue)) : PLAYER_TEXTURES.get("NORTH"));
+            demoAddedObjectSetTextures(currentTask.equals("addCoin") ? COINS.get(String.valueOf(currentCoinValue)) : PLAYER_TEXTURES.get("STAND/TOP"));
         }
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_0)) {
@@ -315,12 +315,12 @@ public class LevelEditor implements Screen {
                 case "STEEL" -> currentBoxMaterial = "BARREL";
                 case "BARREL" -> currentBoxMaterial = "WOODEN";
             }
-            demoAddedObjectSetTextures(currentTask.equals("addBox") ? BOX.get(currentBoxMaterial) : PLAYER_TEXTURES.get("NORTH"));
+            demoAddedObjectSetTextures(currentTask.equals("addBox") ? BOX.get(currentBoxMaterial) : PLAYER_TEXTURES.get("STAND/TOP"));
         }
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.Y)) {
             currentTask = !currentTask.equals("addDecor") ? "addDecor" : "edit";
-            demoAddedObjectSetTextures(currentTask.equals("addDecor") ? DECOR.get(currentDecorTexture) : PLAYER_TEXTURES.get("NORTH"));
+            demoAddedObjectSetTextures(currentTask.equals("addDecor") ? DECOR.get(currentDecorTexture) : PLAYER_TEXTURES.get("STAND/TOP"));
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.U)) {
             currentTask = !currentTask.equals("deleteDecor") ? "deleteDecor" : "edit";
@@ -332,7 +332,7 @@ public class LevelEditor implements Screen {
                 case "PIPE" -> currentDecorTexture = "PORTAL";
                 case "PORTAL" -> currentDecorTexture = "STEAM_HAMMER";
             }
-            demoAddedObjectSetTextures(currentTask.equals("addDecor") ? DECOR.get(currentDecorTexture) : PLAYER_TEXTURES.get("NORTH"));
+            demoAddedObjectSetTextures(currentTask.equals("addDecor") ? DECOR.get(currentDecorTexture) : PLAYER_TEXTURES.get("STAND/TOP"));
         }
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_8)) {
@@ -518,9 +518,9 @@ public class LevelEditor implements Screen {
             }
         }
         if (!switchHandlerList.isEmpty()) {
-            for (Switch swch : switchHandlerList.get(currentSwitchHandlerIndex).getSwitches()) {
-                if (findObjectFromCord(swch, x, y)) {
-                    currentSwitch = swch;
+            for (Switch switcher : switchHandlerList.get(currentSwitchHandlerIndex).getSwitches()) {
+                if (findObjectFromCord(switcher, x, y)) {
+                    currentSwitch = switcher;
                     return;
                 }
             }
@@ -608,11 +608,11 @@ public class LevelEditor implements Screen {
                 object.getY() >= y - object.getHeight() && object.getY() <= y + 1);
     }
 
-    private List<Texture> getCurrentEnemyTexture(){
+    private List<Texture> getCurrentEnemyTexture() {
         List<Texture> textures = new ArrayList<>();
         switch (currentEnemyType) {
-            case "ShortAttackEnemy" -> textures = SHORT_ATTACK_ENEMY.get("NORTH");
-            case "ShotAttackEnemy" -> textures = SHOT_ATTACK_ENEMY.get("NORTH");
+            case "ShortAttackEnemy" -> textures = SHORT_ATTACK_ENEMY.get("STAND/TOP");
+            case "ShotAttackEnemy" -> textures = SHOT_ATTACK_ENEMY.get("STAND/TOP");
         }
         return textures;
     }
@@ -650,58 +650,32 @@ public class LevelEditor implements Screen {
                 touchDownY = screenY;
                 dragged = true;
             }
-            if (button == Input.Buttons.LEFT && currentSurface != null && !extensionCurrentSurface &&
-                    getSynchronizedX() >= currentSurface.x &&
-                    getSynchronizedX() <= currentSurface.x + currentSurface.width / 2 &&
-                    getSynchronizedY() >= currentSurface.y &&
-                    getSynchronizedY() <= currentSurface.y + currentSurface.height / 2) {
-                moveCurrentSurface = true;
-            }
-            if (button == Input.Buttons.LEFT && currentSurface != null && !moveCurrentSurface &&
-                    getSynchronizedX() >= currentSurface.x + currentSurface.width - currentSurface.width / 2 &&
-                    getSynchronizedX() <= currentSurface.x + currentSurface.width &&
-                    getSynchronizedY() >= currentSurface.y + currentSurface.height - currentSurface.height / 2 &&
-                    getSynchronizedY() <= currentSurface.y + currentSurface.height) {
-                extensionCurrentSurface = true;
-            }
 
-            if (button == Input.Buttons.LEFT && currentEntity != null && !moveEntity &&
-                    getSynchronizedX() >= currentEntity.x &&
-                    getSynchronizedX() <= currentEntity.x + currentEntity.width &&
-                    getSynchronizedY() >= currentEntity.y &&
-                    getSynchronizedY() <= currentEntity.y + currentEntity.height) {
-                moveEntity = true;
-            }
+            moveEntity = checkingAvailabilityMove(button, currentEntity, moveEntity);
+            moveCurrentSurface = checkingAvailabilityMove(button, currentSurface, extensionCurrentSurface);
+            moveDecor = checkingAvailabilityMove(button, currentDecorObject, extensionDecor);
+            moveSwitch = checkingAvailabilityMove(button, currentSwitch, extensionSwitch);
 
-            if (button == Input.Buttons.LEFT && currentDecorObject != null && !extensionDecor &&
-                    getSynchronizedX() >= currentDecorObject.x &&
-                    getSynchronizedX() <= currentDecorObject.x + currentDecorObject.width / 2 &&
-                    getSynchronizedY() >= currentDecorObject.y &&
-                    getSynchronizedY() <= currentDecorObject.y + currentDecorObject.height / 2) {
-                moveDecor = true;
-            }
-            if (button == Input.Buttons.LEFT && currentDecorObject != null && !moveDecor &&
-                    getSynchronizedX() >= currentDecorObject.x + currentDecorObject.width - currentDecorObject.width / 2 &&
-                    getSynchronizedX() <= currentDecorObject.x + currentDecorObject.width &&
-                    getSynchronizedY() >= currentDecorObject.y + currentDecorObject.height - currentDecorObject.height / 2 &&
-                    getSynchronizedY() <= currentDecorObject.y + currentDecorObject.height) {
-                extensionDecor = true;
-            }
-            if (button == Input.Buttons.LEFT && currentSwitch != null && !extensionSwitch &&
-                    getSynchronizedX() >= currentSwitch.x &&
-                    getSynchronizedX() <= currentSwitch.x + currentSwitch.width / 2 &&
-                    getSynchronizedY() >= currentSwitch.y &&
-                    getSynchronizedY() <= currentSwitch.y + currentSwitch.height / 2) {
-                moveSwitch = true;
-            }
-            if (button == Input.Buttons.LEFT && currentSwitch != null && !moveSwitch &&
-                    getSynchronizedX() >= currentSwitch.x + currentSwitch.width - currentSwitch.width / 2 &&
-                    getSynchronizedX() <= currentSwitch.x + currentSwitch.width &&
-                    getSynchronizedY() >= currentSwitch.y + currentSwitch.height - currentSwitch.height / 2 &&
-                    getSynchronizedY() <= currentSwitch.y + currentSwitch.height) {
-                extensionSwitch = true;
-            }
+            extensionCurrentSurface = checkingAvailabilityExtension(button, currentSurface, moveCurrentSurface);
+            extensionDecor = checkingAvailabilityExtension(button, currentDecorObject, moveDecor);
+            extensionSwitch = checkingAvailabilityExtension(button, currentSwitch, moveSwitch);
             return false;
+        }
+
+        private boolean checkingAvailabilityMove(int button, Rectangle currentObject, boolean reverseAction) {
+            return button == Input.Buttons.LEFT && currentObject != null && !reverseAction &&
+                    getSynchronizedX() >= currentObject.x &&
+                    getSynchronizedX() <= currentObject.x + currentObject.width / 2 &&
+                    getSynchronizedY() >= currentObject.y &&
+                    getSynchronizedY() <= currentObject.y + currentObject.height / 2;
+        }
+
+        private boolean checkingAvailabilityExtension(int button, Rectangle currentObject, boolean reverseAction) {
+            return button == Input.Buttons.LEFT && currentObject != null && !reverseAction &&
+                    getSynchronizedX() >= currentObject.x + currentObject.width - currentObject.width / 2 &&
+                    getSynchronizedX() <= currentObject.x + currentObject.width &&
+                    getSynchronizedY() >= currentObject.y + currentObject.height - currentObject.height / 2 &&
+                    getSynchronizedY() <= currentObject.y + currentObject.height;
         }
 
         @Override

@@ -8,9 +8,7 @@ import java.util.*;
 
 public class TextureLoader {
     private static final String[] directionals = new String[]
-            {"STAND/NORTH", "STAND/SOUTH", "STAND/WEST", "STAND/EAST", "STAND/LEFT", "STAND/RIGHT",
-                    "MOVE/RIGHT", "MOVE/LEFT", "MOVE/NORTH", "MOVE/SOUTH", "MOVE/WEST", "MOVE/EAST",
-                    "JUMP/LEFT", "JUMP/RIGHT", "FALL/LEFT", "FALL/RIGHT"};
+            {"STAND/SIDE", "STAND/TOP", "MOVE/SIDE", "MOVE/TOP", "JUMP", "FALL"};
     private static Texture nullTexture;
     private static Texture mainMenuBackground;
     private static Texture hubBackground;
@@ -80,7 +78,7 @@ public class TextureLoader {
     }
 
     private static void fillAnimatedObjectMapForCharacter(Map<String, List<Texture>> map, String path) {
-        for (int i = 0; i < 16; i++) {
+        for (int i = 0; i < 6; i++) {
             List<Texture> textures = new ArrayList<>();
             readAnimationTextures(textures, path + directionals[i].toLowerCase() + "/");
             map.put(directionals[i], textures);

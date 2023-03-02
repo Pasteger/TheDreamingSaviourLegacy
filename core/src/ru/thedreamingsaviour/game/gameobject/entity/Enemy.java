@@ -61,7 +61,11 @@ public abstract class Enemy extends Entity {
             timeAgr = System.currentTimeMillis();
         }
         if(!isMoved && jumped == 0 && timeFall == 0) {
-            animatedObject.setTextures(sprites.get("STAND/" + direction));
+            if (gravitated) {
+                animatedObject.setTextures(sprites.get("STAND/SIDE"));
+            } else {
+                animatedObject.setTextures(sprites.get("STAND/TOP"));
+            }
         }
         moveCells();
     }

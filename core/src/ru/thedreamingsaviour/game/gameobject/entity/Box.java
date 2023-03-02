@@ -1,6 +1,7 @@
 package ru.thedreamingsaviour.game.gameobject.entity;
 
 import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import ru.thedreamingsaviour.game.gameobject.Surface;
 
 import java.util.List;
@@ -31,6 +32,12 @@ public class Box extends Entity {
         legs.y = y;
         legs.width = width;
         legs.height = height;
+    }
+
+    @Override
+    public void draw(SpriteBatch batch) {
+        int drawSpeed = 15 - speed / 10 > 0 ? 15 - speed / 10 : 1;
+        animatedObject.draw(batch, x, y, width, height, drawSpeed);
     }
 
     @Override
