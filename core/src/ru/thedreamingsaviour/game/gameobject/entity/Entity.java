@@ -73,13 +73,13 @@ public abstract class Entity extends Rectangle {
                     drawX = x;
                     drawY = y;
                 }
-                case "EAST" -> {
+                case "EAST", "RIGHT" -> {
                     animatedObject.rotateSprite(90);
                     animatedObject.mirrorSprite(true, true);
                     drawX = x + width;
                     drawY = y;
                 }
-                case "WEST" -> {
+                case "WEST", "LEFT" -> {
                     animatedObject.rotateSprite(90);
                     animatedObject.mirrorSprite(false, false);
                     drawX = x + width;

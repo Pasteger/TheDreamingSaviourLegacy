@@ -53,6 +53,42 @@ public class SwitchHandler {
         }
 
         if (switches.stream().allMatch(Switch::isActive)) {
+            surfaces.stream().filter(surface -> surface.id == 11).forEach(surface -> {
+                surface.setEffect("none");
+                surface.setStandardColor("1;0.8902;0.6941;1");
+            });
+        } else {
+            surfaces.stream().filter(surface -> surface.id == 11).forEach(surface -> {
+                surface.setEffect("solid");
+                surface.setStandardColor("1.0;0.84313726;0.0;1");
+            });
+        }
+
+        if (switches.stream().allMatch(Switch::isActive)) {
+            surfaces.stream().filter(surface -> surface.id == 12).forEach(surface -> {
+                surface.setEffect("none");
+                surface.setStandardColor("1;0.8902;0.6941;1");
+            });
+        } else {
+            surfaces.stream().filter(surface -> surface.id == 12).forEach(surface -> {
+                surface.setEffect("solid");
+                surface.setStandardColor("0.8980392;0.16862746;0.3137255;1");
+            });
+        }
+
+        if (switches.stream().allMatch(Switch::isActive)) {
+            surfaces.stream().filter(surface -> surface.id == 13).forEach(surface -> {
+                surface.setEffect("none");
+                surface.setStandardColor("1;0.8902;0.6941;1");
+            });
+        } else {
+            surfaces.stream().filter(surface -> surface.id == 13).forEach(surface -> {
+                surface.setEffect("solid");
+                surface.setStandardColor("0.4;0.4;1.0;1");
+            });
+        }
+
+        if (switches.stream().allMatch(Switch::isActive)) {
             surfaces.stream().filter(surface -> surface.id == 3).forEach(surface -> {
                 surface.setEffect("gravity");
                 surface.setStandardColor("0.30;0.56;0.87;1");

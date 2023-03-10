@@ -74,6 +74,8 @@ public class LevelEditor implements Screen {
         camera.setToOrtho(false, 4000, 4000);
 
         player = PLAYER;
+        player.setX(LevelLoader.getStartX());
+        player.setY(LevelLoader.getStartY());
 
         enemyList = LevelLoader.getEnemyList();
         surfaceList = LevelLoader.getSurfaceList();
@@ -414,7 +416,7 @@ public class LevelEditor implements Screen {
 
         if (currentTask.equals("addBox") && Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
             Box box = new Box(getSynchronizedX() - 100, getSynchronizedY() - 100,
-                    200, 200, currentBoxMaterial, currentBoxHP);
+                    300, 300, currentBoxMaterial, currentBoxHP);
             boxList.add(box);
         }
 

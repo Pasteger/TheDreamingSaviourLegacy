@@ -1,6 +1,6 @@
 {
   "Pasteger": {
-    "level": "demoLevel",
+    "level": "demoLevel3",
     "hubLevel": 0,
     "balance": 0,
     "HP": 4,
@@ -46,6 +46,15 @@
   },
   "0909": {
     "level": "0909",
+    "hubLevel": 0,
+    "balance": 0,
+    "bulletAim": "moveTo",
+    "HP": 4,
+    "damage": 1,
+    "speed": 20
+  },
+  "test": {
+    "level": "test",
     "hubLevel": 0,
     "balance": 0,
     "bulletAim": "moveTo",
