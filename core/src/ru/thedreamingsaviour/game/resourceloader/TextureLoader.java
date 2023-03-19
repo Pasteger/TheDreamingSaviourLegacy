@@ -26,8 +26,8 @@ public class TextureLoader {
 
     public static void load() {
         nullTexture = new Texture("sprites/nullTexture.png");
-        mainMenuBackground = new Texture("sprites/main_menu_background.jpg");
-        hubBackground = new Texture("sprites/hub_background.jpeg");
+        mainMenuBackground = new Texture("sprites/arts/main_menu_background.jpg");
+        hubBackground = new Texture("sprites/arts/hub_background.jpeg");
         traderTexture = new Texture("sprites/trader/trader.png");
 
         readAnimationTextures(DEATH_BACKGROUND, "sprites/death_background/");
