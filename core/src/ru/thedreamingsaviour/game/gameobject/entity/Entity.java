@@ -7,7 +7,6 @@ import com.badlogic.gdx.math.Rectangle;
 import ru.thedreamingsaviour.game.gameobject.AnimatedObject;
 import ru.thedreamingsaviour.game.gameobject.Bullet;
 import ru.thedreamingsaviour.game.gameobject.Surface;
-import ru.thedreamingsaviour.game.logics.LevelsLogic;
 
 import java.util.List;
 import java.util.Map;
@@ -36,6 +35,8 @@ public abstract class Entity extends Rectangle {
     boolean isMoved;
     boolean isAgr;
     long timeAgr;
+
+    public List<Bullet> BULLET_LIST;
 
     public void draw(SpriteBatch batch) {
         int drawSpeed = 15 - speed / 10 > 0 ? 15 - speed / 10 : 1;
@@ -181,7 +182,7 @@ public abstract class Entity extends Rectangle {
         Bullet bullet = createBullet();
         bullet.setTargetAim(aim);
 
-        LevelsLogic.BULLET_LIST.add(bullet);
+        BULLET_LIST.add(bullet);
     }
 
     private Bullet createBullet() {

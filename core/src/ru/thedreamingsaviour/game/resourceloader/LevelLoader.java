@@ -25,8 +25,11 @@ public class LevelLoader {
     private static float startY;
     private static Exit exit;
     private static String nextLevel;
+    private static boolean boss;
+    private static String levelName;
 
     public static void load(String levelName) throws Exception {
+        LevelLoader.levelName = levelName;
         level = JSONReader.getLevel(levelName);
         surfaceList = convertingToSurface();
         coinList = convertingToCoin();
@@ -37,6 +40,7 @@ public class LevelLoader {
         startX = Float.parseFloat(String.valueOf(level.get("startX")));
         startY = Float.parseFloat(String.valueOf(level.get("startY")));
         nextLevel = (String) level.get("nextLevel");
+        boss = (boolean) level.get("boss");
 
         List<ShortAttackEnemy> shortAttackEnemyList = convertingToShortAttackEnemy();
         List<ShotAttackEnemy> shotAttackEnemyList = convertingToShotAttackEnemy();
@@ -250,5 +254,13 @@ public class LevelLoader {
 
     public static List<SwitchHandler> getSwitchHandlerList() {
         return switchHandlerList;
+    }
+
+    public static boolean isBoss() {
+        return boss;
+    }
+
+    public static String getLevelName() {
+        return levelName;
     }
 }

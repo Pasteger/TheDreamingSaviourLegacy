@@ -2,6 +2,7 @@ package ru.thedreamingsaviour.game.gameobject.entity;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import ru.thedreamingsaviour.game.gameobject.Bullet;
 import ru.thedreamingsaviour.game.gameobject.Surface;
 
 import java.util.ArrayList;

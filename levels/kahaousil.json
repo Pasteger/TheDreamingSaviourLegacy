@@ -1,0 +1,346 @@
+{
+  "exit": {
+    "texture": "PORTAL",
+    "x": -6623.321,
+    "width": 300.0,
+    "y": 2330.4688,
+    "speed": 10,
+    "height": 300.0
+  },
+  "boxList": [],
+  "boss": true,
+  "shortAttackEnemyList": [],
+  "surfaceList": [
+    {
+      "effect": "none",
+      "x": 128.27588,
+      "width": 4340.0,
+      "y": 2381.177,
+      "standardColor": "1;0.8902;0.6941;1",
+      "id": 1,
+      "height": 4303.0
+    },
+    {
+      "effect": "solid",
+      "x": 3177.1953,
+      "width": 545.0,
+      "y": 5600.231,
+      "standardColor": "0;0;0;1",
+      "id": 0,
+      "height": 54.0
+    },
+    {
+      "effect": "solid",
+      "x": 4088.9062,
+      "width": 328.0,
+      "y": 2416.997,
+      "standardColor": "0;0;0;1",
+      "id": 0,
+      "height": 4393.0
+    },
+    {
+      "effect": "solid",
+      "x": 81.60547,
+      "width": 4392.0,
+      "y": 2369.5637,
+      "standardColor": "0;0;0;1",
+      "id": 0,
+      "height": 55.0
+    },
+    {
+      "effect": "solid",
+      "x": -305.5952,
+      "width": 9616.0,
+      "y": -1408.3018,
+      "standardColor": "0;0;0;1",
+      "id": 0,
+      "height": 3790.0
+    },
+    {
+      "effect": "solid",
+      "x": 4374.004,
+      "width": 8690.0,
+      "y": 2318.4275,
+      "standardColor": "0;0;0;1",
+      "id": 0,
+      "height": 8422.0
+    },
+    {
+      "effect": "solid",
+      "x": -67.02026,
+      "width": 250.0,
+      "y": 2409.8281,
+      "standardColor": "0;0;0;1",
+      "id": 0,
+      "height": 6152.0
+    },
+    {
+      "effect": "solid",
+      "x": 167.27808,
+      "width": 5437.0,
+      "y": 6335.929,
+      "standardColor": "0;0;0;1",
+      "id": 0,
+      "height": 5251.0
+    },
+    {
+      "effect": "solid",
+      "x": -4754.7227,
+      "width": 4910.0,
+      "y": -2892.9912,
+      "standardColor": "0;0;0;1",
+      "id": 0,
+      "height": 11921.0
+    },
+    {
+      "effect": "solid",
+      "x": -5098.0215,
+      "width": 5606.0,
+      "y": 8172.2705,
+      "standardColor": "0;0;0;1",
+      "id": 0,
+      "height": 3683.0
+    },
+    {
+      "effect": "solid",
+      "x": 20030.297,
+      "width": 100.0,
+      "y": 3101.6274,
+      "standardColor": "0;0;0;1",
+      "id": 2,
+      "height": 50.0
+    },
+    {
+      "effect": "solid",
+      "x": 20030.297,
+      "width": 100.0,
+      "y": 3101.6274,
+      "standardColor": "0;0;0;1",
+      "id": 2,
+      "height": 50.0
+    },
+    {
+      "effect": "solid",
+      "x": 20030.297,
+      "width": 100.0,
+      "y": 3101.6274,
+      "standardColor": "0;0;0;1",
+      "id": 2,
+      "height": 50.0
+    },
+    {
+      "effect": "solid",
+      "x": 20030.297,
+      "width": 100.0,
+      "y": 3101.6274,
+      "standardColor": "0;0;0;1",
+      "id": 2,
+      "height": 50.0
+    },
+    {
+      "effect": "solid",
+      "x": 3165.7988,
+      "width": 505.0,
+      "y": 3461.0352,
+      "standardColor": "0;0;0;1",
+      "id": 0,
+      "height": 126.0
+    },
+    {
+      "effect": "solid",
+      "x": 3755.7988,
+      "width": 620.0,
+      "y": 2367.7017,
+      "standardColor": "0;0;0;1",
+      "id": 0,
+      "height": 327.0
+    },
+    {
+      "effect": "solid",
+      "x": 3900.7988,
+      "width": 310.0,
+      "y": 2687.7017,
+      "standardColor": "0;0;0;1",
+      "id": 0,
+      "height": 280.0
+    },
+    {
+      "effect": "solid",
+      "x": 550.396,
+      "width": 585.0,
+      "y": 5591.295,
+      "standardColor": "0;0;0;1",
+      "id": 0,
+      "height": 54.0
+    },
+    {
+      "effect": "solid",
+      "x": 718.7002,
+      "width": 522.0,
+      "y": 3492.6648,
+      "standardColor": "0;0;0;1",
+      "id": 0,
+      "height": 111.0
+    },
+    {
+      "effect": "solid",
+      "x": 30.000732,
+      "width": 200.0,
+      "y": 2603.8345,
+      "standardColor": "0;0;0;1",
+      "id": 0,
+      "height": 200.0
+    },
+    {
+      "effect": "solid",
+      "x": 85.00073,
+      "width": 200.0,
+      "y": 2423.8345,
+      "standardColor": "0;0;0;1",
+      "id": 0,
+      "height": 200.0
+    },
+    {
+      "effect": "solid",
+      "x": 75.00073,
+      "width": 200.0,
+      "y": 2477.1677,
+      "standardColor": "0;0;0;1",
+      "id": 0,
+      "height": 200.0
+    },
+    {
+      "effect": "solid",
+      "x": 155.00073,
+      "width": 200.0,
+      "y": 2337.1677,
+      "standardColor": "0;0;0;1",
+      "id": 0,
+      "height": 200.0
+    },
+    {
+      "effect": "solid",
+      "x": 200.00073,
+      "width": 200.0,
+      "y": 2337.1677,
+      "standardColor": "0;0;0;1",
+      "id": 0,
+      "height": 200.0
+    },
+    {
+      "effect": "solid",
+      "x": 290.00073,
+      "width": 200.0,
+      "y": 2323.8345,
+      "standardColor": "0;0;0;1",
+      "id": 0,
+      "height": 200.0
+    },
+    {
+      "effect": "solid",
+      "x": 290.00073,
+      "width": 200.0,
+      "y": 2323.8345,
+      "standardColor": "0;0;0;1",
+      "id": 0,
+      "height": 200.0
+    },
+    {
+      "effect": "solid",
+      "x": 225.00073,
+      "width": 200.0,
+      "y": 2390.501,
+      "standardColor": "0;0;0;1",
+      "id": 0,
+      "height": 200.0
+    },
+    {
+      "effect": "solid",
+      "x": 205.00073,
+      "width": 200.0,
+      "y": 2443.8345,
+      "standardColor": "0;0;0;1",
+      "id": 0,
+      "height": 200.0
+    },
+    {
+      "effect": "solid",
+      "x": 175.00073,
+      "width": 200.0,
+      "y": 2470.501,
+      "standardColor": "0;0;0;1",
+      "id": 0,
+      "height": 200.0
+    },
+    {
+      "effect": "solid",
+      "x": 135.00073,
+      "width": 200.0,
+      "y": 2570.501,
+      "standardColor": "0;0;0;1",
+      "id": 0,
+      "height": 200.0
+    },
+    {
+      "effect": "solid",
+      "x": 90.00073,
+      "width": 200.0,
+      "y": 2637.1677,
+      "standardColor": "0;0;0;1",
+      "id": 0,
+      "height": 200.0
+    },
+    {
+      "effect": "solid",
+      "x": 65.00073,
+      "width": 200.0,
+      "y": 2677.1677,
+      "standardColor": "0;0;0;1",
+      "id": 0,
+      "height": 200.0
+    },
+    {
+      "effect": "solid",
+      "x": 60.000732,
+      "width": 200.0,
+      "y": 2730.501,
+      "standardColor": "0;0;0;1",
+      "id": 0,
+      "height": 200.0
+    },
+    {
+      "effect": "solid",
+      "x": 60.000732,
+      "width": 200.0,
+      "y": 2797.1677,
+      "standardColor": "0;0;0;1",
+      "id": 0,
+      "height": 200.0
+    },
+    {
+      "effect": "solid",
+      "x": 60.000732,
+      "width": 200.0,
+      "y": 2830.501,
+      "standardColor": "0;0;0;1",
+      "id": 0,
+      "height": 200.0
+    },
+    {
+      "effect": "solid",
+      "x": 45.000732,
+      "width": 200.0,
+      "y": 2897.1677,
+      "standardColor": "0;0;0;1",
+      "id": 0,
+      "height": 200.0
+    }
+  ],
+  "coinList": [],
+  "nextLevel": "demoLevel3",
+  "startY": 3000.0,
+  "startX": 3000.0,
+  "decorList": [],
+  "switchHandlerList": [],
+  "shotAttackEnemyList": []
+}

@@ -9,5 +9,6 @@
   "nextLevel": "",
   "exit": {},
   "startX": 3000,
-  "startY": 3000
+  "startY": 3000,
+  "boss": false
 }

@@ -11,12 +11,14 @@ public class MusicLoader {
     private static Music menuMusic;
     private static Music factoryMusic;
     private static Music introductionMusic;
+    private static Music rexDuodecimAngelusMusic;
     public static final Map<String, List<Music>> HUB_MUSIC = new HashMap<>();
     public static void load() {
         deathMusic = Gdx.audio.newMusic(Gdx.files.internal("music/eternity_served_cold.mp3"));
         menuMusic = Gdx.audio.newMusic(Gdx.files.internal("music/biophosphoradelecrystalluminescence.mp3"));
         factoryMusic = Gdx.audio.newMusic(Gdx.files.internal("music/another_medium.mp3"));
         introductionMusic = Gdx.audio.newMusic(Gdx.files.internal("music/overture.mp3"));
+        rexDuodecimAngelusMusic = Gdx.audio.newMusic(Gdx.files.internal("music/rex_duodecim_angelus.mp3"));
 
         fillMusicMap(HUB_MUSIC, "music/hub_music/", "ACT_1");
         fillMusicMap(HUB_MUSIC, "music/hub_music/", "ACT_2");
@@ -50,5 +52,9 @@ public class MusicLoader {
 
     public static Music getIntroductionMusic() {
         return introductionMusic;
+    }
+
+    public static Music getRexDuodecimAngelusMusic() {
+        return rexDuodecimAngelusMusic;
     }
 }

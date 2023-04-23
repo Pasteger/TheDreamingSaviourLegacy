@@ -28,6 +28,7 @@ public class LevelSaver {
         level.put("shotAttackEnemyList", saveShotAttackEnemyList(shotAttackEnemyList));
         level.put("switchHandlerList", saveSwitchHandlerList(switchHandlerList));
         level.put("nextLevel", nextLevel);
+        level.put("boss", false);
         level.put("exit", saveExit(exit));
         level.put("startX", startX);
         level.put("startY", startY);

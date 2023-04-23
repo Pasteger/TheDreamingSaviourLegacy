@@ -23,7 +23,7 @@ import static ru.thedreamingsaviour.game.resourceloader.SaveLoader.PLAYER;
 import static ru.thedreamingsaviour.game.resourceloader.TextureLoader.getHubBackground;
 import static ru.thedreamingsaviour.game.resourceloader.TextureLoader.getTraderTexture;
 
-public class Hub {
+public class Hub implements GameLogic {
     private final MyGdxGame game;
     private final Player player;
     private final Texture background;
@@ -71,6 +71,7 @@ public class Hub {
         dialogueOptional.ifPresent(dialogue -> updateDialogue(dialogues.indexOf(dialogue)));
     }
 
+    @Override
     public void render() {
         game.batch.draw(background, 0, 0);
         game.batch.draw(trader, 1404, 1300);

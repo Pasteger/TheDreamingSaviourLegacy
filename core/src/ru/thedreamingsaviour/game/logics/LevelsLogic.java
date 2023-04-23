@@ -22,7 +22,7 @@ import static ru.thedreamingsaviour.game.resourceloader.MusicLoader.getFactoryMu
 import static ru.thedreamingsaviour.game.resourceloader.SaveLoader.PLAYER;
 import static ru.thedreamingsaviour.game.resourceloader.SoundLoader.*;
 
-public class LevelsLogic {
+public class LevelsLogic implements GameLogic {
     private final MyGdxGame game;
     public static final List<Bullet> BULLET_LIST = new ArrayList<>();
     private final Player player;
@@ -65,8 +65,16 @@ public class LevelsLogic {
         startFPSTime = System.currentTimeMillis();
 
         player.heal();
+
+        entityList.clear();
+        entityList.add(player);
+        entityList.addAll(enemyList);
+        entityList.addAll(boxList);
+
+        entityList.forEach(entity -> entity.BULLET_LIST = BULLET_LIST);
     }
 
+    @Override
     public void render() {
         entityList.clear();
         entityList.add(player);
@@ -127,18 +135,26 @@ public class LevelsLogic {
     private void exitLevel() {
         if (exit != null) {
             if (player.overlaps(exit)) {
-                BULLET_LIST.clear();
-                player.timeFall = 0;
-                music.stop();
-                player.balance += score;
-                try {
-                    PLAYER.currentLevel = LevelLoader.getNextLevel();
-                    LevelLoader.load(LevelLoader.getNextLevel());
-                    game.setScreen(new LevelsScreen(game, "level"));
-                } catch (Exception exception) {
-                    exception.printStackTrace();
-                }
+                nextLevel();
             }
+        }
+    }
+
+    private void nextLevel() {
+        BULLET_LIST.clear();
+        player.timeFall = 0;
+        music.stop();
+        player.balance += score;
+        try {
+            PLAYER.currentLevel = LevelLoader.getNextLevel();
+            LevelLoader.load(LevelLoader.getNextLevel());
+            if (LevelLoader.isBoss()) {
+                game.setScreen(new LevelsScreen(game, LevelLoader.getLevelName()));
+            } else {
+                game.setScreen(new LevelsScreen(game, "level"));
+            }
+        } catch (Exception exception) {
+            exception.printStackTrace();
         }
     }
 

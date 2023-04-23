@@ -7103,7 +7103,7 @@
       "value": 10
     }
   ],
-  "nextLevel": "level5",
+  "nextLevel": "demoLevel3",
   "startY": 3158.8015,
   "startX": 2959.3818,
   "decorList": [
@@ -7167,5 +7167,6 @@
       ],
       "surfacesId": 2
     }
-  ]
+  ],
+  "boss": false
 }

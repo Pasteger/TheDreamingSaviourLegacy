@@ -1,5 +1,6 @@
 package ru.thedreamingsaviour.game.screen;
 
+import ru.thedreamingsaviour.game.logics.GameLogic;
 import ru.thedreamingsaviour.game.logics.Hub;
 import ru.thedreamingsaviour.game.logics.LevelsLogic;
 
@@ -10,19 +11,24 @@ import com.badlogic.gdx.Gdx;
 
 public class LevelsScreen implements Screen {
     private final MyGdxGame game;
-    private LevelsLogic levelsLogic;
-    private Hub hub;
-    private final String level;
+    private final GameLogic gameLogic;
 
-    public LevelsScreen(final MyGdxGame game, String level) {
+    public LevelsScreen(final MyGdxGame game, String logic) {
         this.game = game;
         Gdx.gl.glClearColor(0.5f, 0.5f, 0.5f, 1);
 
-        this.level = level;
-        if (level.equals("HUB")) {
-            hub = new Hub(this.game);
+        if (logic.equals("HUB")) {
+            gameLogic = new Hub(this.game);
+        } else if (logic.equals("level")){
+            gameLogic = new LevelsLogic(this.game);
         } else {
-            levelsLogic = new LevelsLogic(this.game);
+            String boss = logic.substring(0, 1).toUpperCase() + logic.substring(1);
+            try {
+                gameLogic = (GameLogic)  Class.forName("ru.thedreamingsaviour.game.logics.bossbattle." + boss)
+                        .getConstructor(MyGdxGame.class).newInstance(this.game);
+            } catch (Exception exception) {
+                throw new RuntimeException(exception);
+            }
         }
     }
 
@@ -35,12 +41,7 @@ public class LevelsScreen implements Screen {
 
         game.batch.begin();
 
-        if (level.equals("HUB")) {
-            hub.render();
-        }
-        else {
-            levelsLogic.render();
-        }
+        gameLogic.render();
 
         game.batch.end();
     }
