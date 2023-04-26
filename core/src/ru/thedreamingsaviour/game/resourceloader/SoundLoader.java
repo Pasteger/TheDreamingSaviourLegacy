@@ -7,6 +7,7 @@ import java.io.File;
 import java.util.*;
 
 public class SoundLoader {
+    public static final Map<String, Sound> KAHAOUSIL_SOUNDS = new HashMap<>();
     public static final Map<String, List<Sound>> DAMAGE = new HashMap<>();
     public static final Map<String, List<Sound>> DEATH = new HashMap<>();
     private static Sound shotPlayer;
@@ -27,6 +28,9 @@ public class SoundLoader {
         fillMap(DEATH, "sounds/death/", "BOX/BARREL");
         fillMap(DEATH, "sounds/death/", "ENEMY/SHORT_ATTACK_ENEMY");
         fillMap(DEATH, "sounds/death/", "ENEMY/SHOT_ATTACK_ENEMY");
+
+        KAHAOUSIL_SOUNDS.put("shot", Gdx.audio.newSound(Gdx.files.internal("sounds/boss/kahaousil/shot.wav")));
+        KAHAOUSIL_SOUNDS.put("explosions", Gdx.audio.newSound(Gdx.files.internal("sounds/boss/kahaousil/explosions.wav")));
 
         shotPlayer = Gdx.audio.newSound(Gdx.files.internal("sounds/shot_player.wav"));
         shotShotAttackEnemy = Gdx.audio.newSound(Gdx.files.internal("sounds/shot_shot_attack_enemy.wav"));

@@ -130,4 +130,8 @@ public class Bullet extends Rectangle {
     public float getOldY() {
         return oldY;
     }
+
+    public void setTextures(AnimatedObject textures){
+        this.textures = textures;
+    }
 }

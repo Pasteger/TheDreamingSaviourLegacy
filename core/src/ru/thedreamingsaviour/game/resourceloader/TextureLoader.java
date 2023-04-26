@@ -13,6 +13,7 @@ public class TextureLoader {
     private static Texture mainMenuBackground;
     private static Texture hubBackground;
     private static Texture traderTexture;
+    public static final Map<String, Texture> KAHAOUSIL_TEXTURES = new HashMap<>();
     public static final Map<String, List<Texture>> PLAYER_TEXTURES = new HashMap<>();
     public static final Map<String, List<Texture>> SHORT_ATTACK_ENEMY = new HashMap<>();
     public static final Map<String, List<Texture>> SHOT_ATTACK_ENEMY = new HashMap<>();
@@ -23,6 +24,7 @@ public class TextureLoader {
     public static final List<Texture> BULLET_ILYA = new ArrayList<>();
     public static final List<Texture> BULLET_SHOT_ATTACK_ENEMY = new ArrayList<>();
     public static final List<Texture> DEATH_BACKGROUND = new ArrayList<>();
+    public static final List<Texture> EXPLOSION = new ArrayList<>();
 
     public static void load() {
         nullTexture = new Texture("sprites/nullTexture.png");
@@ -33,6 +35,7 @@ public class TextureLoader {
         readAnimationTextures(DEATH_BACKGROUND, "sprites/death_background/");
         readAnimationTextures(BULLET_ILYA, "sprites/bullet/bullet_ilya/");
         readAnimationTextures(BULLET_SHOT_ATTACK_ENEMY, "sprites/bullet/shot_attack_enemy/");
+        readAnimationTextures(EXPLOSION, "sprites/explosion/");
 
         SWITCH.put("lever", new HashMap<>());
         fillAnimatedObjectMap(SWITCH.get("lever"), "sprites/switch/lever/", "able");
@@ -69,6 +72,18 @@ public class TextureLoader {
         fillAnimatedObjectMapForCharacter(PLAYER_TEXTURES, "sprites/ilya/");
         fillAnimatedObjectMapForCharacter(SHORT_ATTACK_ENEMY, "sprites/short_attack_enemy/");
         fillAnimatedObjectMapForCharacter(SHOT_ATTACK_ENEMY, "sprites/shot_attack_enemy/");
+
+        KAHAOUSIL_TEXTURES.put("skull", new Texture("sprites/boss/kahaousil/skull.png"));
+        KAHAOUSIL_TEXTURES.put("jaw", new Texture("sprites/boss/kahaousil/jaw.png"));
+        KAHAOUSIL_TEXTURES.put("eyes", new Texture("sprites/boss/kahaousil/eyes.png"));
+        KAHAOUSIL_TEXTURES.put("skull_broken", new Texture("sprites/boss/kahaousil/skull_broken.png"));
+        KAHAOUSIL_TEXTURES.put("jaw_broken", new Texture("sprites/boss/kahaousil/jaw_broken.png"));
+        KAHAOUSIL_TEXTURES.put("eyes_broken_damage", new Texture("sprites/boss/kahaousil/eyes_broken_damage.png"));
+        KAHAOUSIL_TEXTURES.put("eyes_damage", new Texture("sprites/boss/kahaousil/eyes_damage.png"));
+        KAHAOUSIL_TEXTURES.put("bullet", new Texture("sprites/boss/kahaousil/bullet.png"));
+        KAHAOUSIL_TEXTURES.put("duodecagon", new Texture("sprites/boss/kahaousil/duodecagon.png"));
+        KAHAOUSIL_TEXTURES.put("duodecagon_light", new Texture("sprites/boss/kahaousil/duodecagon_light.png"));
+        KAHAOUSIL_TEXTURES.put("fireball", new Texture("sprites/boss/kahaousil/fireball.png"));
     }
 
     private static void fillAnimatedObjectMap(Map<String, List<Texture>> map, String path, String key) {
