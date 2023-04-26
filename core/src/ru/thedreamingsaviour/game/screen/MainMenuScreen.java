@@ -138,7 +138,11 @@ public class MainMenuScreen implements Screen {
             try {
                 SaveLoader.load(player);
                 LevelLoader.load(PLAYER.currentLevel);
-                game.setScreen(new LevelsScreen(game, "level"));
+                if (LevelLoader.isBoss()) {
+                    game.setScreen(new LevelsScreen(game, LevelLoader.getLevelName()));
+                } else {
+                    game.setScreen(new LevelsScreen(game, "level"));
+                }
                 music.stop();
             } catch (Exception exception) {
                 exception.printStackTrace();

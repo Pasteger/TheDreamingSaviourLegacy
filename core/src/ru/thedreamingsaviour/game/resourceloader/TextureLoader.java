@@ -13,6 +13,8 @@ public class TextureLoader {
     private static Texture mainMenuBackground;
     private static Texture hubBackground;
     private static Texture traderTexture;
+    private static Texture bossBarFrame;
+    private static Texture bossBarBody;
     public static final Map<String, Texture> KAHAOUSIL_TEXTURES = new HashMap<>();
     public static final Map<String, List<Texture>> PLAYER_TEXTURES = new HashMap<>();
     public static final Map<String, List<Texture>> SHORT_ATTACK_ENEMY = new HashMap<>();
@@ -21,6 +23,7 @@ public class TextureLoader {
     public static final Map<String, List<Texture>> COINS = new HashMap<>();
     public static final Map<String, List<Texture>> DECOR = new HashMap<>();
     public static final Map<String, Map<String, List<Texture>>> SWITCH = new HashMap<>();
+    public static final Map<String, Map<String, List<Texture>>> PICK_UP_PACKAGE = new HashMap<>();
     public static final List<Texture> BULLET_ILYA = new ArrayList<>();
     public static final List<Texture> BULLET_SHOT_ATTACK_ENEMY = new ArrayList<>();
     public static final List<Texture> DEATH_BACKGROUND = new ArrayList<>();
@@ -31,6 +34,8 @@ public class TextureLoader {
         mainMenuBackground = new Texture("sprites/arts/main_menu_background.jpg");
         hubBackground = new Texture("sprites/arts/hub_background.jpeg");
         traderTexture = new Texture("sprites/trader/trader.png");
+        bossBarFrame = new Texture("sprites/boss_bar/frame.png");
+        bossBarBody = new Texture("sprites/boss_bar/body.png");
 
         readAnimationTextures(DEATH_BACKGROUND, "sprites/death_background/");
         readAnimationTextures(BULLET_ILYA, "sprites/bullet/bullet_ilya/");
@@ -68,6 +73,9 @@ public class TextureLoader {
         fillAnimatedObjectMap(DECOR, "sprites/decor/", "CISTERN");
         fillAnimatedObjectMap(DECOR, "sprites/decor/", "PIPE");
         fillAnimatedObjectMap(DECOR, "sprites/decor/", "PORTAL");
+
+        PICK_UP_PACKAGE.put("heal", new HashMap<>());
+        fillAnimatedObjectMapForCharacter(PICK_UP_PACKAGE.get("heal"), "sprites/pick_up_package/heal/");
 
         fillAnimatedObjectMapForCharacter(PLAYER_TEXTURES, "sprites/ilya/");
         fillAnimatedObjectMapForCharacter(SHORT_ATTACK_ENEMY, "sprites/short_attack_enemy/");
@@ -122,5 +130,13 @@ public class TextureLoader {
 
     public static Texture getTraderTexture() {
         return traderTexture;
+    }
+
+    public static Texture getBossBarFrame() {
+        return bossBarFrame;
+    }
+
+    public static Texture getBossBarBody() {
+        return bossBarBody;
     }
 }

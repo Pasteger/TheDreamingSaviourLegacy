@@ -33,6 +33,7 @@ public class LevelsLogic implements GameLogic {
     private final List<Entity> entityList;
     private final List<DecorObject> decorList;
     private final List<SwitchHandler> switchHandlerList;
+    private final List<PickUpPackage> pickUpPackageList;
     private final Exit exit;
     private final Music music;
     private long score;
@@ -53,6 +54,8 @@ public class LevelsLogic implements GameLogic {
         decorList = LevelLoader.getDecorList();
         switchHandlerList = LevelLoader.getSwitchHandlerList();
         exit = LevelLoader.getExit();
+
+        pickUpPackageList = new ArrayList<>();
 
         entityList = new ArrayList<>();
         player = PLAYER;
@@ -80,6 +83,7 @@ public class LevelsLogic implements GameLogic {
         entityList.add(player);
         entityList.addAll(enemyList);
         entityList.addAll(boxList);
+        entityList.addAll(pickUpPackageList);
 
         surfaceList.stream().filter(surface ->
                 !(surface.getEffect().equals("solid") || surface.getEffect().equals("draw_over"))).forEach(surface -> surface.draw(game.batch));
@@ -102,6 +106,7 @@ public class LevelsLogic implements GameLogic {
             exit.draw(game.batch);
         }
 
+        pickUpPackageList.forEach(pickUpPackage -> pickUpPackage.draw(game.batch));
         boxList.forEach(box -> box.draw(game.batch));
         coinList.forEach(coin -> coin.textures.draw(game.batch, coin.x, coin.y, coin.width, coin.height, coin.gravitated ? 5 : 15));
 
@@ -182,6 +187,18 @@ public class LevelsLogic implements GameLogic {
         }
     }
 
+    private void pickUpPackageLogic(){
+        List<PickUpPackage> pickUpPackageForRemove = new ArrayList<>();
+        pickUpPackageList.forEach(pickUpPackage -> {
+            pickUpPackage.move(surfaceList, entityList);
+            if (pickUpPackage.overlaps(player)) {
+                pickUpPackage.pickUp(player);
+                pickUpPackageForRemove.add(pickUpPackage);
+            }
+        });
+        pickUpPackageForRemove.forEach(pickUpPackageList::remove);
+    }
+
     private void coinLogic() {
         for (Coin coin : coinList) {
             if (coin.saveGravitated != coin.gravitated) {
@@ -198,11 +215,6 @@ public class LevelsLogic implements GameLogic {
     }
 
     private void surfaceLogic() {
-        List<Entity> entityList = new ArrayList<>();
-        entityList.add(player);
-        entityList.addAll(enemyList);
-        entityList.addAll(boxList);
-
         for (Entity entity : entityList) {
             entity.jumpRender(surfaceList, boxList);
         }

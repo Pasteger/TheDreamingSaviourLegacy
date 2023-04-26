@@ -156,7 +156,11 @@ public class Hub implements GameLogic {
                 if (screenX > 709 && screenX < 764 && screenY > 196 && screenY < 335) {
                     try {
                         LevelLoader.load(player.currentLevel);
-                        game.setScreen(new LevelsScreen(game, "level"));
+                        if (LevelLoader.isBoss()) {
+                            game.setScreen(new LevelsScreen(game, LevelLoader.getLevelName()));
+                        } else {
+                            game.setScreen(new LevelsScreen(game, "level"));
+                        }
                         music.stop();
                     } catch (Exception e) {
                         throw new RuntimeException(e);

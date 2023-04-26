@@ -10,10 +10,8 @@ import com.badlogic.gdx.math.Rectangle;
 
 import ru.thedreamingsaviour.game.MyGdxGame;
 import ru.thedreamingsaviour.game.gameobject.*;
-import ru.thedreamingsaviour.game.gameobject.entity.Box;
-import ru.thedreamingsaviour.game.gameobject.entity.Enemy;
-import ru.thedreamingsaviour.game.gameobject.entity.Entity;
-import ru.thedreamingsaviour.game.gameobject.entity.Player;
+import ru.thedreamingsaviour.game.gameobject.entity.*;
+import ru.thedreamingsaviour.game.guiobject.BossBar;
 import ru.thedreamingsaviour.game.logics.GameLogic;
 import ru.thedreamingsaviour.game.resourceloader.LevelLoader;
 import ru.thedreamingsaviour.game.screen.DeathScreen;
@@ -28,8 +26,7 @@ import static ru.thedreamingsaviour.game.resourceloader.MusicLoader.getRexDuodec
 import static ru.thedreamingsaviour.game.resourceloader.SaveLoader.PLAYER;
 import static ru.thedreamingsaviour.game.resourceloader.SoundLoader.DAMAGE;
 import static ru.thedreamingsaviour.game.resourceloader.SoundLoader.KAHAOUSIL_SOUNDS;
-import static ru.thedreamingsaviour.game.resourceloader.TextureLoader.EXPLOSION;
-import static ru.thedreamingsaviour.game.resourceloader.TextureLoader.KAHAOUSIL_TEXTURES;
+import static ru.thedreamingsaviour.game.resourceloader.TextureLoader.*;
 
 public class Kahaousil implements GameLogic {
     private final MyGdxGame game;
@@ -39,6 +36,7 @@ public class Kahaousil implements GameLogic {
     private final List<Surface> surfaceList;
     private final List<Coin> coinList;
     private final List<Box> boxList;
+    private final List<PickUpPackage> pickUpPackageList;
     private final List<Entity> entityList;
     private final List<DecorObject> decorList;
     private final List<SwitchHandler> switchHandlerList;
@@ -73,6 +71,7 @@ public class Kahaousil implements GameLogic {
     private boolean explosionsSoundPlay = true;
     private final AnimatedObject explosionsAnimatedObject;
     private long explosionsTime;
+    private final BossBar bossBar;
 
     public Kahaousil(final MyGdxGame game) {
         this.game = game;
@@ -85,6 +84,8 @@ public class Kahaousil implements GameLogic {
         decorList = LevelLoader.getDecorList();
         switchHandlerList = LevelLoader.getSwitchHandlerList();
         exit = LevelLoader.getExit();
+
+        pickUpPackageList = new ArrayList<>();
 
         entityList = new ArrayList<>();
         player = PLAYER;
@@ -115,6 +116,8 @@ public class Kahaousil implements GameLogic {
         explosionsSound = KAHAOUSIL_SOUNDS.get("explosions");
         explosionsAnimatedObject = new AnimatedObject(EXPLOSION);
 
+        bossBar = new BossBar(3000f / kahaousilHP);
+
         platformHandler = new PlatformHandler(platforms);
 
         core.width = 450;
@@ -138,6 +141,7 @@ public class Kahaousil implements GameLogic {
         entityList.add(player);
         entityList.addAll(enemyList);
         entityList.addAll(boxList);
+        entityList.addAll(pickUpPackageList);
 
         surfaceList.stream().filter(surface ->
                 !(surface.getEffect().equals("solid") || surface.getEffect().equals("draw_over"))).forEach(surface -> surface.draw(game.batch));
@@ -150,6 +154,7 @@ public class Kahaousil implements GameLogic {
         switchHandlerList.forEach(switchHandler -> switchHandler.handle(game.batch));
 
         player.draw(game.batch);
+        pickUpPackageLogic();
         surfaceLogic();
         bulletLogic();
 
@@ -157,6 +162,7 @@ public class Kahaousil implements GameLogic {
             exit.draw(game.batch);
         }
 
+        pickUpPackageList.forEach(pickUpPackage -> pickUpPackage.draw(game.batch));
         boxList.forEach(box -> box.draw(game.batch));
         coinList.forEach(coin -> coin.textures.draw(game.batch, coin.x, coin.y, coin.width, coin.height, coin.gravitated ? 5 : 15));
 
@@ -165,10 +171,6 @@ public class Kahaousil implements GameLogic {
         player.move(surfaceList, entityList);
         game.camera.position.x = player.x;
         game.camera.position.y = player.y;
-
-
-        game.universalFont.draw(game.batch, "HP: " + player.HP, player.x - 1900, player.y + 1900);
-        game.universalFont.draw(game.batch, "Kahaousil: " + kahaousilHP, player.x - 1900, player.y + 1700);
 
         game.batch.draw(kahaousilHP > 50 ? KAHAOUSIL_TEXTURES.get("jaw") : KAHAOUSIL_TEXTURES.get("jaw_broken"), core.x + 62, core.y + jawYOffset);
         if (kahaousilHP > 0) {
@@ -208,6 +210,9 @@ public class Kahaousil implements GameLogic {
 
         playerDeath();
         exitLevel();
+
+        bossBar.draw(game.batch, player.x - 1500, player.y + 1800, kahaousilHP);
+        game.universalFont.draw(game.batch, "HP: " + player.HP, player.x - 1900, player.y - 1700);
 
         if (!duodecagonActive) {
             platformHandler.rotatePlatforms();
@@ -254,11 +259,13 @@ public class Kahaousil implements GameLogic {
         }
     }
 
+    boolean addedPickUpPackage;
     private void kahaousilMove(){
         if (kahaousilHP > 80) {
             moveCore();
             moveJaw(1, 100);
         } else if (kahaousilHP > 70) {
+            addedPickUpPackage = false;
             if (core.x == 2000 && core.y == 4000) {
                 if (isGravitationalPlane) {
                     switchSurface();
@@ -280,12 +287,17 @@ public class Kahaousil implements GameLogic {
                     switchSurface();
                 }
                 moveToCircle();
+                if (!addedPickUpPackage) {
+                    addedPickUpPackage = true;
+                    pickUpPackageList.add(new PickUpPackage("heal", 3, 2000, 4000, 200, 200));
+                }
                 moveJaw(2, 90);
             } else {
                 moveCore();
                 moveJaw(2, 100);
             }
         } else if (kahaousilHP > 50) {
+            addedPickUpPackage = false;
             if (core.x == 2000 && core.y == 4000) {
                 if (isGravitationalPlane) {
                     switchSurface();
@@ -307,12 +319,17 @@ public class Kahaousil implements GameLogic {
                     switchSurface();
                 }
                 moveToCircle();
+                if (!addedPickUpPackage) {
+                    addedPickUpPackage = true;
+                    pickUpPackageList.add(new PickUpPackage("heal", 3, 2000, 4000, 200, 200));
+                }
                 moveJaw(2, 90);
             } else {
                 moveCore();
                 moveJaw(2, 100);
             }
         } else if (kahaousilHP > 0) {
+            addedPickUpPackage = false;
             if (core.x == 2000 && core.y == 4000) {
                 if (isGravitationalPlane) {
                     switchSurface();
@@ -329,6 +346,7 @@ public class Kahaousil implements GameLogic {
         } else {
             duodecagonActive = false;
             duodecagonPhase = 0;
+            addedPickUpPackage = false;
             if (!isGravitationalPlane) {
                 switchSurface();
             }
@@ -511,16 +529,24 @@ public class Kahaousil implements GameLogic {
     }
 
     private void takeDamage(int damage) {
+        KAHAOUSIL_SOUNDS.get("damage").play();
         kahaousilHP -= damage;
         animationOfDamage = 20;
     }
 
-    private void surfaceLogic() {
-        List<Entity> entityList = new ArrayList<>();
-        entityList.add(player);
-        entityList.addAll(enemyList);
-        entityList.addAll(boxList);
+    private void pickUpPackageLogic(){
+        List<PickUpPackage> pickUpPackageForRemove = new ArrayList<>();
+        pickUpPackageList.forEach(pickUpPackage -> {
+            pickUpPackage.move(surfaceList, entityList);
+            if (pickUpPackage.overlaps(player)) {
+                pickUpPackage.pickUp(player);
+                pickUpPackageForRemove.add(pickUpPackage);
+            }
+        });
+        pickUpPackageForRemove.forEach(pickUpPackageList::remove);
+    }
 
+    private void surfaceLogic() {
         for (Entity entity : entityList) {
             entity.jumpRender(surfaceList, boxList);
         }

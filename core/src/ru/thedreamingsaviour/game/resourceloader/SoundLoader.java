@@ -16,6 +16,8 @@ public class SoundLoader {
     private static Sound agrShotAttackEnemy;
     private static Sound pickCoin;
     private static Sound switchToggle;
+    private static Sound pickUpHeal;
+
     public static void load() {
         fillMap(DAMAGE, "sounds/damage/", "BOX/WOODEN");
         fillMap(DAMAGE, "sounds/damage/", "BOX/STEEL");
@@ -30,6 +32,7 @@ public class SoundLoader {
         fillMap(DEATH, "sounds/death/", "ENEMY/SHOT_ATTACK_ENEMY");
 
         KAHAOUSIL_SOUNDS.put("shot", Gdx.audio.newSound(Gdx.files.internal("sounds/boss/kahaousil/shot.wav")));
+        KAHAOUSIL_SOUNDS.put("damage", Gdx.audio.newSound(Gdx.files.internal("sounds/boss/kahaousil/damage.wav")));
         KAHAOUSIL_SOUNDS.put("explosions", Gdx.audio.newSound(Gdx.files.internal("sounds/boss/kahaousil/explosions.wav")));
 
         shotPlayer = Gdx.audio.newSound(Gdx.files.internal("sounds/shot_player.wav"));
@@ -38,9 +41,10 @@ public class SoundLoader {
         agrShotAttackEnemy = Gdx.audio.newSound(Gdx.files.internal("sounds/agr_shot_attack_enemy.wav"));
         pickCoin = Gdx.audio.newSound(Gdx.files.internal("sounds/pick_coin.wav"));
         switchToggle = Gdx.audio.newSound(Gdx.files.internal("sounds/switch.wav"));
+        pickUpHeal = Gdx.audio.newSound(Gdx.files.internal("sounds/heal.wav"));
     }
 
-    private static void fillMap(Map<String, List<Sound>> map, String path, String key){
+    private static void fillMap(Map<String, List<Sound>> map, String path, String key) {
         List<Sound> sounds = new ArrayList<>();
         fillSoundList(sounds, path + key.toLowerCase() + "/");
         map.put(key, sounds);
@@ -76,5 +80,9 @@ public class SoundLoader {
 
     public static Sound getSwitchToggle() {
         return switchToggle;
+    }
+
+    public static Sound getPickUpHeal() {
+        return pickUpHeal;
     }
 }
