@@ -60,7 +60,7 @@ public class Kahaousil implements GameLogic {
     private final List<PlatformHandler.Point> coreCircle = new ArrayList<>();
 
     private final Random random = new Random();
-    private int recharge = 0;
+    private int recharge = 100;
     private int rechargeOfTakeDamage = 0;
     private boolean isMoveOnCircle;
 
@@ -72,6 +72,8 @@ public class Kahaousil implements GameLogic {
     private final AnimatedObject explosionsAnimatedObject;
     private long explosionsTime;
     private final BossBar bossBar;
+    private boolean isIntermission = true;
+    private final long startTime;
 
     public Kahaousil(final MyGdxGame game) {
         this.game = game;
@@ -116,19 +118,24 @@ public class Kahaousil implements GameLogic {
         explosionsSound = KAHAOUSIL_SOUNDS.get("explosions");
         explosionsAnimatedObject = new AnimatedObject(EXPLOSION);
 
-        bossBar = new BossBar(3000f / kahaousilHP);
+        bossBar = new BossBar(3000f / kahaousilHP, "Кахаосил");
 
         platformHandler = new PlatformHandler(platforms);
 
         core.width = 450;
         core.height = 400;
-        core.x = 2000;
-        core.y = 4000;
+        core.x = 1950;
+        core.y = 2000;
 
         duodecagonHitBox.width = 500;
         duodecagonHitBox.height = 500;
         duodecagonHitBox.x = 2000;
         duodecagonHitBox.y = 4000;
+
+        game.camera.position.x = 2100;
+        game.camera.position.y = 4000;
+
+        startTime = System.currentTimeMillis();
 
         platformHandler.createCircle(2000, 4000, 800, coreCircle);
         Collections.reverse(coreCircle);
@@ -168,9 +175,11 @@ public class Kahaousil implements GameLogic {
 
         BULLET_LIST.forEach(bullet -> bullet.textures.draw(game.batch, bullet.x, bullet.y, bullet.width, bullet.height, 2));
 
-        player.move(surfaceList, entityList);
-        game.camera.position.x = player.x;
-        game.camera.position.y = player.y;
+        if (!isIntermission) {
+            player.move(surfaceList, entityList);
+            game.camera.position.x = player.x;
+            game.camera.position.y = player.y;
+        }
 
         game.batch.draw(kahaousilHP > 50 ? KAHAOUSIL_TEXTURES.get("jaw") : KAHAOUSIL_TEXTURES.get("jaw_broken"), core.x + 62, core.y + jawYOffset);
         if (kahaousilHP > 0) {
@@ -204,17 +213,21 @@ public class Kahaousil implements GameLogic {
             }
         }
 
-        kahaousilMove();
-        kahaousilShot();
-        playerCheckDamage();
+        if (!isIntermission) {
+            kahaousilMove();
+            kahaousilShot();
+            playerCheckDamage();
+        } else {
+            moveIntermission();
+        }
 
         playerDeath();
         exitLevel();
 
-        bossBar.draw(game.batch, player.x - 1500, player.y + 1800, kahaousilHP);
-        game.universalFont.draw(game.batch, "HP: " + player.HP, player.x - 1900, player.y - 1700);
+        bossBar.draw(game.batch, game.universalFont, game.camera.position.x - 1500, game.camera.position.y + 1850, kahaousilHP);
+        game.universalFont.draw(game.batch, "HP: " + player.HP, game.camera.position.x - 1900, game.camera.position.y - 1750);
 
-        if (!duodecagonActive) {
+        if (!duodecagonActive && System.currentTimeMillis() - startTime > 14000) {
             platformHandler.rotatePlatforms();
         } else {
             platformHandler.stopPlatforms();
@@ -225,10 +238,21 @@ public class Kahaousil implements GameLogic {
             exit.setY(3500);
         }
 
+        if (isIntermission && System.currentTimeMillis() - startTime > 25000) {
+            isIntermission = false;
+        }
+
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
             game.setScreen(new MainMenuScreen(game));
             music.stop();
         }
+    }
+
+    private void moveIntermission() {
+        if (core.y < 4200) {
+            core.y += 2;
+        }
+        moveJaw(2, 80);
     }
 
     private void playerCheckDamage(){
@@ -262,7 +286,7 @@ public class Kahaousil implements GameLogic {
     boolean addedPickUpPackage;
     private void kahaousilMove(){
         if (kahaousilHP > 80) {
-            moveCore();
+            moveKahaousilToCircle();
             moveJaw(1, 100);
         } else if (kahaousilHP > 70) {
             addedPickUpPackage = false;
@@ -293,7 +317,7 @@ public class Kahaousil implements GameLogic {
                 }
                 moveJaw(2, 90);
             } else {
-                moveCore();
+                moveKahaousilToCircle();
                 moveJaw(2, 100);
             }
         } else if (kahaousilHP > 50) {
@@ -325,7 +349,7 @@ public class Kahaousil implements GameLogic {
                 }
                 moveJaw(2, 90);
             } else {
-                moveCore();
+                moveKahaousilToCircle();
                 moveJaw(2, 100);
             }
         } else if (kahaousilHP > 0) {
@@ -347,6 +371,7 @@ public class Kahaousil implements GameLogic {
             duodecagonActive = false;
             duodecagonPhase = 0;
             addedPickUpPackage = false;
+            BULLET_LIST.clear();
             if (!isGravitationalPlane) {
                 switchSurface();
             }
@@ -465,7 +490,7 @@ public class Kahaousil implements GameLogic {
         }
     }
 
-    private void moveCore() {
+    private void moveKahaousilToCircle() {
         for (PlatformHandler.Point pointCircle : coreCircle) {
             if (pointCircle.target) {
                 core.x = pointCircle.x;
@@ -519,10 +544,10 @@ public class Kahaousil implements GameLogic {
         for (Surface surface : surfaceList) {
             if (surface.id == 1 && surface.getEffect().equals("gravity")) {
                 surface.setEffect("none");
-                surface.setStandardColor("1;0.8902;0.6941;1");
+                surface.setStandardColor("0.6;0.4902;0.2941;1");
             } else if (surface.id == 1) {
                 surface.setEffect("gravity");
-                surface.setStandardColor("0.30;0.56;0.87;1");
+                surface.setStandardColor("0.139215688;0.29607843;0.49215687;1");
             }
         }
         isGravitationalPlane = !isGravitationalPlane;
